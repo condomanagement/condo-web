@@ -1,6 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.scss';
+import 'materialize-css/dist/css/materialize.min.css';
+import { Button, Card, Row, Col } from 'react-materialize';
 
 function App() {
   return (
@@ -19,6 +21,14 @@ function App() {
           Learn React
         </a>
       </header>
+      <div>
+        <Button
+          node="button"
+          waves="light"
+        >
+          button
+        </Button>
+      </div>
     </div>
   );
 }
