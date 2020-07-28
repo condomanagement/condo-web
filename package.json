@@ -43,8 +43,8 @@
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "test-watch": "npx jest --watchAll --coverage",
     "build-watch": "npx webpack -w --mode=production",
-    "build-production": "npx webpack --mode=production -o=dist/console-commerce-brain.js",
-    "build-development": "npx webpack --mode=development -o=dist/console-commerce-brain.dev.js",
+    "build-production": "npx webpack --mode=production",
+    "build-development": "npx webpack --mode=development",
     "build-analyze": "npx webpack --profile --json > stats.json && webpack-bundle-analyzer ./stats.json",
     "dev": "npx webpack-dev-server --config ./webpack.config.js"
   },
