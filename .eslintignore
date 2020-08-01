@@ -1,0 +1,9 @@
+dist/
+build/
+coverage/
+scripts/
+docs/
+.eslintrs.js
+webpack.config.js
+src/serviceWorker.ts
+

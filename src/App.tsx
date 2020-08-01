@@ -1,34 +1,69 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.scss';
+import { Footer, Parallax } from 'react-materialize';
 import 'materialize-css/dist/css/materialize.min.css';
-import { Button, Card, Row, Col } from 'react-materialize';
+import 'materialize-css/dist/js/materialize';
+import './application.scss';
+import './parking.scss';
 
-function App() {
+function App(): JSX.Element {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload!!!
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <div>
-        <Button
-          node="button"
-          waves="light"
-        >
-          button
-        </Button>
+      <Parallax
+        image={<img src="./Arrow-Lofts-Rendering.jpg" alt="Arrow Lofts" />}
+        className="index-banner"
+        options={{
+          responsiveThreshold: 0,
+        }}
+      >
+        <div className="section no-pad-bot">
+          <div className="container">
+            <br />
+            <br />
+            <h1 className="header center arrow-green">
+              <a id="logo-container" href="/" className="brand-logo">
+                <img alt="Arrow Lofts" title="Arrow Lofts" className="arrow-logo" src="./ArrowLofts-White.svg" />
+              </a>
+            </h1>
+          </div>
+        </div>
+      </Parallax>
+      <div className="container">
+        blah blah
       </div>
+      <Footer
+        className="arrow-background-grey"
+        copyrights="Made with ❤️ by David"
+        links={(
+          <div>
+            <h5 className="white-text">Additional Resources</h5>
+            <ul>
+              <li><a className="white-text" href="https://wscc556.frontsteps.com">FrontSteps</a></li>
+              <li><a className="white-text" href="https://www.kitchener.ca">City of Kitchener</a></li>
+              <li>
+                <a className="white-text" href="https://www.kitchener.ca/en/getting-around/parking.aspx">
+                  Kitchener Parking Information
+                </a>
+              </li>
+              <li>
+                <a className="white-text" href="https://github.com/condomanagment">
+                  <span role="img" aria-label="Coding">👩‍💻</span>
+                  Open Source Repository
+                </a>
+              </li>
+            </ul>
+          </div>
+        )}
+      >
+        <div>
+          <h5 className="white-text">Arrow Lofts</h5>
+          <p className="grey-text text-lighten-4">
+            112 Benton Street
+            <br />
+            Kitchener, Ontario N2G 3H6
+          </p>
+          <p className="grey-text text-lighten-4">A beautiful home in a beautiful city.</p>
+        </div>
+      </Footer>
     </div>
   );
 }
