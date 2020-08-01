@@ -1,9 +1,10 @@
 import React from 'react';
 import { Footer, Parallax } from 'react-materialize';
+import Parking from './Parking';
 import 'materialize-css/dist/css/materialize.min.css';
 import 'materialize-css/dist/js/materialize';
-import './application.scss';
-import './parking.scss';
+import './styles/application.scss';
+import './styles/parking.scss';
 
 function App(): JSX.Element {
   return (
@@ -28,7 +29,7 @@ function App(): JSX.Element {
         </div>
       </Parallax>
       <div className="container">
-        blah blah
+        <Parking />
       </div>
       <Footer
         className="arrow-background-grey"
