@@ -1,123 +1,93 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
-  Col,
-  DatePicker,
+  Grid,
   Icon,
-  Row,
-  TextInput,
-} from 'react-materialize';
-import { useForm } from 'react-hook-form';
+  TextField,
+  Theme,
+} from '@material-ui/core';
+import DateFnsUtils from '@date-io/date-fns'; // eslint-disable-line no-unused-vars, @typescript-eslint/no-unused-vars
+import MaterialUtils from '@date-io/moment';
+import { makeStyles } from '@material-ui/core/styles';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import './styles/application.scss';
 import './styles/parking.scss';
 
-type FormData = {
-  make: string;
-  model: string;
-  start: string;
-  end: string;
-  unit: number;
-  email: string;
-}
-
 export default function Parking(): JSX.Element {
-  const startDate = new Date();
-  const endDate = new Date(new Date().getTime() + (86400 * 1000));
+  const [selectedStartDate, handleStartDateChange] = useState<Date | null>(new Date());
+  const [selectedEndDate, handleEndDateChange] = useState<Date | null>(new Date());
 
-  const { register, handleSubmit, watch, errors } = useForm<FormData>();
-  const onSubmit = handleSubmit(({
-    start,
-    end,
-    make,
-    model,
-    unit,
-    email,
-  }) => {
-    console.log(start, end, make, model, unit, email);
-  });
+  interface StyleProps {
+    backgroundColor: string;
+  }
+
+
+  // eslint-disable-next-line max-len
+  /* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars, arrow-parens, @typescript-eslint/explicit-function-return-type */
+  const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) => ({
+    registerButton: props => ({
+      backgroundColor: '#f37f30',
+      color: 'white',
+      marginBottom: '20px',
+    }),
+  }));
+  // eslint-disable-next-line max-len
+  /* eslint-enable no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-function-return-type */
+
+  const styleProps: StyleProps = { backgroundColor: '#f37f30' };
+  const classes = useStyles(styleProps);
 
   return (
-    <div className="section">
-      <Row>
-        <Col
-          s={12}
-          className="center"
-        >
-          <h4>Register a Vehicle</h4>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Row>
-              <DatePicker
-                id="start"
-                options={{
-                  autoClose: true,
-                  defaultDate: startDate,
-                  setDefaultDate: true,
-                }}
-              >
-                <label htmlFor="start">Start Date</label>
-              </DatePicker>
-              <DatePicker
-                id="end"
-                options={{
-                  autoClose: true,
-                  defaultDate: endDate,
-                  setDefaultDate: true,
-                }}
-              >
-                <label htmlFor="end">End Date</label>
-              </DatePicker>
-            </Row>
-            <Row>
-              <TextInput
-                id="license"
-                s={6}
-                label="License Plate"
-                validate
-              />
-              <TextInput
-                id="unit"
-                s={6}
-                label="Unit Number"
-                validate
-                type="number"
-              />
-            </Row>
-            <Row>
-              <TextInput
-                id="make"
-                s={6}
-                label="Vehicle Make"
-                validate
-              />
-              <TextInput
-                id="color"
-                s={6}
-                label="Vehicle Colour"
-                validate
-              />
-            </Row>
-            <Row>
-              <TextInput
-                id="email"
-                s={12}
-                label="Email or Phone Number"
-                validate
-              />
-            </Row>
-            <Row>
-              <Button
-                node="button"
-                waves="light"
-                className="arrow-background-orange"
-              >
-                Register
-                <Icon right>
-                  directions_car
-                </Icon>
-              </Button>
-            </Row>
-          </form>
-        </Col>
-      </Row>
+    <div className="section flex-grow">
+      <Grid container spacing={5}>
+        <Grid item xs={12}>
+          <h4 className="center">Register a Vehicle</h4>
+        </Grid>
+        <MuiPickersUtilsProvider utils={MaterialUtils}>
+          <Grid item xs={6}>
+            <DatePicker
+              id="start"
+              value={selectedStartDate}
+              label="Start Date"
+              onChange={handleStartDateChange}
+              style={{ width: '100%' }}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <DatePicker
+              id="end"
+              value={selectedEndDate}
+              label="End Date"
+              onChange={handleEndDateChange}
+              style={{ width: '100%' }}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField id="license" label="License Plate" style={{ width: '100%' }} />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField id="unit" label="Unit Number" style={{ width: '100%' }} />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField id="make" label="Vehicle Make" style={{ width: '100%' }} />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField id="color" label="Vehicle Colour" style={{ width: '100%' }} />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField id="email" label="Email or Phone Number" style={{ width: '100%' }} />
+          </Grid>
+          <Grid item xs={12} className="center">
+            <Button
+              variant="contained"
+              className={classes.registerButton}
+              endIcon={<Icon>directions_car</Icon>}
+            >
+              Register
+            </Button>
+          </Grid>
+        </MuiPickersUtilsProvider>
+      </Grid>
     </div>
   );
 }
