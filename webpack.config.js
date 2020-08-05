@@ -13,7 +13,7 @@ process.env.NODE_ENV = 'development';
 module.exports = {
   entry: './src/index.tsx',
   devtool: 'source-map',
-  mode: 'production',
+  mode: 'development',
   module: {
     rules: [
       {
@@ -83,11 +83,15 @@ module.exports = {
     contentBase: resolveAppPath('public'),
     // Enable compression
     compress: true,
+    historyApiFallback: true,
     // Enable hot reloading
     hot: true,
     host,
-    port: 3000,
+    port: 3001,
     // Public path is root of content base
     publicPath: '/',
+    proxy: {
+      '/api': 'http://localhost:3000'
+    },
   },
 };

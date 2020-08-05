@@ -1,7 +1,9 @@
 import React from 'react';
 import * as Parallax from 'react-parallax';
 import { Grid } from '@material-ui/core';
+import { Route, Routes } from 'react-router-dom';
 import Parking from './Parking';
+import Admin from './Admin';
 import './styles/application.scss';
 
 function App(): JSX.Element {
@@ -24,7 +26,10 @@ function App(): JSX.Element {
         </div>
       </Parallax.Parallax>
       <div className="container">
-        <Parking />
+        <Routes>
+          <Route path="/" element={<Parking />} />
+          <Route path="admin" element={<Admin />} />
+        </Routes>
       </div>
       <footer
         className="page-footer arrow-background-grey"
