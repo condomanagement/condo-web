@@ -4,11 +4,14 @@ import { Grid } from '@material-ui/core';
 import { Route, Routes } from 'react-router-dom';
 import Parking from './Parking';
 import Admin from './Admin';
+import Login from './Login';
+import Nav from './Nav';
 import './styles/application.scss';
 
 function App(): JSX.Element {
   return (
     <div className="App">
+      <Nav />
       <Parallax.Parallax
         bgImage={require('../public/Arrow-Lofts-Rendering.jpg')} // eslint-disable-line global-require
         className="index-banner"
@@ -29,6 +32,7 @@ function App(): JSX.Element {
         <Routes>
           <Route path="/" element={<Parking />} />
           <Route path="admin" element={<Admin />} />
+          <Route path="login" element={<Login />} />
         </Routes>
       </div>
       <footer
