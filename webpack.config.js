@@ -33,17 +33,6 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.svg$/,
-        use: [
-          {
-            loader: 'svg-url-loader',
-            options: {
-              limit: 10000,
-            },
-          },
-        ],
-      },
-      {
         test: /\.m?js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
@@ -65,6 +54,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
+    publicPath: '/',
     filename: 'condo-web.js',
     path: path.resolve(__dirname, 'build'),
     library: 'CondoWeb',

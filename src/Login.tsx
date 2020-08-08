@@ -20,14 +20,13 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default function ValidationTextFields(): JSX.Element {
+export default function Login({ userManager }: { userManager: UserManager }): JSX.Element {
   const classes = useStyles();
   const [processLogin, setProcessLogin] = React.useState<null | true>(null);
   const [email, setEmail] = React.useState<null | string>(null);
-  const userManager = new UserManager();
 
   function doLogin(): void {
-    if (email) {
+    if (email && userManager) {
       userManager.login(email);
       setProcessLogin(true);
     }

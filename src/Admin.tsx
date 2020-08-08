@@ -15,9 +15,9 @@ const UserLI = (prop: UserProp): JSX.Element => {
 
 export default function Admin(): JSX.Element {
   const [users, setUsers] = useState<User[]>([]);
-  // setState({ users: ;
 
   const admin = new AdminManager();
+  if (!admin) { return (<div />); }
   const fetchUsers = async (): Promise<void> => {
     admin.getUsers().then((response) => {
       setUsers(response);
