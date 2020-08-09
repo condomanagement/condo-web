@@ -10,8 +10,8 @@ import Reservation from './Reservation';
 import Login from './Login';
 import Nav from './Nav';
 import './styles/application.scss';
-import ArrowLoftsWhite from '../public/ArrowLofts-White.svg';
-import ArrowLoftsRendering from '../public/Arrow-Lofts-Rendering.jpg';
+import ArrowLoftsWhite from './images/ArrowLofts-White.svg';
+import ArrowLoftsRendering from './images/Arrow-Lofts-Rendering.jpg';
 
 function App(): JSX.Element {
   const [userManager] = React.useState(new UserManager());
