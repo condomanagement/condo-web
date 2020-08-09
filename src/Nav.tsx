@@ -6,9 +6,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { Link } from 'react-router-dom';
@@ -36,12 +33,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setAuth(event.target.checked);
-  };
-
-  React.useEffect(() => {
-    if (!userManager) { return; }
+  const checkLogin = (): void => {
     const token = getCookie('token');
     if (token) {
       userManager.validateToken(token).then((_result) => {
@@ -52,6 +44,11 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
         }
       });
     }
+  };
+
+  React.useEffect(() => {
+    if (!userManager) { return; }
+    checkLogin();
   }, [auth]);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>): void => {
@@ -66,7 +63,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
         return;
       }
       setAuth(false);
-    })
+    });
     setAnchorEl(null);
   };
 
@@ -77,6 +74,9 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
         <Toolbar className={classes.orangeBg}>
           <Typography variant="h6" className={classes.title}>
             <Link to="/">Parking</Link>
+          </Typography>
+          <Typography variant="h6" className={classes.title}>
+            <Link to="/admin">Admin</Link>
           </Typography>
           <IconButton
             aria-label="account of current user"
@@ -112,13 +112,12 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
       <AppBar position="static">
         <Toolbar className={classes.orangeBg}>
           <Typography variant="h6" className={classes.title} />
-          <Link to="/login">
-            <Button
-              color="inherit"
-            >
-              Login
-            </Button>
-          </Link>
+          <Button
+            color="inherit"
+            href="/login"
+          >
+            Login
+          </Button>
         </Toolbar>
       </AppBar>
     );
@@ -126,12 +125,6 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
 
   return (
     <div className={classes.root}>
-      <FormGroup>
-        <FormControlLabel
-          control={<Switch checked={auth} onChange={handleChange} aria-label="login switch" />}
-          label={auth ? 'Logout' : 'Login'}
-        />
-      </FormGroup>
       {toolBar}
     </div>
   );
