@@ -6,11 +6,12 @@ import { UserManager } from 'condo-brain';
 import Parking from './Parking';
 import Admin from './Admin';
 import Authenticate from './Authenticate';
+import Reservation from './Reservation';
 import Login from './Login';
 import Nav from './Nav';
 import './styles/application.scss';
-import ArrowLoftsWhite from '../public/ArrowLofts-White.svg';
-import ArrowLoftsRendering from '../public/Arrow-Lofts-Rendering.jpg';
+import ArrowLoftsWhite from './images/ArrowLofts-White.svg';
+import ArrowLoftsRendering from './images/Arrow-Lofts-Rendering.jpg';
 
 function App(): JSX.Element {
   const [userManager] = React.useState(new UserManager());
@@ -45,6 +46,7 @@ function App(): JSX.Element {
           <Route path="admin" element={<Admin />} />
           <Route path="login" element={<Login userManager={userManager} />} />
           <Route path="authenticate/:emailtoken" element={<Authenticate userManager={userManager} />} />
+          <Route path="reservation" element={<Reservation />} />
         </Routes>
       </div>
       <footer
