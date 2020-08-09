@@ -39,10 +39,6 @@ jobs:
           command: npm run lint
 
       - run:
-          name: Test && CodeCov
-          command: npm run test && npx codecov
-
-      - run:
           name: Build
           command: npm run build-production
 
