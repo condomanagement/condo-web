@@ -2,18 +2,24 @@ import React from 'react';
 import * as Parallax from 'react-parallax';
 import { Grid } from '@material-ui/core';
 import { Route, Routes } from 'react-router-dom';
+import { UserManager } from 'condo-brain';
 import Parking from './Parking';
 import Admin from './Admin';
+import Authenticate from './Authenticate';
 import Login from './Login';
 import Nav from './Nav';
 import './styles/application.scss';
+import ArrowLoftsWhite from '../public/ArrowLofts-White.svg';
+import ArrowLoftsRendering from '../public/Arrow-Lofts-Rendering.jpg';
 
 function App(): JSX.Element {
+  const [userManager] = React.useState(new UserManager());
+
   return (
     <div className="App">
-      <Nav />
+      <Nav userManager={userManager} />
       <Parallax.Parallax
-        bgImage={require('../public/Arrow-Lofts-Rendering.jpg')} // eslint-disable-line global-require
+        bgImage={ArrowLoftsRendering}
         className="index-banner"
       >
         <div className="section no-pad-bot">
@@ -22,7 +28,12 @@ function App(): JSX.Element {
             <br />
             <h1 className="header center arrow-green">
               <a id="logo-container" href="/" className="brand-logo">
-                <img alt="Arrow Lofts" title="Arrow Lofts" className="arrow-logo" src="./ArrowLofts-White.svg" />
+                <img
+                  alt="Arrow Lofts"
+                  title="Arrow Lofts"
+                  className="arrow-logo"
+                  src={ArrowLoftsWhite}
+                />
               </a>
             </h1>
           </div>
@@ -32,7 +43,8 @@ function App(): JSX.Element {
         <Routes>
           <Route path="/" element={<Parking />} />
           <Route path="admin" element={<Admin />} />
-          <Route path="login" element={<Login />} />
+          <Route path="login" element={<Login userManager={userManager} />} />
+          <Route path="authenticate/:emailtoken" element={<Authenticate userManager={userManager} />} />
         </Routes>
       </div>
       <footer

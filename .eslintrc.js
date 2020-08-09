@@ -46,6 +46,8 @@ module.exports = {
     'no-console': ['error', { allow: ['warn', 'error'] }],
     'max-len': ['error', { code: 120 }],
     'react/jsx-filename-extension': [1, { extensions: ['.jsx', '.tsx'] }],
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     indent: ['error', 2],
     'sort-imports': ['error', {
       ignoreCase: false,

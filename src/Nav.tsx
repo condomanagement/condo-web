@@ -5,13 +5,12 @@ import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import { Link } from 'react-router-dom';
+import { get as getCookie } from 'es-cookie';
+import { UserManager } from 'condo-brain';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -28,21 +27,43 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default function MenuAppBar(): JSX.Element {
+export default function NavBar({ userManager }: { userManager: UserManager }): JSX.Element {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
+  const [auth, setAuth] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setAuth(event.target.checked);
+  const checkLogin = (): void => {
+    const token = getCookie('token');
+    if (token) {
+      userManager.validateToken(token).then((_result) => {
+        if (userManager.loggedIn) {
+          setAuth(true);
+        } else {
+          setAuth(false);
+        }
+      });
+    }
   };
+
+  React.useEffect(() => {
+    if (!userManager) { return; }
+    checkLogin();
+  }, [auth]);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = (): void => {
+    const token = getCookie('token');
+    if (!token) { return; }
+    userManager.logout(token).then((result) => {
+      if (result === false) {
+        return;
+      }
+      setAuth(false);
+    });
     setAnchorEl(null);
   };
 
@@ -51,11 +72,11 @@ export default function MenuAppBar(): JSX.Element {
     toolBar = (
       <AppBar position="static">
         <Toolbar className={classes.orangeBg}>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Photos
+            <Link to="/">Parking</Link>
+          </Typography>
+          <Typography variant="h6" className={classes.title}>
+            <Link to="/admin">Admin</Link>
           </Typography>
           <IconButton
             aria-label="account of current user"
@@ -93,6 +114,7 @@ export default function MenuAppBar(): JSX.Element {
           <Typography variant="h6" className={classes.title} />
           <Button
             color="inherit"
+            href="/login"
           >
             Login
           </Button>
@@ -103,12 +125,6 @@ export default function MenuAppBar(): JSX.Element {
 
   return (
     <div className={classes.root}>
-      <FormGroup>
-        <FormControlLabel
-          control={<Switch checked={auth} onChange={handleChange} aria-label="login switch" />}
-          label={auth ? 'Logout' : 'Login'}
-        />
-      </FormGroup>
       {toolBar}
     </div>
   );
