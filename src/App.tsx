@@ -6,6 +6,7 @@ import { UserManager } from 'condo-brain';
 import Parking from './Parking';
 import Admin from './Admin';
 import Authenticate from './Authenticate';
+import Reservation from './Reservation';
 import Login from './Login';
 import Nav from './Nav';
 import './styles/application.scss';
@@ -45,6 +46,7 @@ function App(): JSX.Element {
           <Route path="admin" element={<Admin />} />
           <Route path="login" element={<Login userManager={userManager} />} />
           <Route path="authenticate/:emailtoken" element={<Authenticate userManager={userManager} />} />
+          <Route path="reservation" element={<Reservation />} />
         </Routes>
       </div>
       <footer

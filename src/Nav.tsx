@@ -76,6 +76,9 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
             <Link to="/">Parking</Link>
           </Typography>
           <Typography variant="h6" className={classes.title}>
+            <Link to="/reservation">Reserve Amenity</Link>
+          </Typography>
+          <Typography variant="h6" className={classes.title}>
             <Link to="/admin">Admin</Link>
           </Typography>
           <IconButton
