@@ -49,6 +49,10 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
   React.useEffect(() => {
     if (!userManager) { return; }
     checkLogin();
+    const timer = setTimeout(() => {
+      checkLogin();
+      clearTimeout(timer);
+    }, 1000);
   }, [auth]);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>): void => {
