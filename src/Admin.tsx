@@ -3,6 +3,10 @@ import Button from '@material-ui/core/Button';
 import { AdminManager, User } from 'condo-brain';
 import { Grid } from '@material-ui/core';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
 
 type UserProp = {
   children: User;
@@ -10,8 +14,39 @@ type UserProp = {
 
 const UserLI = (prop: UserProp): JSX.Element => {
   const user = prop.children;
+  const primary = user.name;
+
   return (
-    <li>{user.name}</li>
+    <ListItem>
+      <ListItemText
+        primary={primary}
+        secondary={(
+          <>
+            <Typography
+              component="span"
+              variant="body2"
+              style={{ display: 'inline' }}
+              color="textPrimary"
+            >
+              Unit 108
+              {'  '}
+            </Typography>
+            {`${user.email}`}
+            {user.admin && (
+              <Typography
+                component="span"
+                variant="body2"
+                style={{ display: 'inline' }}
+                color="textPrimary"
+              >
+                {'  '}
+                Administrator
+              </Typography>
+            )}
+          </>
+        )}
+      />
+    </ListItem>
   );
 };
 
@@ -26,6 +61,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     backgroundColor: '#f37f30',
     color: 'white',
     marginBottom: '20px',
+  },
+  demo: {
+    backgroundColor: theme.palette.background.paper,
+  },
+  title: {
+    margin: theme.spacing(4, 0, 2),
   },
 }));
 
@@ -106,9 +147,9 @@ export default function Admin(): JSX.Element {
               )}
             </label>
           </form>
-          <ul>
+          <List>
             {users.map((user) => <UserLI key={user.name}>{user}</UserLI>)}
-          </ul>
+          </List>
         </Grid>
       </Grid>
     </div>
