@@ -55,7 +55,7 @@ module.exports = {
   },
   output: {
     publicPath: '/',
-    filename: 'condo-web.js',
+    filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'build'),
     library: 'CondoWeb',
   },
@@ -64,6 +64,7 @@ module.exports = {
     // The injected script tag contains a src value of the
     // filename output defined above.
     new HtmlWebpackPlugin({
+      title: 'condo-web',
       inject: 'body',
       template: resolveAppPath('public/index.html'),
     }),
