@@ -28,7 +28,7 @@ const UserLI = (prop: UserProp): JSX.Element => {
               style={{ display: 'inline' }}
               color="textPrimary"
             >
-              Unit 108
+              {`${user.unit}`}
               {'  '}
             </Typography>
             {`${user.email}`}

@@ -7,7 +7,10 @@ import {
   Tab,
   Tabs,
 } from '@material-ui/core';
+import { useNavigate } from 'react-router-dom';
 import UserAdmin from './UserAdmin';
+import QuestionAdmin from './QuestionAdmin';
+import AmenityAdmin from './AmenityAdmin';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -37,6 +40,10 @@ interface TabPanelProps {
 
 function TabPanel(props: TabPanelProps): JSX.Element {
   const { children, value, index } = props;
+  const admin = new AdminManager();
+  const navigate = useNavigate();
+
+  if (!admin) { navigate('/'); }
 
   return (
     <div
@@ -78,7 +85,7 @@ export default function Admin(): JSX.Element {
         >
           <Tab label="Parking" disabled />
           <Tab label="Users" />
-          <Tab label="Ameneties" disabled />
+          <Tab label="Ameneties" />
           <Tab label="Questions" />
           <Tab label="Reservations" disabled />
         </Tabs>
@@ -90,10 +97,10 @@ export default function Admin(): JSX.Element {
           <UserAdmin />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Item Three
+          <AmenityAdmin />
         </TabPanel>
         <TabPanel value={value} index={3}>
-          Item Four
+          <QuestionAdmin />
         </TabPanel>
         <TabPanel value={value} index={4}>
           Item Five
