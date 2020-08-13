@@ -60,6 +60,10 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
   };
 
   const handleClose = (): void => {
+    setAnchorEl(null);
+  };
+
+  const logout = (): void => {
     const token = getCookie('token');
     if (!token) { return; }
     userManager.logout(token).then((result) => {
@@ -68,7 +72,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
       }
       setAuth(false);
     });
-    setAnchorEl(null);
+    handleClose();
   };
 
   let toolBar;
@@ -109,7 +113,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
             open={open}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
+            <MenuItem onClick={logout}>Logout</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
