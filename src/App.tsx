@@ -79,7 +79,7 @@ function App(): JSX.Element {
         </div>
         <div className="footer-copyright">
           <div className="container">
-            <a className="white-text" href="https://github.com/djensenius/condomanagement">
+            <a className="white-text" href="https://github.com/condomanagement">
               Open Source and Built with
               <span role="img" aria-label="love">❤️ </span>
               by David
