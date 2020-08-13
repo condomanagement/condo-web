@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import UserAdmin from './UserAdmin';
 import QuestionAdmin from './QuestionAdmin';
 import AmenityAdmin from './AmenityAdmin';
+import ReservationAdmin from './ReservationAdmin';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -87,7 +88,7 @@ export default function Admin(): JSX.Element {
           <Tab label="Users" />
           <Tab label="Ameneties" />
           <Tab label="Questions" />
-          <Tab label="Reservations" disabled />
+          <Tab label="Reservations" />
         </Tabs>
 
         <TabPanel value={value} index={0}>
@@ -103,7 +104,7 @@ export default function Admin(): JSX.Element {
           <QuestionAdmin />
         </TabPanel>
         <TabPanel value={value} index={4}>
-          Item Five
+          <ReservationAdmin />
         </TabPanel>
       </Paper>
     </div>
