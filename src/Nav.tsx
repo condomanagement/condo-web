@@ -86,9 +86,11 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
           <Typography variant="h6" className={classes.title}>
             <Link to="/reservation">Reserve Amenity</Link>
           </Typography>
-          <Typography variant="h6" className={classes.title}>
-            <Link to="/admin">Admin</Link>
-          </Typography>
+          { userManager.isAdmin && (
+            <Typography variant="h6" className={classes.title}>
+              <Link to="/admin">Admin</Link>
+            </Typography>
+          )}
           <IconButton
             aria-label="account of current user"
             aria-controls="menu-appbar"

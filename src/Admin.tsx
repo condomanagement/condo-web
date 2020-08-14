@@ -12,6 +12,7 @@ import UserAdmin from './UserAdmin';
 import QuestionAdmin from './QuestionAdmin';
 import AmenityAdmin from './AmenityAdmin';
 import ReservationAdmin from './ReservationAdmin';
+import ParkingAdmin from './ParkingAdmin';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -64,12 +65,12 @@ function TabPanel(props: TabPanelProps): JSX.Element {
 
 export default function Admin(): JSX.Element {
   const classes = useStyles();
-  const [value, setValue] = React.useState(1);
+  const [value, setValue] = React.useState(0);
 
   const admin = new AdminManager();
   if (!admin) { return (<div />); }
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number): void => {
+  const handleChange = (_event: React.ChangeEvent<{}>, newValue: number): void => {
     setValue(newValue);
   };
 
@@ -84,7 +85,7 @@ export default function Admin(): JSX.Element {
           onChange={handleChange}
           aria-label="admin tabs"
         >
-          <Tab label="Parking" disabled />
+          <Tab label="Parking" />
           <Tab label="Users" />
           <Tab label="Ameneties" />
           <Tab label="Questions" />
@@ -92,7 +93,7 @@ export default function Admin(): JSX.Element {
         </Tabs>
 
         <TabPanel value={value} index={0}>
-          Item One
+          <ParkingAdmin />
         </TabPanel>
         <TabPanel value={value} index={1}>
           <UserAdmin />
