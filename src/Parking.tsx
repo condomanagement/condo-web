@@ -6,6 +6,7 @@ import {
   TextField,
   Theme,
 } from '@material-ui/core';
+import { isMobile } from 'react-device-detect';
 import DateFnsUtils from '@date-io/date-fns'; // eslint-disable-line no-unused-vars, @typescript-eslint/no-unused-vars
 import MaterialUtils from '@date-io/moment';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
@@ -49,6 +50,16 @@ export default function Parking(): JSX.Element {
   const classes = useStyles(styleProps);
 
   const userManager = new UserManager();
+
+  const handleNativeStartDateChange = (date: string): void => {
+    const startDate = new Date(`${date}T01:00:00-05:00`);
+    handleStartDateChange(startDate);
+  };
+
+  const handleNativeEndDateChange = (date: string): void => {
+    const endDate = new Date(`${date}T01:00:00-05:00`);
+    handleEndDateChange(endDate);
+  };
 
   const register = (e: React.FormEvent): void => {
     e.preventDefault();
@@ -104,22 +115,50 @@ export default function Parking(): JSX.Element {
               </Grid>
               <MuiPickersUtilsProvider utils={MaterialUtils}>
                 <Grid item xs={6}>
-                  <DatePicker
-                    id="start"
-                    value={selectedStartDate}
-                    label="Start Date"
-                    onChange={handleStartDateChange}
-                    style={{ width: '100%' }}
-                  />
+                  {isMobile && (
+                    <TextField
+                      id="start"
+                      label="Start Date"
+                      type="date"
+                      defaultValue={selectedStartDate}
+                      onChange={(e): void => handleNativeStartDateChange(e.target.value)}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                  {!isMobile && (
+                    <DatePicker
+                      id="start"
+                      value={selectedStartDate}
+                      label="Start Date"
+                      onChange={handleStartDateChange}
+                      style={{ width: '100%' }}
+                    />
+                  )}
                 </Grid>
                 <Grid item xs={6}>
-                  <DatePicker
-                    id="end"
-                    value={selectedEndDate}
-                    label="End Date"
-                    onChange={handleEndDateChange}
-                    style={{ width: '100%' }}
-                  />
+                  {isMobile && (
+                    <TextField
+                      id="end"
+                      label="End Date"
+                      type="date"
+                      defaultValue={selectedEndDate}
+                      onChange={(e): void => handleNativeEndDateChange(e.target.value)}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                  {!isMobile && (
+                    <DatePicker
+                      id="end"
+                      value={selectedEndDate}
+                      label="End Date"
+                      onChange={handleEndDateChange}
+                      style={{ width: '100%' }}
+                    />
+                  )}
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
