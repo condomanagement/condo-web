@@ -9,6 +9,7 @@ import Authenticate from './Authenticate';
 import Reservation from './Reservation';
 import Login from './Login';
 import Nav from './Nav';
+import MyReservations from './MyReservations';
 import './styles/application.scss';
 import ArrowLoftsWhite from './images/ArrowLofts-White.svg';
 import ArrowLoftsRendering from './images/Arrow-Lofts-Rendering.jpg';
@@ -47,6 +48,7 @@ function App(): JSX.Element {
           <Route path="login" element={<Login userManager={userManager} />} />
           <Route path="authenticate/:emailtoken" element={<Authenticate userManager={userManager} />} />
           <Route path="reservation" element={<Reservation />} />
+          <Route path="myreservations" element={<MyReservations />} />
         </Routes>
       </div>
       <footer
