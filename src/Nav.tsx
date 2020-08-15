@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { get as getCookie } from 'es-cookie';
 import { UserManager } from 'condo-brain';
 
@@ -32,6 +32,8 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
   const [auth, setAuth] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  const navigate = useNavigate();
 
   const checkLogin = (): void => {
     const token = getCookie('token');
@@ -115,6 +117,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
             open={open}
             onClose={handleClose}
           >
+            <MenuItem onClick={(): void => navigate('myreservations')}>My Reservations</MenuItem>
             <MenuItem onClick={logout}>Logout</MenuItem>
           </Menu>
         </Toolbar>
