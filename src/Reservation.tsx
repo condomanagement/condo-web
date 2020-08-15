@@ -6,6 +6,9 @@ import {
   Grid,
   Icon,
   InputLabel,
+  List,
+  ListItem,
+  ListItemText,
   Select,
   TextField,
   Theme,
@@ -17,6 +20,7 @@ import { isMobile } from 'react-device-detect';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { DatePicker, MuiPickersUtilsProvider, TimePicker } from '@material-ui/pickers';
 import { Amenity, Question, UserManager } from 'condo-brain';
+import moment from 'moment';
 import './styles/application.scss';
 import './styles/parking.scss';
 
@@ -29,6 +33,13 @@ export default function Resevation(): JSX.Element {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [thanks, setThanks] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | unknown>(null);
+  const [availability, setAvailability] = useState<JSX.Element | null>(
+    <>
+      <AlertTitle>Select an amenity</AlertTitle>
+      Please select an amenity, and availability will be shown here.
+    </>,
+  );
+  const [selectedAmenityName, setSelectedAmenityName] = useState<string | unknown>('');
 
   const userManager = new UserManager();
 
@@ -61,14 +72,67 @@ export default function Resevation(): JSX.Element {
     userManager.getQuestions().then((result) => (setQuestions(result)))
   );
 
+  const findReservations = (): void => {
+    if (!amenity || !selectedStartDate) { return; }
+
+    userManager.findReservations(selectedStartDate, Number(amenity)).then((result) => {
+      if (result.length === 0) {
+        setAvailability(
+          <>
+            <AlertTitle>
+              {selectedAmenityName}
+              {'  '}
+              Availability
+            </AlertTitle>
+            Available all day.
+          </>,
+        );
+      } else {
+        const times: string[] = [];
+        Object.keys(result).forEach((a) => {
+          const pos = Number(a);
+          times.push(`${moment(result[pos].startTime).format('LT')} - ${moment(result[pos].endTime).format('LT')}`);
+        });
+        setAvailability(
+          <>
+            <AlertTitle>
+              {selectedAmenityName}
+              {'  '}
+              is already booked at these times:
+            </AlertTitle>
+            <List>
+              {times.map((time) => (
+                <ListItem>
+                  <ListItemText
+                    primary={time}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </>,
+        );
+      }
+    });
+  };
+
   useEffect(() => {
     fetchAmenities();
     fetchQuestions();
   }, [amenities.length]);
 
+  useEffect(() => {
+    findReservations();
+  }, [amenity, selectedStartDate]);
+
   const handleAmenityChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>): void => {
     const reserveAmenity = event.target.value;
     setAmenity(reserveAmenity);
+    Object.keys(amenities).forEach((a) => {
+      const loopAmenity = amenities[Number(a)];
+      if (String(loopAmenity.id) === event.target.value) {
+        setSelectedAmenityName(loopAmenity.name);
+      }
+    });
   };
 
   const handleAnswerChange = (event: React.ChangeEvent<{ name?: string; checked: unknown }>): void => {
@@ -89,8 +153,9 @@ export default function Resevation(): JSX.Element {
       changedDate.getFullYear(),
       changedDate.getMonth(),
       changedDate.getDate(),
-      selectedStartDate?.getHours(),
-      selectedStartDate?.getMinutes(),
+      selectedStartDate?.getHours() || new Date().getHours(),
+      selectedStartDate?.getMinutes() || new Date().getMinutes(),
+      changedDate.getTimezoneOffset(),
     );
     handleStartDateChange(startDate);
 
@@ -98,21 +163,23 @@ export default function Resevation(): JSX.Element {
       changedDate.getFullYear(),
       changedDate.getMonth(),
       changedDate.getDate(),
-      selectedEndDate?.getHours(),
-      selectedEndDate?.getMinutes(),
+      selectedEndDate?.getHours() || new Date().getHours(),
+      selectedEndDate?.getMinutes() || new Date().getMinutes(),
+      changedDate.getTimezoneOffset(),
     );
     handleEndDateChange(endDate);
   };
 
   const handleNativeStartTimeChange = (date: string): void => {
     const [hour, minute] = date.split(':');
-
+    const changedDate = new Date();
     const startDate = new Date(
       selectedStartDate?.getFullYear() || new Date().getFullYear(),
       selectedStartDate?.getMonth() || new Date().getMonth(),
       selectedStartDate?.getDate() || new Date().getDate(),
       Number(hour),
       Number(minute),
+      changedDate.getTimezoneOffset(),
     );
 
     handleStartDateChange(startDate);
@@ -120,13 +187,14 @@ export default function Resevation(): JSX.Element {
 
   const handleNativeEndTimeChange = (date: string): void => {
     const [hour, minute] = date.split(':');
-
+    const changedDate = new Date();
     const endDate = new Date(
       selectedEndDate?.getFullYear() || new Date().getFullYear(),
       selectedEndDate?.getMonth() || new Date().getMonth(),
       selectedEndDate?.getDate() || new Date().getDate(),
       Number(hour),
       Number(minute),
+      changedDate.getTimezoneOffset(),
     );
 
     handleEndDateChange(endDate);
@@ -184,6 +252,11 @@ export default function Resevation(): JSX.Element {
                   <Alert severity="error">
                     <AlertTitle>Error</AlertTitle>
                     {errorMessage}
+                  </Alert>
+                )}
+                { availability && (
+                  <Alert severity="info">
+                    {availability}
                   </Alert>
                 )}
               </Grid>
@@ -302,6 +375,12 @@ export default function Resevation(): JSX.Element {
                     endIcon={<Icon>add</Icon>}
                   >
                     Reserve
+                    {selectedAmenityName && (
+                      <>
+                        {'  '}
+                        {selectedAmenityName}
+                      </>
+                    )}
                   </Button>
                 </Grid>
               </MuiPickersUtilsProvider>
