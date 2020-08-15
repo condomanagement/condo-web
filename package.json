@@ -34,6 +34,7 @@
     "materialize-css": "^1.0.0",
     "moment": "^2.27.0",
     "react": "^16.13.1",
+    "react-device-detect": "^1.13.1",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.3.0",
     "react-materialize": "^3.9.2",

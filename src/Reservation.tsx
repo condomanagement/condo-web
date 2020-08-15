@@ -7,11 +7,13 @@ import {
   Icon,
   InputLabel,
   Select,
+  TextField,
   Theme,
 } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import DateFnsUtils from '@date-io/date-fns'; // eslint-disable-line no-unused-vars, @typescript-eslint/no-unused-vars
 import MaterialUtils from '@date-io/moment';
+import { isMobile } from 'react-device-detect';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { DatePicker, MuiPickersUtilsProvider, TimePicker } from '@material-ui/pickers';
 import { Amenity, Question, UserManager } from 'condo-brain';
@@ -79,6 +81,55 @@ export default function Resevation(): JSX.Element {
       currentAnswers[Number(event.target.name)] = false;
       setAnswers(currentAnswers);
     }
+  };
+
+  const handleNativeDateChange = (date: string): void => {
+    const changedDate = new Date(date);
+    const startDate = new Date(
+      changedDate.getFullYear(),
+      changedDate.getMonth(),
+      changedDate.getDate(),
+      selectedStartDate?.getHours(),
+      selectedStartDate?.getMinutes(),
+    );
+    handleStartDateChange(startDate);
+
+    const endDate = new Date(
+      changedDate.getFullYear(),
+      changedDate.getMonth(),
+      changedDate.getDate(),
+      selectedEndDate?.getHours(),
+      selectedEndDate?.getMinutes(),
+    );
+    handleEndDateChange(endDate);
+  };
+
+  const handleNativeStartTimeChange = (date: string): void => {
+    const [hour, minute] = date.split(':');
+
+    const startDate = new Date(
+      selectedStartDate?.getFullYear() || new Date().getFullYear(),
+      selectedStartDate?.getMonth() || new Date().getMonth(),
+      selectedStartDate?.getDate() || new Date().getDate(),
+      Number(hour),
+      Number(minute),
+    );
+
+    handleStartDateChange(startDate);
+  };
+
+  const handleNativeEndTimeChange = (date: string): void => {
+    const [hour, minute] = date.split(':');
+
+    const endDate = new Date(
+      selectedEndDate?.getFullYear() || new Date().getFullYear(),
+      selectedEndDate?.getMonth() || new Date().getMonth(),
+      selectedEndDate?.getDate() || new Date().getDate(),
+      Number(hour),
+      Number(minute),
+    );
+
+    handleEndDateChange(endDate);
   };
 
   const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -158,31 +209,73 @@ export default function Resevation(): JSX.Element {
                   </Select>
                 </Grid>
                 <Grid item xs={6}>
-                  <DatePicker
-                    id="start"
-                    value={selectedStartDate}
-                    label="Date"
-                    onChange={handleStartDateChange}
-                    style={{ width: '100%' }}
-                  />
+                  { isMobile && (
+                    <TextField
+                      id="start"
+                      label="Date"
+                      type="date"
+                      defaultValue={selectedStartDate}
+                      onChange={(e): void => handleNativeDateChange(e.target.value)}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                  { !isMobile && (
+                    <DatePicker
+                      id="start"
+                      value={selectedStartDate}
+                      label="Date"
+                      onChange={handleStartDateChange}
+                      style={{ width: '100%' }}
+                    />
+                  )}
                 </Grid>
                 <Grid item xs={6}>
-                  <TimePicker
-                    id="startTime"
-                    value={selectedStartDate}
-                    label="Start Time"
-                    onChange={handleStartDateChange}
-                    style={{ width: '100%' }}
-                  />
+                  { isMobile && (
+                    <TextField
+                      id="startTime"
+                      label="Start Time"
+                      type="time"
+                      defaultValue={selectedStartDate}
+                      onChange={(e): void => handleNativeStartTimeChange(e.target.value)}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                  { !isMobile && (
+                    <TimePicker
+                      id="startTime"
+                      value={selectedStartDate}
+                      label="Start Time"
+                      onChange={handleStartDateChange}
+                      style={{ width: '100%' }}
+                    />
+                  )}
                 </Grid>
                 <Grid item xs={6}>
-                  <TimePicker
-                    id="endTime"
-                    value={selectedEndDate}
-                    label="End Time"
-                    onChange={handleEndDateChange}
-                    style={{ width: '100%' }}
-                  />
+                  { isMobile && (
+                    <TextField
+                      id="endTime"
+                      label="End Time"
+                      type="time"
+                      defaultValue={selectedEndDate}
+                      onChange={(e): void => handleNativeEndTimeChange(e.target.value)}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                  { !isMobile && (
+                    <TimePicker
+                      id="endTime"
+                      value={selectedEndDate}
+                      label="End Time"
+                      onChange={handleEndDateChange}
+                      style={{ width: '100%' }}
+                    />
+                  )}
                 </Grid>
                 {questions.map(
                   (questionOption) => (

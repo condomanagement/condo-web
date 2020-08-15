@@ -115,8 +115,8 @@ export default function ParkingAdmin(): JSX.Element {
                     </StyledTableCell>
                     <StyledTableCell align="right">{row.color}</StyledTableCell>
                     <StyledTableCell align="right">{row.license}</StyledTableCell>
-                    <StyledTableCell align="right">{moment(row.startDate).format('llll')}</StyledTableCell>
-                    <StyledTableCell align="right">{moment(row.endDate).format('llll')}</StyledTableCell>
+                    <StyledTableCell align="right">{moment(row.startDate).format('LL')}</StyledTableCell>
+                    <StyledTableCell align="right">{moment(row.endDate).format('LL')}</StyledTableCell>
                     <StyledTableCell align="right">{row.contact}</StyledTableCell>
                   </StyledTableRow>
                 ))}
