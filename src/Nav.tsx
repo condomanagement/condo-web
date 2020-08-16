@@ -10,7 +10,6 @@ import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { useNavigate } from 'react-router-dom';
@@ -33,6 +32,7 @@ import LocalParking from '@material-ui/icons/LocalParking';
 import Settings from '@material-ui/icons/Settings';
 import Schedule from '@material-ui/icons/Schedule';
 import EventAvailable from '@material-ui/icons/EventAvailable';
+import Avatar from 'react-avatar';
 
 const drawerWidth = 240;
 
@@ -198,7 +198,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
               onClick={handleMenu}
               color="inherit"
             >
-              <AccountCircle />
+              <Avatar md5Email={userManager.md5Email} name={userManager.fullname} color="#93C83E" size="40" round />
             </IconButton>
             <Menu
               id="menu-appbar"
