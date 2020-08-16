@@ -1,5 +1,10 @@
 import React from 'react';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import {
+  Theme,
+  createStyles,
+  makeStyles,
+  useTheme,
+} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -8,16 +13,34 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { get as getCookie } from 'es-cookie';
 import { UserManager } from 'condo-brain';
+import Link from '@material-ui/core/Link';
+import Tooltip from '@material-ui/core/Tooltip';
+import clsx from 'clsx';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Divider from '@material-ui/core/Divider';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import LocalParking from '@material-ui/icons/LocalParking';
+import Settings from '@material-ui/icons/Settings';
+import Schedule from '@material-ui/icons/Schedule';
+import EventAvailable from '@material-ui/icons/EventAvailable';
+
+const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
-    flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: 36,
   },
   title: {
     flexGrow: 1,
@@ -25,12 +48,76 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   orangeBg: {
     backgroundColor: '#f37f30',
   },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  hide: {
+    display: 'none',
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+  },
+  drawerOpen: {
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  drawerClose: {
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width: theme.spacing(7) + 1,
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing(9) + 1,
+    },
+  },
+  toolbar: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
 }));
 
 export default function NavBar({ userManager }: { userManager: UserManager }): JSX.Element {
   const classes = useStyles();
+  const theme = useTheme();
   const [auth, setAuth] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [openDrawer, setOpenDrawer] = React.useState(false);
+  const [pageTitle, setPageTitle] = React.useState('Visitor Parking Registrations');
+
+  const handleDrawerOpen = (): void => {
+    setOpenDrawer(true);
+  };
+
+  const handleDrawerClose = (): void => {
+    setOpenDrawer(false);
+  };
   const open = Boolean(anchorEl);
 
   const navigate = useNavigate();
@@ -73,6 +160,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
         return;
       }
       setAuth(false);
+      navigate('/');
     });
     handleClose();
   };
@@ -80,48 +168,158 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
   let toolBar;
   if (auth) {
     toolBar = (
-      <AppBar position="static">
-        <Toolbar className={classes.orangeBg}>
-          <Typography variant="h6" className={classes.title}>
-            <Link to="/">Parking</Link>
-          </Typography>
-          <Typography variant="h6" className={classes.title}>
-            <Link to="/reservation">Reserve Amenity</Link>
-          </Typography>
-          { userManager.isAdmin && (
+      <>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          className={clsx(classes.appBar, {
+            [classes.appBarShift]: openDrawer,
+          })}
+        >
+          <Toolbar className={classes.orangeBg}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, {
+                [classes.hide]: openDrawer,
+              })}
+            >
+              <MenuIcon />
+            </IconButton>
             <Typography variant="h6" className={classes.title}>
-              <Link to="/admin">Admin</Link>
+              {pageTitle}
             </Typography>
+            <IconButton
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={open}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={(): void => navigate('myreservations')}>My Reservations</MenuItem>
+              <MenuItem onClick={logout}>Logout</MenuItem>
+            </Menu>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          className={clsx(classes.drawer, {
+            [classes.drawerOpen]: openDrawer,
+            [classes.drawerClose]: !openDrawer,
+          })}
+          classes={{
+            paper: clsx({
+              [classes.drawerOpen]: openDrawer,
+              [classes.drawerClose]: !openDrawer,
+            }),
+          }}
+        >
+          <div className={classes.toolbar}>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </IconButton>
+          </div>
+          <Divider />
+          <List>
+            <Link
+              href="/"
+              onClick={(e: React.SyntheticEvent): void => {
+                e.preventDefault();
+                navigate('/');
+                setPageTitle('Visitor Parking Registration');
+              }}
+              color="inherit"
+              underline="none"
+            >
+              <Tooltip title="Visitor Parking Registration">
+                <ListItem button key="parking">
+                  <ListItemIcon style={{ paddingLeft: '5px' }}><LocalParking /></ListItemIcon>
+                  <ListItemText primary="Parking" />
+                </ListItem>
+              </Tooltip>
+            </Link>
+
+            <Link
+              href="/reservation"
+              onClick={(e: React.SyntheticEvent): void => {
+                e.preventDefault();
+                navigate('reservation');
+                setPageTitle('Reserve Amenity');
+              }}
+              color="inherit"
+              underline="none"
+            >
+              <Tooltip title="Reserve Amenity">
+                <ListItem button key="reservation">
+                  <ListItemIcon style={{ paddingLeft: '5px' }}><EventAvailable /></ListItemIcon>
+                  <ListItemText primary="Reserve Amenity" />
+                </ListItem>
+              </Tooltip>
+            </Link>
+
+            <Link
+              href="/myreservations"
+              onClick={(e: React.SyntheticEvent): void => {
+                e.preventDefault();
+                navigate('myreservations');
+                setPageTitle('My Reservations');
+              }}
+              color="inherit"
+              underline="none"
+            >
+              <Tooltip title="My Reservations">
+                <ListItem button key="myreservations">
+                  <ListItemIcon style={{ paddingLeft: '5px' }}><Schedule /></ListItemIcon>
+                  <ListItemText primary="My reservations" />
+                </ListItem>
+              </Tooltip>
+            </Link>
+          </List>
+          {userManager.isAdmin && (
+            <>
+              <Divider />
+              <List>
+                <Link
+                  href="/admin"
+                  onClick={(e: React.SyntheticEvent): void => {
+                    e.preventDefault();
+                    navigate('admin');
+                    setPageTitle('administration');
+                  }}
+                  color="inherit"
+                  underline="none"
+                >
+                  <Tooltip title="Administration">
+                    <ListItem button key="administration">
+                      <ListItemIcon style={{ paddingLeft: '5px' }}><Settings /></ListItemIcon>
+                      <ListItemText primary="Administration" />
+                    </ListItem>
+                  </Tooltip>
+                </Link>
+              </List>
+            </>
           )}
-          <IconButton
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            onClick={handleMenu}
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
-          <Menu
-            id="menu-appbar"
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={open}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={(): void => navigate('myreservations')}>My Reservations</MenuItem>
-            <MenuItem onClick={logout}>Logout</MenuItem>
-          </Menu>
-        </Toolbar>
-      </AppBar>
+        </Drawer>
+      </>
     );
   } else {
     toolBar = (
