@@ -7,6 +7,7 @@ Web interface for Condo Management
 1. Clone reposotory
 2. `npm install`
 3. `npm run dev`
+4. Visit http://localhost:3001 to see the project.
 
 ## Lint
 
