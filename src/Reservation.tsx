@@ -14,8 +14,7 @@ import {
   Theme,
 } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
-import DateFnsUtils from '@date-io/date-fns'; // eslint-disable-line no-unused-vars, @typescript-eslint/no-unused-vars
-import MaterialUtils from '@date-io/moment';
+import MomentUtils from '@date-io/moment';
 import { isMobile } from 'react-device-detect';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { DatePicker, MuiPickersUtilsProvider, TimePicker } from '@material-ui/pickers';
@@ -25,8 +24,9 @@ import './styles/application.scss';
 import './styles/parking.scss';
 
 export default function Resevation(): JSX.Element {
-  const [selectedStartDate, handleStartDateChange] = useState<Date | null>(new Date());
-  const [selectedEndDate, handleEndDateChange] = useState<Date | null>(new Date());
+  const [selectedStartDate, setSelectedStartDateChange] = useState<Date | null>(new Date());
+  const [selectedEndDate, setSelectedEndDateChange] = useState<Date | null>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [amenity, setAmenity] = useState<string | unknown>(null);
   const [amenities, setAmenities] = useState<Amenity[]>([]);
   const [answers, setAnswers] = useState<boolean[]>([]);
@@ -157,7 +157,7 @@ export default function Resevation(): JSX.Element {
       selectedStartDate?.getMinutes() || new Date().getMinutes(),
       changedDate.getTimezoneOffset(),
     );
-    handleStartDateChange(startDate);
+    setSelectedStartDateChange(startDate);
 
     const endDate = new Date(
       changedDate.getFullYear(),
@@ -167,22 +167,64 @@ export default function Resevation(): JSX.Element {
       selectedEndDate?.getMinutes() || new Date().getMinutes(),
       changedDate.getTimezoneOffset(),
     );
-    handleEndDateChange(endDate);
+    setSelectedEndDateChange(endDate);
+  };
+
+  const handleDateChange = (date: string | undefined): void => {
+    let setDate = new Date();
+    if (date) {
+      setDate = new Date(date);
+    }
+    setSelectedDate(setDate);
+
+    const startDate = new Date(
+      setDate.getFullYear(),
+      setDate.getMonth(),
+      setDate.getDate(),
+      selectedStartDate?.getHours(),
+      selectedStartDate?.getMinutes(),
+    );
+
+    setSelectedStartDateChange(startDate);
+
+    const endDate = new Date(
+      setDate.getFullYear(),
+      setDate.getMonth(),
+      setDate.getDate(),
+      selectedEndDate?.getHours() || new Date().getHours(),
+      selectedEndDate?.getMinutes() || new Date().getMinutes(),
+    );
+    setSelectedEndDateChange(endDate);
   };
 
   const handleNativeStartTimeChange = (date: string): void => {
     const [hour, minute] = date.split(':');
-    const changedDate = new Date();
     const startDate = new Date(
       selectedStartDate?.getFullYear() || new Date().getFullYear(),
       selectedStartDate?.getMonth() || new Date().getMonth(),
       selectedStartDate?.getDate() || new Date().getDate(),
       Number(hour),
       Number(minute),
-      changedDate.getTimezoneOffset(),
     );
 
-    handleStartDateChange(startDate);
+    setSelectedStartDateChange(startDate);
+  };
+
+  const handleStartDateChange = (date: string | undefined): void => {
+    let setTime = new Date();
+    if (date) {
+      setTime = new Date(date);
+    }
+
+    const startDate = new Date(
+      selectedDate?.getFullYear() || new Date().getFullYear(),
+      selectedDate?.getMonth() || new Date().getMonth(),
+      selectedDate?.getDate() || new Date().getDate(),
+      setTime.getHours(),
+      setTime.getMinutes(),
+    );
+
+    setSelectedStartDateChange(startDate);
   };
 
   const handleNativeEndTimeChange = (date: string): void => {
@@ -197,7 +239,24 @@ export default function Resevation(): JSX.Element {
       changedDate.getTimezoneOffset(),
     );
 
-    handleEndDateChange(endDate);
+    setSelectedEndDateChange(endDate);
+  };
+
+  const handleEndDateChange = (date: string | undefined): void => {
+    let setTime = new Date();
+    if (date) {
+      setTime = new Date(date);
+    }
+
+    const endDate = new Date(
+      selectedDate?.getFullYear() || new Date().getFullYear(),
+      selectedDate?.getMonth() || new Date().getMonth(),
+      selectedDate?.getDate() || new Date().getDate(),
+      setTime.getHours(),
+      setTime.getMinutes(),
+    );
+
+    setSelectedEndDateChange(endDate);
   };
 
   const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -260,7 +319,7 @@ export default function Resevation(): JSX.Element {
                   </Alert>
                 )}
               </Grid>
-              <MuiPickersUtilsProvider utils={MaterialUtils}>
+              <MuiPickersUtilsProvider utils={MomentUtils}>
                 <Grid item xs={6}>
                   <InputLabel htmlFor="age-native-simple">Amenity</InputLabel>
                   <Select
@@ -299,7 +358,7 @@ export default function Resevation(): JSX.Element {
                       id="start"
                       value={selectedStartDate}
                       label="Date"
-                      onChange={handleStartDateChange}
+                      onChange={(e): void => handleDateChange(e?.toString())}
                       style={{ width: '100%' }}
                     />
                   )}
@@ -322,7 +381,7 @@ export default function Resevation(): JSX.Element {
                       id="startTime"
                       value={selectedStartDate}
                       label="Start Time"
-                      onChange={handleStartDateChange}
+                      onChange={(e): void => handleStartDateChange(e?.toString())}
                       style={{ width: '100%' }}
                     />
                   )}
@@ -345,7 +404,7 @@ export default function Resevation(): JSX.Element {
                       id="endTime"
                       value={selectedEndDate}
                       label="End Time"
-                      onChange={handleEndDateChange}
+                      onChange={(e): void => handleEndDateChange(e?.toString())}
                       style={{ width: '100%' }}
                     />
                   )}
