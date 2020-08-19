@@ -23,6 +23,23 @@ import moment from 'moment';
 import './styles/application.scss';
 import './styles/parking.scss';
 
+const minutesToReadable = (t: number): string => {
+  const hours = Math.floor(t / 60);
+  const hourText = hours > 1 ? 'hours' : 'hour';
+
+  const minutes = t % 60;
+
+  let timeText = '';
+  if (hours > 0) {
+    timeText = `${hours} ${hourText} `;
+  }
+
+  if (minutes > 0) {
+    timeText = `${timeText} ${minutes} minutes`;
+  }
+  return timeText;
+};
+
 export default function Resevation(): JSX.Element {
   const [selectedStartDate, setSelectedStartDateChange] = useState<Date | null>(new Date());
   const [selectedEndDate, setSelectedEndDateChange] = useState<Date | null>(new Date());
@@ -32,6 +49,7 @@ export default function Resevation(): JSX.Element {
   const [answers, setAnswers] = useState<boolean[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [thanks, setThanks] = useState(false);
+  const [amenityTime, setAmenityTime] = useState<number>(60);
   const [errorMessage, setErrorMessage] = useState<string | unknown>(null);
   const [availability, setAvailability] = useState<JSX.Element | null>(
     <>
@@ -85,6 +103,11 @@ export default function Resevation(): JSX.Element {
               Availability
             </AlertTitle>
             Available all day.
+            <p>
+              {minutesToReadable(amenityTime)}
+              {'  '}
+              limit.
+            </p>
           </>,
         );
       } else {
@@ -109,6 +132,11 @@ export default function Resevation(): JSX.Element {
                 </ListItem>
               ))}
             </List>
+            <p>
+              {minutesToReadable(amenityTime)}
+              {'  '}
+              limit.
+            </p>
           </>,
         );
       }
@@ -131,6 +159,7 @@ export default function Resevation(): JSX.Element {
       const loopAmenity = amenities[Number(a)];
       if (String(loopAmenity.id) === event.target.value) {
         setSelectedAmenityName(loopAmenity.name);
+        setAmenityTime(loopAmenity.timeLimit);
       }
     });
   };
@@ -307,15 +336,15 @@ export default function Resevation(): JSX.Element {
             <Grid container spacing={5}>
               <Grid item xs={12}>
                 <h4 className="center">Reserve an Amenity</h4>
+                { availability && (
+                  <Alert severity="info">
+                    {availability}
+                  </Alert>
+                )}
                 { errorMessage && (
                   <Alert severity="error">
                     <AlertTitle>Error</AlertTitle>
                     {errorMessage}
-                  </Alert>
-                )}
-                { availability && (
-                  <Alert severity="info">
-                    {availability}
                   </Alert>
                 )}
               </Grid>

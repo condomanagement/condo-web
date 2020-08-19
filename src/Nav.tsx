@@ -303,7 +303,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
                   onClick={(e: React.SyntheticEvent): void => {
                     e.preventDefault();
                     navigate('admin');
-                    setPageTitle('administration');
+                    setPageTitle('Administration');
                   }}
                   color="inherit"
                   underline="none"
