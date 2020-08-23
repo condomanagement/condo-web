@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import { UserManager } from 'condo-brain';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 
@@ -23,12 +24,19 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 export default function Login({ userManager }: { userManager: UserManager }): JSX.Element {
   const classes = useStyles();
   const [processLogin, setProcessLogin] = React.useState<null | true>(null);
+  const [error, setError] = React.useState<string | null>(null);
   const [email, setEmail] = React.useState<null | string>(null);
 
   function doLogin(): void {
     if (email && userManager) {
-      userManager.login(email);
       setProcessLogin(true);
+      userManager.login(email).then((result) => {
+        if (result === false) {
+          setError(
+            'Invalid email address. Please make sure you are using the same email address you use with FrontSteps.',
+          );
+        }
+      });
     }
   }
 
@@ -63,9 +71,18 @@ export default function Login({ userManager }: { userManager: UserManager }): JS
   const loggingIn = (
     <Grid container spacing={5}>
       <Grid item xs={12}>
-        <h4 className="center">Email Sent</h4>
+        <h4 className="center">
+          {error && (<>Error</>)}
+          {!error && (<>Check your Email</>)}
+        </h4>
       </Grid>
       <Grid item xs={12}>
+        {error && (
+          <Alert severity="error">
+            <AlertTitle>Error</AlertTitle>
+            {error}
+          </Alert>
+        )}
         <p>
           If your email address matches one in our system you will recieve a login link.
           Please check your email to continue.
