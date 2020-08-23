@@ -47,7 +47,7 @@ export default function Resevation(): JSX.Element {
   const [amenity, setAmenity] = useState<string | unknown>(null);
   const [amenities, setAmenities] = useState<Amenity[]>([]);
   const [answers, setAnswers] = useState<boolean[]>([]);
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<{ [id: number]: Question[] } >([]);
   const [thanks, setThanks] = useState(false);
   const [amenityTime, setAmenityTime] = useState<number>(60);
   const [errorMessage, setErrorMessage] = useState<string | unknown>(null);
@@ -82,13 +82,15 @@ export default function Resevation(): JSX.Element {
       });
   };
 
-  const fetchAmenities = async (): Promise<void> => (
-    userManager.getAmenities().then((result) => (setAmenities(result)))
-  );
-
-  const fetchQuestions = async (): Promise<void> => (
-    userManager.getQuestions().then((result) => (setQuestions(result)))
-  );
+  const fetchAmenities = async (): Promise<void> => (userManager.getAmenities().then((result) => {
+    setAmenities(result);
+    const amenityQuestions: { [id: number]: Question[] } = [];
+    Object.keys(result).forEach((i) => {
+      const a = result[Number(i)];
+      amenityQuestions[a.id] = a.questions;
+    });
+    setQuestions(amenityQuestions);
+  }));
 
   const findReservations = (): void => {
     if (!amenity || !selectedStartDate) { return; }
@@ -145,7 +147,6 @@ export default function Resevation(): JSX.Element {
 
   useEffect(() => {
     fetchAmenities();
-    fetchQuestions();
   }, [amenities.length]);
 
   useEffect(() => {
@@ -438,7 +439,7 @@ export default function Resevation(): JSX.Element {
                     />
                   )}
                 </Grid>
-                {questions.map(
+                {amenity && questions[Number(amenity)].map(
                   (questionOption) => (
                     <Grid item xs={12} key={questionOption.id}>
                       <FormControlLabel

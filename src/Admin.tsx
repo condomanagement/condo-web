@@ -87,7 +87,7 @@ export default function Admin(): JSX.Element {
         >
           <Tab label="Parking" />
           <Tab label="Users" />
-          <Tab label="Ameneties" />
+          <Tab label="Amenities" />
           <Tab label="Questions" />
           <Tab label="Reservations" />
         </Tabs>
