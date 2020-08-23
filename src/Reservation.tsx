@@ -177,14 +177,15 @@ export default function Resevation(): JSX.Element {
   };
 
   const handleNativeDateChange = (date: string): void => {
-    const changedDate = new Date(date);
+    const constDate = new Date(date);
+    const tzo = new Date().getTimezoneOffset();
+    const changedDate = moment(constDate).add(tzo, 'm').toDate();
     const startDate = new Date(
       changedDate.getFullYear(),
       changedDate.getMonth(),
       changedDate.getDate(),
       selectedStartDate?.getHours() || new Date().getHours(),
       selectedStartDate?.getMinutes() || new Date().getMinutes(),
-      changedDate.getTimezoneOffset(),
     );
     setSelectedStartDateChange(startDate);
 
@@ -194,7 +195,6 @@ export default function Resevation(): JSX.Element {
       changedDate.getDate(),
       selectedEndDate?.getHours() || new Date().getHours(),
       selectedEndDate?.getMinutes() || new Date().getMinutes(),
-      changedDate.getTimezoneOffset(),
     );
     setSelectedEndDateChange(endDate);
   };
@@ -258,14 +258,12 @@ export default function Resevation(): JSX.Element {
 
   const handleNativeEndTimeChange = (date: string): void => {
     const [hour, minute] = date.split(':');
-    const changedDate = new Date();
     const endDate = new Date(
       selectedEndDate?.getFullYear() || new Date().getFullYear(),
       selectedEndDate?.getMonth() || new Date().getMonth(),
       selectedEndDate?.getDate() || new Date().getDate(),
       Number(hour),
       Number(minute),
-      changedDate.getTimezoneOffset(),
     );
 
     setSelectedEndDateChange(endDate);
