@@ -105,6 +105,14 @@ export default function QuestionAdmin(): JSX.Element {
       const index = question.amenities[Number(a)].id;
       checkedValues[index] = true;
     });
+
+    Object.keys(amenities).forEach((a) => {
+      const index = amenities[Number(a)].id;
+      if (!checkedValues[index]) {
+        checkedValues[index] = false;
+      }
+    });
+
     setAmenityChecks(checkedValues);
     setAmenityOpen(true);
   };
@@ -217,6 +225,7 @@ export default function QuestionAdmin(): JSX.Element {
                   <Checkbox
                     checked={amenityChecks[amenity.id]}
                     onChange={(e): void => handleCheckChange(e, amenity)}
+                    name={String(amenity.id)}
                     inputProps={{ 'aria-label': 'primary checkbox' }}
                   />
                 )}
