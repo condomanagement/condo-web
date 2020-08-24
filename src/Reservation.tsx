@@ -51,12 +51,7 @@ export default function Resevation(): JSX.Element {
   const [thanks, setThanks] = useState(false);
   const [amenityTime, setAmenityTime] = useState<number>(60);
   const [errorMessage, setErrorMessage] = useState<string | unknown>(null);
-  const [availability, setAvailability] = useState<JSX.Element | null>(
-    <>
-      <AlertTitle>Select an amenity</AlertTitle>
-      Please select an amenity, and availability will be shown here.
-    </>,
-  );
+  const [availability, setAvailability] = useState<JSX.Element | null>(null);
   const [selectedAmenityName, setSelectedAmenityName] = useState<string | unknown>('');
 
   const userManager = new UserManager();
@@ -122,8 +117,17 @@ export default function Resevation(): JSX.Element {
           <>
             <AlertTitle>
               {selectedAmenityName}
-              {'  '}
-              is already booked at these times:
+              {' '}
+              has a
+              {' '}
+              <strong>
+                {minutesToReadable(amenityTime)}
+                {' '}
+                limit
+              </strong>
+              ,
+              {' '}
+              and is already booked at these times:
             </AlertTitle>
             <List>
               {times.map((time) => (
@@ -134,11 +138,6 @@ export default function Resevation(): JSX.Element {
                 </ListItem>
               ))}
             </List>
-            <p>
-              {minutesToReadable(amenityTime)}
-              {'  '}
-              limit.
-            </p>
           </>,
         );
       }
@@ -337,11 +336,6 @@ export default function Resevation(): JSX.Element {
             <Grid container spacing={5}>
               <Grid item xs={12}>
                 <h4 className="center">Reserve an Amenity</h4>
-                { availability && (
-                  <Alert severity="info">
-                    {availability}
-                  </Alert>
-                )}
                 { errorMessage && (
                   <Alert severity="error">
                     <AlertTitle>Error</AlertTitle>
@@ -439,6 +433,13 @@ export default function Resevation(): JSX.Element {
                     />
                   )}
                 </Grid>
+                { availability && (
+                  <Grid item xs={12}>
+                    <Alert severity="info">
+                      {availability}
+                    </Alert>
+                  </Grid>
+                )}
                 {amenity && questions[Number(amenity)].map(
                   (questionOption) => (
                     <Grid item xs={12} key={questionOption.id}>
@@ -456,22 +457,24 @@ export default function Resevation(): JSX.Element {
                     </Grid>
                   ),
                 )}
-                <Grid item xs={12} className="center">
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    className={classes.registerButton}
-                    endIcon={<Icon>add</Icon>}
-                  >
-                    Reserve
-                    {selectedAmenityName && (
-                      <>
-                        {'  '}
-                        {selectedAmenityName}
-                      </>
-                    )}
-                  </Button>
-                </Grid>
+                {amenity && (
+                  <Grid item xs={12} className="center">
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      className={classes.registerButton}
+                      endIcon={<Icon>add</Icon>}
+                    >
+                      Reserve
+                      {selectedAmenityName && (
+                        <>
+                          {'  '}
+                          {selectedAmenityName}
+                        </>
+                      )}
+                    </Button>
+                  </Grid>
+                )}
               </MuiPickersUtilsProvider>
             </Grid>
           </div>
