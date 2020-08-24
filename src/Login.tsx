@@ -27,7 +27,8 @@ export default function Login({ userManager }: { userManager: UserManager }): JS
   const [error, setError] = React.useState<string | null>(null);
   const [email, setEmail] = React.useState<null | string>(null);
 
-  function doLogin(): void {
+  function doLogin(e: React.FormEvent): void {
+    e.preventDefault();
     if (email && userManager) {
       setProcessLogin(true);
       userManager.login(email).then((result) => {
@@ -41,7 +42,7 @@ export default function Login({ userManager }: { userManager: UserManager }): JS
   }
 
   const loginFrom = (
-    <form className={classes.root} noValidate autoComplete="off" onSubmit={doLogin}>
+    <form className={classes.root} noValidate autoComplete="off" onSubmit={(e): void => doLogin(e)}>
       <Grid container spacing={5}>
         <Grid item xs={12}>
           <h4 className="center">Login</h4>
