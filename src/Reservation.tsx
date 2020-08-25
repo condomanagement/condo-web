@@ -115,7 +115,7 @@ export default function Resevation(): JSX.Element {
               {'  '}
               Availability
             </AlertTitle>
-            Available all day.
+            No current bookings.
             <p>
               {minutesToReadable(amenityTime)}
               {'  '}
