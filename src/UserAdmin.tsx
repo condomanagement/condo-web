@@ -32,7 +32,7 @@ const UserLI = (prop: UserProp): JSX.Element => {
               {'  '}
             </Typography>
             {`${user.email}`}
-            {user.admin && (
+            {user.active && (
               <Typography
                 component="span"
                 variant="body2"
@@ -40,7 +40,31 @@ const UserLI = (prop: UserProp): JSX.Element => {
                 color="textPrimary"
               >
                 {'  '}
+                Active
+              </Typography>
+            )}
+            {!user.active && (
+              <Typography
+                component="span"
+                variant="body2"
+                style={{ display: 'inline' }}
+                color="textPrimary"
+              >
+                {'  '}
+                Inactive
+              </Typography>
+            )}
+            {user.admin && (
+              <Typography
+                component="span"
+                variant="body2"
+                style={{ display: 'inline' }}
+                color="textPrimary"
+              >
+                ,
+                {'  '}
                 Administrator
+                {'  '}
               </Typography>
             )}
           </>
