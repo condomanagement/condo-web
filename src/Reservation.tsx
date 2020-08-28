@@ -6,12 +6,14 @@ import {
   Grid,
   Icon,
   InputLabel,
+  Link,
   List,
   ListItem,
   ListItemText,
   Select,
   TextField,
   Theme,
+  Typography,
 } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import MomentUtils from '@date-io/moment';
@@ -455,6 +457,16 @@ export default function Resevation(): JSX.Element {
                     </Grid>
                   ),
                 )}
+                <Grid item xs={12}>
+                  <Typography>
+                    Please ensure that you follow the posted instructions as well as complying with the
+                    {' '}
+                    <Link href="https://wscc556.frontsteps.com/folders/" target="_blank" rel="noopener">
+                      Arrow Lofts condo rules
+                    </Link>
+                    .
+                  </Typography>
+                </Grid>
                 {amenity && (
                   <Grid item xs={12} className="center">
                     <Button
