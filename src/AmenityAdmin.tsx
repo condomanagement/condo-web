@@ -87,6 +87,7 @@ export default function AmenityAdmin(): JSX.Element {
       .then((_response: boolean) => {
         setValue('');
         fetchAmenities();
+        setAmenityOpen(false);
       });
   }
 
