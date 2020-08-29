@@ -67,6 +67,8 @@ export default function AmenityAdmin(): JSX.Element {
   const [timeLimit, setTimeLimit] = useState(60);
   const [selectedAmenity, setSelectedAmenity] = useState<Amenity | undefined>(undefined);
   const [amenityOpen, setAmenityOpen] = useState(false);
+  const [amenityToDelete, setAmenityToDelete] = useState(0);
+  const [deleteOpen, setDeleteOpen] = React.useState(false);
 
   const admin = new AdminManager();
   if (!admin) { return (<div />); }
@@ -88,11 +90,18 @@ export default function AmenityAdmin(): JSX.Element {
       });
   }
 
-  function deleteAmenity(id: number): void {
-    admin.deleteAmenity(id)
+  function doDeleteAmenity(): void {
+    admin.deleteAmenity(amenityToDelete)
       .then((_response: boolean) => {
         fetchAmenities();
+        setDeleteOpen(false);
       });
+  }
+
+  function deleteAmenity(amenity: Amenity): void {
+    setAmenityToDelete(amenity.id);
+    setSelectedAmenity(amenity);
+    setDeleteOpen(true);
   }
 
   function editAmenity(amenity: Amenity): void {
@@ -102,8 +111,23 @@ export default function AmenityAdmin(): JSX.Element {
     setAmenityOpen(true);
   }
 
-  function updateAmenity(amenity?: Amenity): void {
-    debugger;
+  function updateAmenity(e: React.FormEvent, amenity?: Amenity): void {
+    if (!amenity) {
+      addAmenity(e);
+      setAmenityOpen(false);
+    } else {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append('resource[name]', value);
+      formData.append('resource[time_limit]', String(timeLimit));
+      formData.append('resource[id]', String(amenity.id));
+      admin.editAmenity(formData, amenity.id)
+        .then((_response: boolean) => {
+          setValue('');
+          fetchAmenities();
+          setAmenityOpen(false);
+        });
+    }
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -130,7 +154,7 @@ export default function AmenityAdmin(): JSX.Element {
             <IconButton edge="end" aria-label="edit" onClick={(): void => { editAmenity(amenity); }}>
               <EditIcon />
             </IconButton>
-            <IconButton edge="end" aria-label="delete" onClick={(): void => { deleteAmenity(amenity.id); }}>
+            <IconButton edge="end" aria-label="delete" onClick={(): void => { deleteAmenity(amenity); }}>
               <DeleteIcon />
             </IconButton>
           </>
@@ -149,6 +173,36 @@ export default function AmenityAdmin(): JSX.Element {
     const time = event.target.value;
     setTimeLimit(Number(time));
   };
+
+  const deleteConfirmation = (
+    <Dialog
+      open={deleteOpen}
+      onClose={(): void => setDeleteOpen(false)}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        Delete
+        {' '}
+        &ldquo;
+        {selectedAmenity?.name}
+        &rdquo;?
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          If you delete this amenity all associated reservations will also be deleted.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={(): void => setDeleteOpen(false)} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={(): void => doDeleteAmenity()} color="primary" autoFocus>
+          Save
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 
   return (
     <>
@@ -192,10 +246,11 @@ export default function AmenityAdmin(): JSX.Element {
                   rowsMax={4}
                   value={value}
                   onChange={handleChange}
+                  style={{ width: '100%' }}
                 />
               </Grid>
               <Grid item xs={12}>
-                <InputLabel htmlFor="age-native-simple">Time Limit</InputLabel>
+                <InputLabel htmlFor="time-limit">Time Limit</InputLabel>
                 <Select
                   native
                   value={timeLimit}
@@ -209,23 +264,19 @@ export default function AmenityAdmin(): JSX.Element {
                   {times}
                 </Select>
               </Grid>
-              <Grid item xs={12}>
-                <Button className={classes.registerButton} variant="contained" type="submit">
-                  Add Amenity
-                </Button>
-              </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>
             <Button onClick={(): void => setAmenityOpen(false)} color="secondary">
               Cancel
             </Button>
-            <Button onClick={(): void => updateAmenity(selectedAmenity)} color="primary">
+            <Button onClick={(e): void => updateAmenity(e, selectedAmenity)} color="primary">
               Save
             </Button>
           </DialogActions>
         </Dialog>
       </form>
+      {deleteConfirmation}
     </>
   );
 }
