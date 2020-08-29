@@ -109,7 +109,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
   const [auth, setAuth] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [openDrawer, setOpenDrawer] = React.useState(false);
-  const [pageTitle, setPageTitle] = React.useState('Visitor Parking Registrations');
+  const [pageTitle, setPageTitle] = React.useState('Amenity Reservation');
 
   const handleDrawerOpen = (): void => {
     setOpenDrawer(true);
@@ -241,10 +241,10 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
           <Divider />
           <List>
             <Link
-              href="/"
+              href="/parking"
               onClick={(e: React.SyntheticEvent): void => {
                 e.preventDefault();
-                navigate('/');
+                navigate('/parking');
                 setPageTitle('Visitor Parking Registration');
               }}
               color="inherit"
@@ -263,12 +263,12 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
               onClick={(e: React.SyntheticEvent): void => {
                 e.preventDefault();
                 navigate('reservation');
-                setPageTitle('Reserve Amenity');
+                setPageTitle('Amenity Reservation');
               }}
               color="inherit"
               underline="none"
             >
-              <Tooltip title="Reserve Amenity">
+              <Tooltip title="Amenity Reservation">
                 <ListItem button key="reservation">
                   <ListItemIcon style={{ paddingLeft: '5px' }}><EventAvailable /></ListItemIcon>
                   <ListItemText primary="Reserve Amenity" />

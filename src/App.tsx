@@ -1,12 +1,13 @@
 import React from 'react';
 import * as Parallax from 'react-parallax';
 import { Grid } from '@material-ui/core';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { get as getCookie } from 'es-cookie';
 import { UserManager } from 'condo-brain';
 import Parking from './Parking';
+import Home from './Home';
 import Admin from './Admin';
 import Authenticate from './Authenticate';
 import Reservation from './Reservation';
@@ -41,6 +42,7 @@ function App(): JSX.Element {
   const [toolbarState, setToolbarState] = React.useState<string | undefined>(undefined);
   const [contentState, setContentState] = React.useState<string | undefined>(undefined);
   const classes = useStyles();
+  const navigate = useNavigate();
 
   const checkLogin = (): void => {
     const token = getCookie('token');
@@ -51,6 +53,7 @@ function App(): JSX.Element {
           setRootState(classes.root);
           setToolbarState(classes.toolbar);
           setContentState(classes.content);
+          navigate('/reservation');
         } else {
           setAuth(false);
           setRootState(undefined);
@@ -100,7 +103,8 @@ function App(): JSX.Element {
           </Parallax.Parallax>
           <div className="container">
             <Routes>
-              <Route path="/" element={<Parking />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/parking" element={<Parking />} />
               <Route path="admin" element={<Admin />} />
               <Route path="login" element={<Login userManager={userManager} />} />
               <Route path="authenticate/:emailtoken" element={<Authenticate userManager={userManager} />} />
