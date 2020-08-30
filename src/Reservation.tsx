@@ -16,11 +16,14 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import { useNavigate } from 'react-router-dom';
 import MomentUtils from '@date-io/moment';
 import { isMobile } from 'react-device-detect';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { DatePicker, MuiPickersUtilsProvider, TimePicker } from '@material-ui/pickers';
 import { Amenity, Question, UserManager } from 'condo-brain';
+import Schedule from '@material-ui/icons/Schedule';
+import EventAvailable from '@material-ui/icons/EventAvailable';
 import moment from 'moment';
 import './styles/application.scss';
 import './styles/parking.scss';
@@ -57,6 +60,7 @@ export default function Resevation(): JSX.Element {
   const [selectedAmenityName, setSelectedAmenityName] = useState<string | unknown>('');
 
   const userManager = new UserManager();
+  const navigate = useNavigate();
 
   const reserve = (e: React.FormEvent): void => {
     e.preventDefault();
@@ -69,6 +73,10 @@ export default function Resevation(): JSX.Element {
       .then((response) => {
         if (response.success === true) {
           setThanks(true);
+          setSelectedStartDateChange(new Date());
+          setSelectedEndDateChange(new Date());
+          setAmenity(null);
+          setAnswers([]);
         } else if (response.error === 'Unprocessable Entity') {
           const err = 'Please make sure you have filled out the form correctly. '
             + 'If you could not check every box, then you cannot use this amenity.';
@@ -326,6 +334,28 @@ export default function Resevation(): JSX.Element {
                 Your reservation has been confirmed!
                 {'  '}
               </p>
+            </Grid>
+            <Grid item xs={12} className="center">
+              <Button
+                variant="contained"
+                className={classes.registerButton}
+                onClick={(): void => setThanks(false)}
+                startIcon={<EventAvailable />}
+                type="submit"
+              >
+                Make Another Reservation
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                onClick={(): void => navigate('/myreservations')}
+                className={classes.registerButton}
+                startIcon={<Schedule />}
+                type="submit"
+              >
+                My Reservations
+              </Button>
             </Grid>
           </Grid>
         </div>

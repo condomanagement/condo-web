@@ -77,7 +77,7 @@ export default function Login({ userManager }: { userManager: UserManager }): JS
           {!error && (<>Check your Email</>)}
         </h4>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} className="center">
         {error && (
           <Alert severity="error">
             <AlertTitle>Error</AlertTitle>
