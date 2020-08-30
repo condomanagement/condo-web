@@ -1,7 +1,12 @@
 import React from 'react';
 import * as Parallax from 'react-parallax';
 import { Grid } from '@material-ui/core';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import {
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { get as getCookie } from 'es-cookie';
@@ -43,6 +48,7 @@ function App(): JSX.Element {
   const [contentState, setContentState] = React.useState<string | undefined>(undefined);
   const classes = useStyles();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const checkLogin = (): void => {
     const token = getCookie('token');
@@ -53,7 +59,9 @@ function App(): JSX.Element {
           setRootState(classes.root);
           setToolbarState(classes.toolbar);
           setContentState(classes.content);
-          navigate('/reservation');
+          if (location.pathname === '/') {
+            navigate('/reservation');
+          }
         } else {
           setAuth(false);
           setRootState(undefined);
