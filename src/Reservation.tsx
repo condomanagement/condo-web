@@ -324,7 +324,7 @@ export default function Resevation(): JSX.Element {
     <div>
       { thanks && (
         <div className="section flex-grow">
-          <Grid container spacing={5}>
+          <Grid container spacing={1}>
             <Grid item xs={12}>
               <h4 className="center">Amenity reserved</h4>
               <p className="center">
@@ -346,7 +346,7 @@ export default function Resevation(): JSX.Element {
                 Make Another Reservation
               </Button>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} className="center">
               <Button
                 variant="contained"
                 onClick={(): void => navigate('/myreservations')}
