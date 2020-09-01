@@ -50,6 +50,25 @@ const roundToMinuteInterval = (date: Date, interval: number): Date => {
     Math.round(date.getMinutes() / interval) * interval); 
 };
 
+const formatDate = (date: Date): string => {
+  let month = date.toLocaleDateString().split("/")[0];
+  let day = date.toLocaleDateString().split("/")[1];
+  const year = date.toLocaleDateString().split("/")[2];
+
+  if(parseInt(month) < 10) {
+    month = "0" + month; 
+  }
+  if(parseInt(day) < 10) {
+    day = "0" + day;
+  }
+
+  return year + "-" + month + "-" + day; 
+}; 
+
+const formatTime = (date: Date): string => {
+  return date.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit'}); 
+}; 
+
 export default function Resevation(): JSX.Element {
   const [selectedStartDate, setSelectedStartDateChange] = useState<Date | null>(new Date());
   const [selectedEndDate, setSelectedEndDateChange] = useState<Date | null>(new Date());
@@ -409,7 +428,7 @@ export default function Resevation(): JSX.Element {
                       id="start"
                       label="Date"
                       type="date"
-                      defaultValue={roundToMinuteInterval(selectedStartDate!, 15)}
+                      defaultValue={formatDate(selectedStartDate!)}
                       onChange={(e): void => handleNativeDateChange(e.target.value)}
                       InputLabelProps={{
                         shrink: true,
@@ -432,7 +451,8 @@ export default function Resevation(): JSX.Element {
                       id="startTime"
                       label="Start Time"
                       type="time"
-                      defaultValue={roundToMinuteInterval(selectedStartDate!, 15)}
+                      defaultValue={formatTime(roundToMinuteInterval(selectedStartDate!, 15))}
+                      value={formatTime(roundToMinuteInterval(selectedStartDate!, 15))}
                       onChange={(e): void => handleNativeStartTimeChange(e.target.value)}
                       InputLabelProps={{
                         shrink: true,
@@ -457,7 +477,8 @@ export default function Resevation(): JSX.Element {
                       id="endTime"
                       label="End Time"
                       type="time"
-                      defaultValue={roundToMinuteInterval(selectedEndDate!, 15)}
+                      defaultValue={formatTime(roundToMinuteInterval(selectedEndDate!, 15))}
+                      value={formatTime(roundToMinuteInterval(selectedEndDate!, 15))}
                       onChange={(e): void => handleNativeEndTimeChange(e.target.value)}
                       InputLabelProps={{
                         shrink: true,
