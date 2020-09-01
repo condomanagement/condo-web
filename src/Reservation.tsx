@@ -77,6 +77,7 @@ export default function Resevation(): JSX.Element {
           setSelectedEndDateChange(new Date());
           setAmenity(null);
           setAnswers([]);
+          setErrorMessage(null);
         } else if (response.error === 'Unprocessable Entity') {
           const err = 'Please make sure you have filled out the form correctly. '
             + 'If you could not check every box, then you cannot use this amenity.';
@@ -339,7 +340,10 @@ export default function Resevation(): JSX.Element {
               <Button
                 variant="contained"
                 className={classes.registerButton}
-                onClick={(): void => setThanks(false)}
+                onClick={(): void => {
+                  setAvailability(null);
+                  setThanks(false);
+                }}
                 startIcon={<EventAvailable />}
                 type="submit"
               >
