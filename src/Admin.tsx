@@ -1,5 +1,5 @@
 import React from 'react';
-import { AdminManager } from 'condo-brain';
+import { AdminManager, UserManager } from 'condo-brain';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import {
   Box,
@@ -63,12 +63,13 @@ function TabPanel(props: TabPanelProps): JSX.Element {
   );
 }
 
-export default function Admin(): JSX.Element {
+export default function Admin({ userManager }: { userManager: UserManager }): JSX.Element {
   const classes = useStyles();
   const [value, setValue] = React.useState(1);
 
   const admin = new AdminManager();
   if (!admin) { return (<div />); }
+  if (!userManager.isAdmin && !userManager.isParkingAdmin) { return (<div />); }
 
   const handleChange = (_event: React.ChangeEvent<{}>, newValue: number): void => {
     setValue(newValue);
@@ -76,38 +77,43 @@ export default function Admin(): JSX.Element {
 
   return (
     <div className={classes.root}>
-      <Paper square>
-        <Tabs
-          value={value}
-          variant="fullWidth"
-          indicatorColor="primary"
-          textColor="primary"
-          onChange={handleChange}
-          aria-label="admin tabs"
-        >
-          <Tab label="Parking" />
-          <Tab label="Users" />
-          <Tab label="Amenities" />
-          <Tab label="Questions" />
-          <Tab label="Reservations" />
-        </Tabs>
+      { userManager.isAdmin && (
+        <Paper square>
+          <Tabs
+            value={value}
+            variant="fullWidth"
+            indicatorColor="primary"
+            textColor="primary"
+            onChange={handleChange}
+            aria-label="admin tabs"
+          >
+            <Tab label="Parking" />
+            <Tab label="Users" />
+            <Tab label="Amenities" />
+            <Tab label="Questions" />
+            <Tab label="Reservations" />
+          </Tabs>
 
-        <TabPanel value={value} index={0}>
-          <ParkingAdmin />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <UserAdmin />
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <AmenityAdmin />
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          <QuestionAdmin />
-        </TabPanel>
-        <TabPanel value={value} index={4}>
-          <ReservationAdmin />
-        </TabPanel>
-      </Paper>
+          <TabPanel value={value} index={0}>
+            <ParkingAdmin />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <UserAdmin />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <AmenityAdmin />
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            <QuestionAdmin />
+          </TabPanel>
+          <TabPanel value={value} index={4}>
+            <ReservationAdmin />
+          </TabPanel>
+        </Paper>
+      )}
+      { !userManager.isAdmin && userManager.isParkingAdmin && (
+        <ParkingAdmin />
+      )}
     </div>
   );
 }
