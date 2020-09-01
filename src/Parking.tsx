@@ -86,7 +86,7 @@ export default function Parking(): JSX.Element {
       { thanks && (
         <div className="section flex-grow">
           <Grid container spacing={5}>
-            <Grid item xs={12}>
+            <Grid item xs={12} className="center">
               <h4 className="center">Thank you</h4>
               <p className="center">
                 Thank you!
