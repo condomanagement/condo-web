@@ -438,7 +438,7 @@ export default function Resevation(): JSX.Element {
                   { !isMobile && (
                     <DatePicker
                       id="start"
-                      value={roundToMinuteInterval(selectedStartDate!, 15)}
+                      value={selectedStartDate}
                       label="Date"
                       onChange={(e): void => handleDateChange(e?.toString())}
                       style={{ width: '100%' }}
@@ -461,7 +461,6 @@ export default function Resevation(): JSX.Element {
                   { !isMobile && (
                     <TimePicker
                       id="startTime"
-                      initialFocusedDate={roundToMinuteInterval(selectedStartDate!, 15)}
                       value={roundToMinuteInterval(selectedStartDate!, 15)}
                       label="Start Time"
                       onChange={(e): void => handleStartDateChange(e?.toString())}
@@ -486,7 +485,6 @@ export default function Resevation(): JSX.Element {
                   { !isMobile && (
                     <TimePicker
                       id="endTime"
-                      initialFocusedDate={roundToMinuteInterval(selectedEndDate!, 15)}
                       value={roundToMinuteInterval(selectedEndDate!, 15)}
                       label="End Time"
                       onChange={(e): void => handleEndDateChange(e?.toString())}
