@@ -415,7 +415,6 @@ export default function Resevation(): JSX.Element {
                       id="startTime"
                       label="Start Time"
                       type="time"
-                      defaultValue={formatTime(roundToMinuteInterval(selectedStartDate!, 15))}
                       value={formatTime(roundToMinuteInterval(selectedStartDate!, 15))}
                       onChange={(e): void => handleNativeStartTimeChange(e.target.value)}
                       InputLabelProps={{
@@ -441,7 +440,6 @@ export default function Resevation(): JSX.Element {
                       id="endTime"
                       label="End Time"
                       type="time"
-                      defaultValue={formatTime(roundToMinuteInterval(selectedEndDate!, 15))}
                       value={formatTime(roundToMinuteInterval(selectedEndDate!, 15))}
                       onChange={(e): void => handleNativeEndTimeChange(e.target.value)}
                       InputLabelProps={{
