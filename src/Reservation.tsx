@@ -41,33 +41,35 @@ const minutesToReadable = (t: number): string => {
 };
 
 const roundToMinuteInterval = (date: Date, interval: number): Date => {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDay(), date.getHours(), 
-    Math.round(date.getMinutes() / interval) * interval); 
+  const roundedDate = new Date(date.getFullYear(), date.getMonth(), date.getDay(), date.getHours(),
+    Math.round(date.getMinutes() / interval) * interval);
+  return roundedDate;
 };
 
 const formatDate = (date: Date): string => {
-  let month = date.toLocaleDateString().split("/")[0];
-  let day = date.toLocaleDateString().split("/")[1];
-  const year = date.toLocaleDateString().split("/")[2];
+  let month = date.toLocaleDateString().split('/')[0];
+  let day = date.toLocaleDateString().split('/')[1];
+  const year = date.toLocaleDateString().split('/')[2];
 
-  if(parseInt(month) < 10) {
-    month = "0" + month; 
+  if (parseInt(month, 10) < 10) {
+    month = `0 ${month}`;
   }
-  if(parseInt(day) < 10) {
-    day = "0" + day;
+  if (parseInt(day, 10) < 10) {
+    day = `0 ${day}`;
   }
 
-  return year + "-" + month + "-" + day; 
-}; 
+  return `${year} - ${month} - ${day}`;
+};
 
 const formatTime = (date: Date): string => {
-  return date.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit'}); 
-}; 
+  const options = { hour12: false, hour: '2-digit', minute: '2-digit' };
+  return date.toLocaleTimeString([], options);
+};
 
 export default function Resevation(): JSX.Element {
-  const [selectedStartDate, setSelectedStartDateChange] = useState<Date | null>(new Date());
-  const [selectedEndDate, setSelectedEndDateChange] = useState<Date | null>(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [selectedStartDate, setSelectedStartDateChange] = useState<Date>(new Date());
+  const [selectedEndDate, setSelectedEndDateChange] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [amenity, setAmenity] = useState<string | unknown>(null);
   const [amenities, setAmenities] = useState<Amenity[]>([]);
   const [answers, setAnswers] = useState<boolean[]>([]);
@@ -392,7 +394,7 @@ export default function Resevation(): JSX.Element {
                       id="start"
                       label="Date"
                       type="date"
-                      defaultValue={formatDate(selectedStartDate!)}
+                      defaultValue={formatDate(selectedStartDate)}
                       onChange={(e): void => handleNativeDateChange(e.target.value)}
                       InputLabelProps={{
                         shrink: true,
@@ -415,7 +417,7 @@ export default function Resevation(): JSX.Element {
                       id="startTime"
                       label="Start Time"
                       type="time"
-                      value={formatTime(roundToMinuteInterval(selectedStartDate!, 15))}
+                      value={formatTime(roundToMinuteInterval(selectedStartDate, 15))}
                       onChange={(e): void => handleNativeStartTimeChange(e.target.value)}
                       InputLabelProps={{
                         shrink: true,
@@ -425,7 +427,7 @@ export default function Resevation(): JSX.Element {
                   { !isMobile && (
                     <TimePicker
                       id="startTime"
-                      value={roundToMinuteInterval(selectedStartDate!, 15)}
+                      value={roundToMinuteInterval(selectedStartDate, 15)}
                       label="Start Time"
                       onChange={(e): void => handleStartDateChange(e?.toString())}
                       style={{ width: '100%' }}
@@ -439,7 +441,7 @@ export default function Resevation(): JSX.Element {
                       id="endTime"
                       label="End Time"
                       type="time"
-                      value={formatTime(roundToMinuteInterval(selectedEndDate!, 15))}
+                      value={formatTime(roundToMinuteInterval(selectedEndDate, 15))}
                       onChange={(e): void => handleNativeEndTimeChange(e.target.value)}
                       InputLabelProps={{
                         shrink: true,
@@ -449,7 +451,7 @@ export default function Resevation(): JSX.Element {
                   { !isMobile && (
                     <TimePicker
                       id="endTime"
-                      value={roundToMinuteInterval(selectedEndDate!, 15)}
+                      value={roundToMinuteInterval(selectedEndDate, 15)}
                       label="End Time"
                       onChange={(e): void => handleEndDateChange(e?.toString())}
                       style={{ width: '100%' }}
