@@ -66,23 +66,6 @@ const formatTime = (date: Date): string => {
   return date.toLocaleTimeString([], options);
 };
 
-const formatDate = (date: Date): string => {
-  let month = date.toLocaleDateString().split('/')[0];
-  let day = date.toLocaleDateString().split('/')[1];
-  const year = date.toLocaleDateString().split('/')[2];
-
-  if (parseInt(month) < 10) {
-    month = `0${month}`;
-  }
-  if (parseInt(day) < 10) {
-    day = `0${day}`;
-  }
-
-  return `${year}-${month}-${day}`;
-};
-
-const formatTime = (date: Date): string => date.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit' });
-
 export default function Resevation(): JSX.Element {
   const [selectedStartDate, setSelectedStartDateChange] = useState<Date>(new Date());
   const [selectedEndDate, setSelectedEndDateChange] = useState<Date>(new Date());
