@@ -65,7 +65,7 @@ function TabPanel(props: TabPanelProps): JSX.Element {
 
 export default function Admin(): JSX.Element {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(1);
 
   const admin = new AdminManager();
   if (!admin) { return (<div />); }
