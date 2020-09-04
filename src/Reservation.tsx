@@ -57,10 +57,10 @@ const formatDate = (date: Date): string => {
   const year = date.toLocaleDateString().split('/')[2];
 
   if (parseInt(month, 10) < 10) {
-    month = `0 ${month}`;
+    month = `0${month}`;
   }
   if (parseInt(day, 10) < 10) {
-    day = `0 ${day}`;
+    day = `0${day}`;
   }
 
   return `${year} - ${month} - ${day}`;
