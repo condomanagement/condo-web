@@ -63,7 +63,7 @@ const formatDate = (date: Date): string => {
     day = `0${day}`;
   }
 
-  return `${year} - ${month} - ${day}`;
+  return `${year}-${month}-${day}`;
 };
 
 const formatTime = (date: Date): string => {
@@ -273,7 +273,7 @@ export default function Resevation(): JSX.Element {
       Number(minute),
     );
 
-    setSelectedStartDateChange(startDate);
+    setSelectedStartDateChange(roundToMinuteInterval(startDate, 15));
   };
 
   const handleStartDateChange = (date: string | undefined): void => {
@@ -303,7 +303,7 @@ export default function Resevation(): JSX.Element {
       Number(minute),
     );
 
-    setSelectedEndDateChange(endDate);
+    setSelectedEndDateChange(roundToMinuteInterval(endDate, 15));
   };
 
   const handleEndDateChange = (date: string | undefined): void => {
