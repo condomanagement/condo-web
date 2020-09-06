@@ -294,7 +294,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
               </Tooltip>
             </Link>
           </List>
-          {userManager.isAdmin && (
+          {(userManager.isAdmin || userManager.isParkingAdmin) && (
             <>
               <Divider />
               <List>

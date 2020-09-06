@@ -51,6 +51,7 @@ const emptyUser = {
   email: '',
   admin: false,
   active: false,
+  parkingAdmin: false,
 };
 
 export default function UserAdmin(): JSX.Element {
@@ -65,6 +66,7 @@ export default function UserAdmin(): JSX.Element {
   const [email, setEmail] = useState(selectedUser.email);
   const [phone, setPhone] = useState(selectedUser.phone);
   const [userAdmin, setUserAdmin] = useState(selectedUser.admin);
+  const [userParkingAdmin, setUserParkingAdmin] = useState(selectedUser.parkingAdmin);
   const [userActive, setUserActive] = useState(selectedUser.active);
   const [userList, setUserList] = useState(<span />);
   const [hideInactive, setHideInactive] = useState(true);
@@ -105,6 +107,10 @@ export default function UserAdmin(): JSX.Element {
     setUserAdmin(event.target.checked);
   };
 
+  const handleParkingAdminChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setUserParkingAdmin(event.target.checked);
+  };
+
   const handleActiveChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setUserActive(event.target.checked);
   };
@@ -121,6 +127,7 @@ export default function UserAdmin(): JSX.Element {
     formData.append('user[phone]', phone || '');
     formData.append('user[unit]', String(unit));
     formData.append('user[admin]', String(userAdmin));
+    formData.append('user[parking_admin]', String(userParkingAdmin));
     formData.append('user[active]', String(userActive));
     admin.createUser(formData)
       .then((_response: boolean) => {
@@ -138,6 +145,7 @@ export default function UserAdmin(): JSX.Element {
     setPhone(user.phone);
     setUserActive(user.active);
     setUserAdmin(user.admin);
+    setUserParkingAdmin(user.parkingAdmin);
     setUserOpen(true);
   }
 
@@ -154,6 +162,7 @@ export default function UserAdmin(): JSX.Element {
       formData.append('user[phone]', phone || '');
       formData.append('user[unit]', String(unit));
       formData.append('user[admin]', String(userAdmin));
+      formData.append('user[parking_admin]', String(userParkingAdmin));
       formData.append('user[active]', String(userActive));
       admin.editUser(formData, Number(selectedUserId))
         .then((_response: boolean) => {
@@ -219,6 +228,19 @@ export default function UserAdmin(): JSX.Element {
                 >
                   {'  '}
                   Inactive
+                </Typography>
+              )}
+              {!user.admin && user.parkingAdmin && (
+                <Typography
+                  component="span"
+                  variant="body2"
+                  style={{ display: 'inline' }}
+                  color="textPrimary"
+                >
+                  ,
+                  {'  '}
+                  Parking Administrator
+                  {'  '}
                 </Typography>
               )}
               {user.admin && (
@@ -316,6 +338,19 @@ export default function UserAdmin(): JSX.Element {
                   />
                 )}
                 label="Administrator"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={(
+                  <Switch
+                    checked={userParkingAdmin}
+                    onChange={handleParkingAdminChange}
+                    name="parkingAdmin"
+                    color="primary"
+                  />
+                )}
+                label="Parking Administrator"
               />
             </Grid>
             <Grid item xs={12}>

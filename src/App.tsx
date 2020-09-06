@@ -113,7 +113,7 @@ function App(): JSX.Element {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/parking" element={<Parking />} />
-              <Route path="admin" element={<Admin />} />
+              <Route path="admin" element={<Admin userManager={userManager} />} />
               <Route path="login" element={<Login userManager={userManager} />} />
               <Route path="authenticate/:emailtoken" element={<Authenticate userManager={userManager} />} />
               <Route path="reservation" element={<Reservation />} />
