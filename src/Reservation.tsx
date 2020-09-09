@@ -45,9 +45,22 @@ const minutesToReadable = (t: number): string => {
   return timeText;
 };
 
+const addMinutes = (date: Date, min: number): Date => {
+  const updatedDate = new Date(date);
+  updatedDate.setMinutes(date.getMinutes() + min);
+  return updatedDate;
+};
+
 const roundToMinuteInterval = (date: Date, interval: number): Date => {
-  const roundedDate = new Date(date.getFullYear(), date.getMonth(), date.getDay(), date.getHours(),
-    Math.round(date.getMinutes() / interval) * interval);
+  const time = (date.getHours() * 60) + date.getMinutes();
+  const rounded = Math.round(time / interval) * interval;
+  const roundedDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    Math.floor(rounded / 60),
+    rounded % 60,
+  );
   return roundedDate;
 };
 
@@ -72,8 +85,8 @@ const formatTime = (date: Date): string => {
 };
 
 export default function Resevation(): JSX.Element {
-  const [selectedStartDate, setSelectedStartDateChange] = useState<Date>(new Date());
-  const [selectedEndDate, setSelectedEndDateChange] = useState<Date>(new Date());
+  const [selectedStartDate, setSelectedStartDateChange] = useState<Date>(roundToMinuteInterval(new Date(), 15));
+  const [selectedEndDate, setSelectedEndDateChange] = useState<Date>(addMinutes(selectedStartDate, 30));
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [amenity, setAmenity] = useState<string | unknown>(null);
   const [amenities, setAmenities] = useState<Amenity[]>([]);
@@ -290,7 +303,7 @@ export default function Resevation(): JSX.Element {
       setTime.getMinutes(),
     );
 
-    setSelectedStartDateChange(startDate);
+    setSelectedStartDateChange(roundToMinuteInterval(startDate, 15));
   };
 
   const handleNativeEndTimeChange = (date: string): void => {
@@ -320,7 +333,7 @@ export default function Resevation(): JSX.Element {
       setTime.getMinutes(),
     );
 
-    setSelectedEndDateChange(endDate);
+    setSelectedEndDateChange(roundToMinuteInterval(endDate, 15));
   };
 
   const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -369,6 +382,8 @@ export default function Resevation(): JSX.Element {
                 onClick={(): void => {
                   setAvailability(null);
                   setThanks(false);
+                  setSelectedStartDateChange(roundToMinuteInterval(new Date(), 15));
+                  setSelectedEndDateChange(roundToMinuteInterval(addMinutes(selectedStartDate, 30), 15));
                 }}
                 startIcon={<EventAvailable />}
                 type="submit"
