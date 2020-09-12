@@ -45,10 +45,49 @@ const minutesToReadable = (t: number): string => {
   return timeText;
 };
 
+const addMinutes = (date: Date, min: number): Date => {
+  const updatedDate = new Date(date);
+  updatedDate.setMinutes(date.getMinutes() + min);
+  return updatedDate;
+};
+
+const roundToMinuteInterval = (date: Date, interval: number): Date => {
+  const time = (date.getHours() * 60) + date.getMinutes();
+  const rounded = Math.round(time / interval) * interval;
+  const roundedDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    Math.floor(rounded / 60),
+    rounded % 60,
+  );
+  return roundedDate;
+};
+
+const formatDate = (date: Date): string => {
+  let month = date.toLocaleDateString().split('/')[0];
+  let day = date.toLocaleDateString().split('/')[1];
+  const year = date.toLocaleDateString().split('/')[2];
+
+  if (parseInt(month, 10) < 10) {
+    month = `0${month}`;
+  }
+  if (parseInt(day, 10) < 10) {
+    day = `0${day}`;
+  }
+
+  return `${year}-${month}-${day}`;
+};
+
+const formatTime = (date: Date): string => {
+  const options = { hour12: false, hour: '2-digit', minute: '2-digit' };
+  return date.toLocaleTimeString([], options);
+};
+
 export default function Resevation(): JSX.Element {
-  const [selectedStartDate, setSelectedStartDateChange] = useState<Date | null>(new Date());
-  const [selectedEndDate, setSelectedEndDateChange] = useState<Date | null>(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [selectedStartDate, setSelectedStartDateChange] = useState<Date>(roundToMinuteInterval(new Date(), 15));
+  const [selectedEndDate, setSelectedEndDateChange] = useState<Date>(addMinutes(selectedStartDate, 30));
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [amenity, setAmenity] = useState<string | unknown>(null);
   const [amenities, setAmenities] = useState<Amenity[]>([]);
   const [answers, setAnswers] = useState<boolean[]>([]);
@@ -110,7 +149,7 @@ export default function Resevation(): JSX.Element {
               {'  '}
               Availability
             </AlertTitle>
-            Available all day.
+            No current bookings.
             <p>
               {minutesToReadable(amenityTime)}
               {'  '}
@@ -247,7 +286,7 @@ export default function Resevation(): JSX.Element {
       Number(minute),
     );
 
-    setSelectedStartDateChange(startDate);
+    setSelectedStartDateChange(roundToMinuteInterval(startDate, 15));
   };
 
   const handleStartDateChange = (date: string | undefined): void => {
@@ -264,7 +303,7 @@ export default function Resevation(): JSX.Element {
       setTime.getMinutes(),
     );
 
-    setSelectedStartDateChange(startDate);
+    setSelectedStartDateChange(roundToMinuteInterval(startDate, 15));
   };
 
   const handleNativeEndTimeChange = (date: string): void => {
@@ -277,7 +316,7 @@ export default function Resevation(): JSX.Element {
       Number(minute),
     );
 
-    setSelectedEndDateChange(endDate);
+    setSelectedEndDateChange(roundToMinuteInterval(endDate, 15));
   };
 
   const handleEndDateChange = (date: string | undefined): void => {
@@ -294,7 +333,7 @@ export default function Resevation(): JSX.Element {
       setTime.getMinutes(),
     );
 
-    setSelectedEndDateChange(endDate);
+    setSelectedEndDateChange(roundToMinuteInterval(endDate, 15));
   };
 
   const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -343,6 +382,8 @@ export default function Resevation(): JSX.Element {
                 onClick={(): void => {
                   setAvailability(null);
                   setThanks(false);
+                  setSelectedStartDateChange(roundToMinuteInterval(new Date(), 15));
+                  setSelectedEndDateChange(roundToMinuteInterval(addMinutes(selectedStartDate, 30), 15));
                 }}
                 startIcon={<EventAvailable />}
                 type="submit"
@@ -404,7 +445,7 @@ export default function Resevation(): JSX.Element {
                       id="start"
                       label="Date"
                       type="date"
-                      defaultValue={selectedStartDate}
+                      defaultValue={formatDate(selectedStartDate)}
                       onChange={(e): void => handleNativeDateChange(e.target.value)}
                       InputLabelProps={{
                         shrink: true,
@@ -427,7 +468,7 @@ export default function Resevation(): JSX.Element {
                       id="startTime"
                       label="Start Time"
                       type="time"
-                      defaultValue={selectedStartDate}
+                      value={formatTime(roundToMinuteInterval(selectedStartDate, 15))}
                       onChange={(e): void => handleNativeStartTimeChange(e.target.value)}
                       InputLabelProps={{
                         shrink: true,
@@ -437,10 +478,11 @@ export default function Resevation(): JSX.Element {
                   { !isMobile && (
                     <TimePicker
                       id="startTime"
-                      value={selectedStartDate}
+                      value={roundToMinuteInterval(selectedStartDate, 15)}
                       label="Start Time"
                       onChange={(e): void => handleStartDateChange(e?.toString())}
                       style={{ width: '100%' }}
+                      minutesStep={15}
                     />
                   )}
                 </Grid>
@@ -450,7 +492,7 @@ export default function Resevation(): JSX.Element {
                       id="endTime"
                       label="End Time"
                       type="time"
-                      defaultValue={selectedEndDate}
+                      value={formatTime(roundToMinuteInterval(selectedEndDate, 15))}
                       onChange={(e): void => handleNativeEndTimeChange(e.target.value)}
                       InputLabelProps={{
                         shrink: true,
@@ -460,10 +502,11 @@ export default function Resevation(): JSX.Element {
                   { !isMobile && (
                     <TimePicker
                       id="endTime"
-                      value={selectedEndDate}
+                      value={roundToMinuteInterval(selectedEndDate, 15)}
                       label="End Time"
                       onChange={(e): void => handleEndDateChange(e?.toString())}
                       style={{ width: '100%' }}
+                      minutesStep={15}
                     />
                   )}
                 </Grid>
