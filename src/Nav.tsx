@@ -330,7 +330,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
             color="inherit"
             href="/login"
           >
-            Login
+            Amenities reservation login
           </Button>
         </Toolbar>
       </AppBar>

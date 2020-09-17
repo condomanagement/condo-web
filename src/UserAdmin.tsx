@@ -193,7 +193,7 @@ export default function UserAdmin(): JSX.Element {
     const primary = user.name;
 
     return (
-      <ListItem>
+      <ListItem disabled={!user.active}>
         <ListItemText
           primary={primary}
           secondary={(
@@ -207,7 +207,17 @@ export default function UserAdmin(): JSX.Element {
                 {`${user.unit}`}
                 {'  '}
               </Typography>
-              {`${user.email}`}
+              <Typography
+                component="span"
+                variant="body2"
+                style={{ display: 'inline' }}
+                color="textPrimary"
+              >
+                ,
+                {'  '}
+                {`${user.email}`}
+
+              </Typography>
               {user.active && (
                 <Typography
                   component="span"
@@ -215,6 +225,7 @@ export default function UserAdmin(): JSX.Element {
                   style={{ display: 'inline' }}
                   color="textPrimary"
                 >
+                  ,
                   {'  '}
                   Active
                 </Typography>
@@ -226,6 +237,7 @@ export default function UserAdmin(): JSX.Element {
                   style={{ display: 'inline' }}
                   color="textPrimary"
                 >
+                  ,
                   {'  '}
                   Inactive
                 </Typography>
@@ -379,7 +391,6 @@ export default function UserAdmin(): JSX.Element {
       </Dialog>
     </form>
   );
-
 
   useEffect(() => {
     fetchUsers();
