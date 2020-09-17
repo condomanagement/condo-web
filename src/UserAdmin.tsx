@@ -213,7 +213,10 @@ export default function UserAdmin(): JSX.Element {
                 style={{ display: 'inline' }}
                 color="textPrimary"
               >
+                ,
+                {'  '}
                 {`${user.email}`}
+
               </Typography>
               {user.active && (
                 <Typography
@@ -222,6 +225,7 @@ export default function UserAdmin(): JSX.Element {
                   style={{ display: 'inline' }}
                   color="textPrimary"
                 >
+                  ,
                   {'  '}
                   Active
                 </Typography>
@@ -233,6 +237,7 @@ export default function UserAdmin(): JSX.Element {
                   style={{ display: 'inline' }}
                   color="textPrimary"
                 >
+                  ,
                   {'  '}
                   Inactive
                 </Typography>
