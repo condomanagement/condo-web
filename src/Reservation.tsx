@@ -158,15 +158,9 @@ export default function Resevation(): JSX.Element {
           </>,
         );
       } else {
-        result.sort((r1: ReservationTime, r2: ReservationTime) => r1.startTime < r2.startTime ? -1 : 1);
         const times: string[] = [];
-        const dateToShow = moment(selectedStartDate).local().format('YYYY-MM-DD');
         Object.keys(result).forEach((a) => {
           const pos = Number(a);
-          const resultStartDate = moment(result[pos].startTime).local().format('YYYY-MM-DD');
-          if (resultStartDate !== dateToShow) {
-            return;
-          }
           times.push(`${moment(result[pos].startTime).format('LT')} - ${moment(result[pos].endTime).format('LT')}`);
         });
         setAvailability(
