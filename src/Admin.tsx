@@ -32,6 +32,14 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   title: {
     margin: theme.spacing(4, 0, 2),
   },
+  center: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  tab: {
+    padding: theme.spacing(1.5),
+    fontSize: theme.typography.pxToRem(16),
+  },
 }));
 
 interface TabPanelProps {
@@ -51,8 +59,8 @@ function TabPanel(props: TabPanelProps): JSX.Element {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`scrollable-auto-tabpanel-${index}`}
+      aria-labelledby={`scrollable-auto-tab-${index}`}
     >
       {value === index && (
         <Box p={3}>
@@ -79,20 +87,23 @@ export default function Admin({ userManager }: { userManager: UserManager }): JS
     <div className={classes.root}>
       { userManager.isAdmin && (
         <Paper square>
-          <Tabs
-            value={value}
-            variant="fullWidth"
-            indicatorColor="primary"
-            textColor="primary"
-            onChange={handleChange}
-            aria-label="admin tabs"
-          >
-            <Tab label="Parking" />
-            <Tab label="Users" />
-            <Tab label="Amenities" />
-            <Tab label="Questions" />
-            <Tab label="Reservations" />
-          </Tabs>
+          <div className={classes.center}>
+            <Tabs
+              value={value}
+              variant="scrollable"
+              indicatorColor="primary"
+              textColor="primary"
+              onChange={handleChange}
+              aria-label="scrollable auto admin tabs"
+              scrollButtons="auto"
+            >
+              <Tab className={classes.tab} label="Parking" />
+              <Tab className={classes.tab} label="Users" />
+              <Tab className={classes.tab} label="Amenities" />
+              <Tab className={classes.tab} label="Questions" />
+              <Tab className={classes.tab} label="Reservations" />
+            </Tabs>
+          </div>
 
           <TabPanel value={value} index={0}>
             <ParkingAdmin />
