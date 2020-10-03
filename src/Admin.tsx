@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   tab: {
     padding: theme.spacing(1.5),
-    fontSize: theme.typography.pxToRem(16),
+    fontSize: theme.typography.pxToRem(15),
   },
 }));
 
