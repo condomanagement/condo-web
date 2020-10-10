@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
-import { AdminManager, User } from 'condo-brain';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import { AdminManager, User, UserType } from 'condo-brain';
 import { Grid } from '@material-ui/core';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
@@ -44,6 +45,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   title: {
     margin: theme.spacing(4, 0, 2),
   },
+  unselected: {
+    backgroundColor: 'grey',
+  },
+  selected: {
+    backgroundColor: '#f37f30',
+  },
 }));
 
 const emptyUser = {
@@ -52,6 +59,7 @@ const emptyUser = {
   admin: false,
   active: false,
   parkingAdmin: false,
+  type: UserType.None,
 };
 
 export default function UserAdmin(): JSX.Element {
@@ -66,6 +74,7 @@ export default function UserAdmin(): JSX.Element {
   const [email, setEmail] = useState(selectedUser.email);
   const [phone, setPhone] = useState(selectedUser.phone);
   const [userAdmin, setUserAdmin] = useState(selectedUser.admin);
+  const [userType, setUserType] = useState<UserType>(selectedUser.type);
   const [userParkingAdmin, setUserParkingAdmin] = useState(selectedUser.parkingAdmin);
   const [userActive, setUserActive] = useState(selectedUser.active);
   const [userList, setUserList] = useState(<span />);
@@ -129,6 +138,7 @@ export default function UserAdmin(): JSX.Element {
     formData.append('user[admin]', String(userAdmin));
     formData.append('user[parking_admin]', String(userParkingAdmin));
     formData.append('user[active]', String(userActive));
+    formData.append('user[resident_type]', String(userType));
     admin.createUser(formData)
       .then((_response: boolean) => {
         fetchUsers();
@@ -147,6 +157,7 @@ export default function UserAdmin(): JSX.Element {
     setUserAdmin(user.admin);
     setUserParkingAdmin(user.parkingAdmin);
     setUserOpen(true);
+    setUserType(user.type);
   }
 
   function updateUser(e: React.FormEvent): void {
@@ -164,6 +175,7 @@ export default function UserAdmin(): JSX.Element {
       formData.append('user[admin]', String(userAdmin));
       formData.append('user[parking_admin]', String(userParkingAdmin));
       formData.append('user[active]', String(userActive));
+      formData.append('user[resident_type]', String(userType));
       admin.editUser(formData, Number(selectedUserId))
         .then((_response: boolean) => {
           fetchUsers();
@@ -338,6 +350,36 @@ export default function UserAdmin(): JSX.Element {
                 onChange={handlePhoneChange}
                 style={{ width: '100%' }}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <div>
+                {userType}
+              </div>
+              <ButtonGroup
+                disableElevation
+                variant="contained"
+                color="primary"
+                aria-label="contained primary button group"
+              >
+                <Button
+                  onClick={(): void => setUserType(UserType.Owner)}
+                  className={userType === UserType.Owner ? classes.selected : classes.unselected}
+                >
+                  Owner
+                </Button>
+                <Button
+                  onClick={(): void => setUserType(UserType.Tenant)}
+                  className={userType === UserType.Tenant ? classes.selected : classes.unselected}
+                >
+                  Tenant
+                </Button>
+                <Button
+                  onClick={(): void => setUserType(UserType.None)}
+                  className={(!userType || userType === UserType.None) ? classes.selected : classes.unselected}
+                >
+                  None
+                </Button>
+              </ButtonGroup>
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel

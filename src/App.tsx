@@ -16,6 +16,7 @@ import Home from './Home';
 import Admin from './Admin';
 import Authenticate from './Authenticate';
 import Reservation from './Reservation';
+import ElevatorBooking from './ElevatorBooking';
 import Login from './Login';
 import Nav from './Nav';
 import MyReservations from './MyReservations';
@@ -117,6 +118,7 @@ function App(): JSX.Element {
               <Route path="login" element={<Login userManager={userManager} />} />
               <Route path="authenticate/:emailtoken" element={<Authenticate userManager={userManager} />} />
               <Route path="reservation" element={<Reservation />} />
+              <Route path="elevator-booking" element={<ElevatorBooking />} />
               <Route path="myreservations" element={<MyReservations />} />
             </Routes>
           </div>
