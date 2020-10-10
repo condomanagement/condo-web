@@ -352,9 +352,6 @@ export default function UserAdmin(): JSX.Element {
               />
             </Grid>
             <Grid item xs={12}>
-              <div>
-                {userType}
-              </div>
               <ButtonGroup
                 disableElevation
                 variant="contained"
