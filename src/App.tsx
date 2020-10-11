@@ -113,12 +113,12 @@ function App(): JSX.Element {
           <div className="container">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/parking" element={<Parking />} />
+              <Route path="/parking" element={<Parking userManager={userManager} />} />
               <Route path="admin" element={<Admin userManager={userManager} />} />
               <Route path="login" element={<Login userManager={userManager} />} />
               <Route path="authenticate/:emailtoken" element={<Authenticate userManager={userManager} />} />
               <Route path="reservation" element={<Reservation />} />
-              <Route path="elevator-booking" element={<ElevatorBooking />} />
+              <Route path="elevator-booking" element={<ElevatorBooking userManager={userManager} />} />
               <Route path="myreservations" element={<MyReservations />} />
             </Routes>
           </div>
