@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -17,7 +17,7 @@ import MomentUtils from '@date-io/moment';
 import { isMobile } from 'react-device-detect';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { DatePicker, MuiPickersUtilsProvider, TimePicker } from '@material-ui/pickers';
-import { UserManager } from 'condo-brain';
+import { UserManager, UserType } from 'condo-brain';
 import moment from 'moment';
 import './styles/application.scss';
 import './styles/parking.scss';
@@ -323,6 +323,12 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
 
   const classes = useStyles();
 
+  useEffect(() => {
+    if (userManager.userType !== UserType.Owner) {
+      setMoveType(1);
+    }
+  }, [userManager]);
+
   return (
     <div>
       { thanks && (
@@ -350,8 +356,13 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                 <h4 className="center">Reserve Elevator</h4>
                 <Alert severity="info">
                   <AlertTitle>Available hours</AlertTitle>
-                  Elevator booking hours are Monday to Friday 9 AM - 5 PM and Saturdays 9 AM - 3 PM.
-                  Elevators are not available to book on Sundays or statutory holidays.
+                  <p>
+                    Elevator booking hours are Monday to Friday 9 AM - 5 PM and Saturdays 9 AM - 3 PM.
+                    Elevators are not available to book on Sundays or statutory holidays.
+                  </p>
+                  <p>
+                    Only owners can book the elevator for moves. If you are a tenant please contact your landlord.
+                  </p>
                 </Alert>
                 { errorMessage && (
                   <Alert severity="error">
@@ -375,7 +386,9 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                   >
                     <option aria-label="None" value="" />
                     <option key="delivery" value="1">Delivery / Disposal</option>
-                    <option key="move" value="2">Move</option>
+                    {userManager.userType === UserType.Owner && (
+                      <option key="move" value="2">Move</option>
+                    )}
                   </Select>
                 </Grid>
                 <Grid item xs={6}>
