@@ -115,6 +115,8 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
         } else if (response.error === 'Unprocessable Entity') {
           const err = 'Please make sure you have filled out the form correctly.';
           setErrorMessage(err);
+        } else if (response.error === 'Please check at least one in/out option.') {
+          setErrorMessage(response.error);
         } else {
           setErrorMessage('Name and unit number are required.');
         }
