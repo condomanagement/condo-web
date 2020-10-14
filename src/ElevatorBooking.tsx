@@ -339,7 +339,6 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
               <p className="center">
                 Thank you!
                 {'  '}
-                <span role="img" aria-label="">🛗</span>
                 You will recieve an email when we confirm your elevator reservation or if we have
                 additional questions.
                 {'  '}
