@@ -12,8 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faDolly } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDolly } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { get as getCookie } from 'es-cookie';
 import { UserManager } from 'condo-brain';
@@ -278,7 +278,6 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
               </Tooltip>
             </Link>
 
-            {/*
             <Link
               href="/elevator-booking"
               onClick={(e: React.SyntheticEvent): void => {
@@ -298,7 +297,6 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
                 </ListItem>
               </Tooltip>
             </Link>
-            */}
 
             <Link
               href="/myreservations"

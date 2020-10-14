@@ -16,14 +16,14 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 import './styles/application.scss';
 import './styles/parking.scss';
 
-export default function Parking(): JSX.Element {
+export default function Parking({ userManager }: { userManager: UserManager }): JSX.Element {
   const [selectedStartDate, handleStartDateChange] = useState<Date | null>(new Date());
   const [selectedEndDate, handleEndDateChange] = useState<Date | null>(new Date());
   const [license, setLicense] = useState<string | unknown>(null);
-  const [unit, setUnit] = useState<string | unknown>(null);
+  const [unit, setUnit] = useState<string | unknown>(userManager.unit);
   const [make, setMake] = useState<string | unknown>(null);
   const [color, setColor] = useState<string | unknown>(null);
-  const [email, setEmail] = useState<string | unknown>(null);
+  const [email, setEmail] = useState<string | unknown>(userManager.email);
   const [thanks, setThanks] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | unknown>(null);
 
@@ -48,8 +48,6 @@ export default function Parking(): JSX.Element {
 
   const styleProps: StyleProps = { backgroundColor: '#f37f30' };
   const classes = useStyles(styleProps);
-
-  const userManager = new UserManager();
 
   const handleNativeStartDateChange = (date: string): void => {
     const startDate = new Date(`${date}T01:00:00-05:00`);

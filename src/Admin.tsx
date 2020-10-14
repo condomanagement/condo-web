@@ -13,6 +13,7 @@ import QuestionAdmin from './QuestionAdmin';
 import AmenityAdmin from './AmenityAdmin';
 import ReservationAdmin from './ReservationAdmin';
 import ParkingAdmin from './ParkingAdmin';
+import ElevatorBookingAdmin from './ElevatorBookingAdmin';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -99,9 +100,10 @@ export default function Admin({ userManager }: { userManager: UserManager }): JS
             >
               <Tab className={classes.tab} label="Parking" />
               <Tab className={classes.tab} label="Users" />
+              <Tab className={classes.tab} label="Elevator Bookings" />
+              <Tab className={classes.tab} label="Reservations" />
               <Tab className={classes.tab} label="Amenities" />
               <Tab className={classes.tab} label="Questions" />
-              <Tab className={classes.tab} label="Reservations" />
             </Tabs>
           </div>
 
@@ -112,13 +114,16 @@ export default function Admin({ userManager }: { userManager: UserManager }): JS
             <UserAdmin />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <AmenityAdmin />
+            <ElevatorBookingAdmin />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            <QuestionAdmin />
+            <ReservationAdmin />
           </TabPanel>
           <TabPanel value={value} index={4}>
-            <ReservationAdmin />
+            <AmenityAdmin />
+          </TabPanel>
+          <TabPanel value={value} index={5}>
+            <QuestionAdmin />
           </TabPanel>
         </Paper>
       )}
