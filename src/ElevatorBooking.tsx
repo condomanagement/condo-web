@@ -548,10 +548,21 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                           <li>$300 Saturday + $75 / hour over 4 hours</li>
                         </ul>
                       </ul>
-                      <strong>
-                        Total due: $
-                        {deposit}
-                      </strong>
+                      <p>
+                        Deposit
+                        {' '}
+                        $500
+                        <br />
+                        Fee
+                        {' '}
+                        $
+                        {deposit - 500}
+                        <br />
+                        <strong>
+                          Total due: $
+                          {deposit}
+                        </strong>
+                      </p>
                     </Alert>
                   </Grid>
                 )}
