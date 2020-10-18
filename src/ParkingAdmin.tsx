@@ -104,6 +104,7 @@ export default function ParkingAdmin(): JSX.Element {
                   <StyledTableCell align="right">License</StyledTableCell>
                   <StyledTableCell align="right">Starts</StyledTableCell>
                   <StyledTableCell align="right">Ends</StyledTableCell>
+                  <StyledTableCell align="right">Unit</StyledTableCell>
                   <StyledTableCell align="right">Contact</StyledTableCell>
                 </TableRow>
               </TableHead>
@@ -117,6 +118,7 @@ export default function ParkingAdmin(): JSX.Element {
                     <StyledTableCell align="right">{row.license}</StyledTableCell>
                     <StyledTableCell align="right">{moment(row.startDate).format('LL')}</StyledTableCell>
                     <StyledTableCell align="right">{moment(row.endDate).format('LL')}</StyledTableCell>
+                    <StyledTableCell align="right">{row.unit}</StyledTableCell>
                     <StyledTableCell align="right">{row.contact}</StyledTableCell>
                   </StyledTableRow>
                 ))}
