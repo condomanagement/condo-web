@@ -155,7 +155,11 @@ export default function UserAdmin(): JSX.Element {
     setPhone(user.phone);
     setUserActive(user.active);
     setUserAdmin(user.admin);
-    setUserParkingAdmin(user.parkingAdmin);
+    if (user.parkingAdmin) {
+      setUserParkingAdmin(user.parkingAdmin);
+    } else {
+      setUserParkingAdmin(false);
+    }
     setUserOpen(true);
     setUserType(user.type);
   }
