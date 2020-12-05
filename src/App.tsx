@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   content: {
     flexGrow: 1,
   },
+  indexBanner: {
+    height: '10px',
+  },
 }));
 
 function App(): JSX.Element {
@@ -95,8 +98,6 @@ function App(): JSX.Element {
           >
             <div className="section no-pad-bot">
               <div className="container">
-                <br />
-                <br />
                 <h1 className="header center arrow-green">
                   <a id="logo-container" href="/" className="brand-logo">
                     <img

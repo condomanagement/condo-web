@@ -48,6 +48,7 @@ p, li {
   color: rgba(255, 255, 255, 0.9);
   height: auto;
   line-height: 0;
+  height: 10px;
   min-height: 400px;
 }
 
@@ -182,6 +183,18 @@ h6 { font-size: $h6-fontsize; line-height: 110%; margin: ($h6-fontsize / 1.5) 0 
 @media #{$large-and-up} {
   .container {
     width: 70%;
+  }
+}
+
+@media #{$medium-and-down} {
+  .react-parallax-content {
+    height: 150px;
+  }
+  .arrow-green {
+    margin: 0;
+  }
+  .arrow-logo {
+    width: 50%;
   }
 }
 

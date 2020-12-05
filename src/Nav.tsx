@@ -90,6 +90,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     [theme.breakpoints.up('sm')]: {
       width: theme.spacing(9) + 1,
     },
+    [theme.breakpoints.down('xs')]: {
+      width: 0,
+      display: 'none',
+    },
   },
   toolbar: {
     display: 'flex',
