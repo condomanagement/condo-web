@@ -39,9 +39,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   content: {
     flexGrow: 1,
   },
-  indexBanner: {
-    height: '10px',
-  },
 }));
 
 function App(): JSX.Element {

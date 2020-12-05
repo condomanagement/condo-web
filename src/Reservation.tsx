@@ -21,7 +21,12 @@ import MomentUtils from '@date-io/moment';
 import { isMobile } from 'react-device-detect';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { DatePicker, MuiPickersUtilsProvider, TimePicker } from '@material-ui/pickers';
-import { Amenity, ReservationTime, Question, UserManager } from 'condo-brain';
+import {
+  Amenity,
+  Question,
+  ReservationTime,
+  UserManager,
+} from 'condo-brain';
 import Schedule from '@material-ui/icons/Schedule';
 import EventAvailable from '@material-ui/icons/EventAvailable';
 import moment from 'moment';
@@ -158,6 +163,7 @@ export default function Resevation(): JSX.Element {
           </>,
         );
       } else {
+        // eslint-disable-next-line
         result.sort((r1: ReservationTime, r2: ReservationTime) => r1.startTime < r2.startTime ? -1 : 1);
         const times: string[] = [];
         const dateToShow = moment(selectedStartDate).local().format('YYYY-MM-DD');
@@ -187,8 +193,9 @@ export default function Resevation(): JSX.Element {
             </AlertTitle>
             <List>
               {times.map((time) => (
-                <ListItem>
+                <ListItem style={{ paddingTop: 0, paddingBottom: 0 }}>
                   <ListItemText
+                    style={{ marginBottom: 0, marginTop: 0 }}
                     primary={time}
                   />
                 </ListItem>
