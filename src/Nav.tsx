@@ -12,6 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDolly } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { get as getCookie } from 'es-cookie';
 import { UserManager } from 'condo-brain';
@@ -276,6 +278,26 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
                 <ListItem button key="reservation">
                   <ListItemIcon style={{ paddingLeft: '5px' }}><EventAvailable /></ListItemIcon>
                   <ListItemText primary="Reserve Amenity" />
+                </ListItem>
+              </Tooltip>
+            </Link>
+
+            <Link
+              href="/elevator-booking"
+              onClick={(e: React.SyntheticEvent): void => {
+                e.preventDefault();
+                navigate('elevator-booking');
+                setPageTitle('Elevator Booking');
+              }}
+              color="inherit"
+              underline="none"
+            >
+              <Tooltip title="Elevator Booking">
+                <ListItem button key="elevator-booking">
+                  <ListItemIcon style={{ paddingLeft: '5px' }}>
+                    <FontAwesomeIcon icon={faDolly} size="lg" />
+                  </ListItemIcon>
+                  <ListItemText primary="Elevator Booking" />
                 </ListItem>
               </Tooltip>
             </Link>

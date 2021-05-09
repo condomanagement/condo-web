@@ -140,7 +140,8 @@ export default function AmenityAdmin(): JSX.Element {
   }, [amenities.length]);
 
   const AmenityLI = (prop: AmenityProp): JSX.Element => {
-    const amenity = prop.children;
+    const { children } = prop;
+    const amenity = children;
     const primary = amenity.name;
     const secondary = minutesToReadable(amenity.timeLimit);
 

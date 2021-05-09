@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { AdminManager, ElevatorBooking } from 'condo-brain';
-import { Grid } from '@material-ui/core';
+import { AdminManager, BookingStatus, ElevatorBooking } from 'condo-brain';
+import { Grid, TextField } from '@material-ui/core';
 import {
   Theme,
   createStyles,
@@ -59,6 +59,8 @@ export default function ElevatorBookingAdmin(): JSX.Element {
   const [bookings, setBookings] = useState<ElevatorBooking[]>([]);
   const [bookingOpen, setBookingOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<ElevatorBooking | undefined>(undefined);
+  const [isRejecting, setIsRejecting] = useState(false);
+  const [rejection, setRejection] = useState('');
 
   const admin = new AdminManager();
   if (!admin) { return (<div />); }
@@ -72,18 +74,45 @@ export default function ElevatorBookingAdmin(): JSX.Element {
   const showBooking = (booking: ElevatorBooking): void => {
     setSelectedBooking(booking);
     setBookingOpen(true);
+    setIsRejecting(false);
   };
 
   const approveBooking = (e: React.FormEvent): void => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('elevator_booking[approved]', 'true');
+    formData.append('elevator_booking[status]', 'true');
     if (selectedBooking?.id) {
       admin.approveElevatorBooking(selectedBooking.id, formData)
         .then((_response: boolean) => {
           fetchBookings();
           setBookingOpen(false);
+          setIsRejecting(false);
+          setRejection('');
         });
+    }
+  };
+
+  const saveRejection = (e: React.FormEvent): void => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('elevator_booking[status]', 'false');
+    formData.append('elevator_booking[rejection]', rejection);
+    if (selectedBooking?.id) {
+      admin.rejectElevatorBooking(selectedBooking.id, formData)
+        .then((_response: boolean) => {
+          fetchBookings();
+          setBookingOpen(false);
+          setIsRejecting(false);
+        });
+    }
+  };
+
+  const rejectBooking = (e: React.FormEvent): void => {
+    e.preventDefault();
+    if (isRejecting === true) {
+      saveRejection(e);
+    } else {
+      setIsRejecting(true);
     }
   };
 
@@ -131,9 +160,21 @@ export default function ElevatorBookingAdmin(): JSX.Element {
     <Dialog open={bookingOpen} aria-labelledby="form-dialog-title" fullWidth>
       <DialogTitle id="form-dialog-title">
         <>
-          {selectedBooking !== undefined && selectedBooking.approved === false && (
+          {selectedBooking !== undefined && selectedBooking.status === BookingStatus.Pending && (
             <>
               Pending
+              {' '}
+            </>
+          )}
+          {selectedBooking !== undefined && selectedBooking.status === BookingStatus.Rejected && (
+            <>
+              Rejected
+              {' '}
+            </>
+          )}
+          {selectedBooking !== undefined && selectedBooking.status === BookingStatus.Approved && (
+            <>
+              Approved
               {' '}
             </>
           )}
@@ -215,21 +256,48 @@ export default function ElevatorBookingAdmin(): JSX.Element {
                       </StyledTableCell>
                     </StyledTableRow>
                   )}
+                  {selectedBooking !== undefined && selectedBooking.rejection && (
+                    <StyledTableRow key="rejection">
+                      <StyledTableCell component="th" scope="row">
+                        Rejection Reason
+                      </StyledTableCell>
+                      <StyledTableCell scope="row">
+                        {selectedBooking.rejection}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
+            {isRejecting === true && (
+              <TextField
+                id="rejection"
+                label="Reason for Rejection"
+                multiline
+                style={{ width: '100%', marginTop: '20px' }}
+                value={rejection}
+                rows={50}
+                placeholder="Enter a reason for rejecting this booking."
+                onChange={(e): void => setRejection(e.target.value)}
+              />
+            )}
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={(): void => setBookingOpen(false)} color="secondary">
-          Close
-        </Button>
-        {selectedBooking !== undefined && selectedBooking.approved === false && (
+        {selectedBooking !== undefined && isRejecting === false && selectedBooking.status !== 'true' && (
           <Button onClick={(e): void => approveBooking(e)} color="primary">
             Approve
           </Button>
         )}
+        {selectedBooking !== undefined && selectedBooking.status !== 'false' && (
+          <Button onClick={(e): void => rejectBooking(e)} color="secondary">
+            Reject
+          </Button>
+        )}
+        <Button onClick={(): void => setBookingOpen(false)} color="secondary">
+          Close
+        </Button>
       </DialogActions>
     </Dialog>
   );
@@ -246,8 +314,8 @@ export default function ElevatorBookingAdmin(): JSX.Element {
                 <TableRow>
                   <StyledTableCell>Type</StyledTableCell>
                   <StyledTableCell align="right">Resident</StyledTableCell>
-                  <StyledTableCell align="right">Name</StyledTableCell>
                   <StyledTableCell align="right">Phone</StyledTableCell>
+                  <StyledTableCell align="right">Start</StyledTableCell>
                   <StyledTableCell align="right">Ends</StyledTableCell>
                   <StyledTableCell align="right">Status</StyledTableCell>
                   <StyledTableCell align="right" />
@@ -273,14 +341,19 @@ export default function ElevatorBookingAdmin(): JSX.Element {
                     </StyledTableCell>
                     <StyledTableCell align="right">{moment(row.endTime).format('MMM D, YYYY h:mm a')}</StyledTableCell>
                     <StyledTableCell align="right">
-                      {row.approved === true && (
+                      {row.status === BookingStatus.Approved && (
                         <div>
                           Approved
                         </div>
                       )}
-                      {row.approved === false && (
+                      {row.status === BookingStatus.Pending && (
                         <div>
                           Pending
+                        </div>
+                      )}
+                      {row.status === BookingStatus.Rejected && (
+                        <div>
+                          Rejected
                         </div>
                       )}
                     </StyledTableCell>

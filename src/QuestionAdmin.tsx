@@ -195,7 +195,8 @@ export default function QuestionAdmin(): JSX.Element {
   };
 
   const QuestionLI = (prop: QuestionProp): JSX.Element => {
-    const question = prop.children;
+    const { children } = prop;
+    const question = children;
     const primary = question.question;
     const numberOfAmenities = question.amenities?.length;
     const remainingAmenities = numberOfAmenities - 3;

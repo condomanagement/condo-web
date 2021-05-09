@@ -80,7 +80,7 @@ export default function Admin({ userManager }: { userManager: UserManager }): JS
   if (!admin) { return (<div />); }
   if (!userManager.isAdmin && !userManager.isParkingAdmin) { return (<div />); }
 
-  const handleChange = (_event: React.ChangeEvent<{}>, newValue: number): void => {
+  const handleChange = (_event: React.ChangeEvent<unknown>, newValue: number): void => {
     setValue(newValue);
   };
 
