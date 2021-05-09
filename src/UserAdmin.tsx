@@ -435,6 +435,13 @@ export default function UserAdmin(): JSX.Element {
     </form>
   );
 
+  const ListOfUsers = React.memo((prop: UsersProp) => {
+    const usersLI = prop.localUsers.map((user) => (
+      <UserLI key={user.id} user={user} />
+    ));
+    return (<List>{usersLI}</List>);
+  });
+
   useEffect(() => {
     fetchUsers();
   }, [users.length]);
@@ -446,13 +453,6 @@ export default function UserAdmin(): JSX.Element {
     }
     setUserList(<ListOfUsers localUsers={showUsers} />);
   }, [users, hideInactive]);
-
-  const ListOfUsers = React.memo((prop: UsersProp) => {
-    const usersLI = prop.localUsers.map((user) => (
-      <UserLI key={user.id} user={user} />
-    ));
-    return (<List>{usersLI}</List>);
-  });
 
   return (
     <div className="section flex-grow">

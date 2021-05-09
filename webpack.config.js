@@ -52,6 +52,14 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    fallback: {
+      'os':  require.resolve('os-browserify/browser'),
+      'tty': require.resolve("tty-browserify"),
+      "http": require.resolve("stream-http"),
+       "https": require.resolve("https-browserify"),
+      'stream': require.resolve("stream-browserify"),
+      "zlib": require.resolve("browserify-zlib")
+    },
   },
   output: {
     publicPath: '/',

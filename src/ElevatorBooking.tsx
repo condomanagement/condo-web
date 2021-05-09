@@ -57,7 +57,7 @@ const formatDate = (date: Date): string => {
 };
 
 const formatTime = (date: Date): string => {
-  const options = { hour12: false, hour: '2-digit', minute: '2-digit' };
+  const options = { hour12: false, hour: '2-digit', minute: '2-digit' } as const;
   return date.toLocaleTimeString([], options);
 };
 
