@@ -34,7 +34,7 @@ export default function Login({ userManager }: { userManager: UserManager }): JS
       userManager.login(email).then((result) => {
         if (result === false) {
           setError(
-            'Invalid email address. Please make sure you are using the same email address you use with FrontSteps.',
+            'Invalid email address. Please use the same email address you use with Condo Control Central.',
           );
         }
       });
@@ -50,7 +50,7 @@ export default function Login({ userManager }: { userManager: UserManager }): JS
         <Grid item xs={12}>
           <TextField
             id="email"
-            label="Email address used with FrontSteps"
+            label="Email address used with Condo Control Central"
             value={email || ''}
             onChange={(event): void => setEmail(event.target.value)}
           />

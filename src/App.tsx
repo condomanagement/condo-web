@@ -137,7 +137,11 @@ function App(): JSX.Element {
                 <Grid item xs={6}>
                   <h5 className="white-text">Additional Resources</h5>
                   <ul>
-                    <li><a className="white-text" href="https://wscc556.evercondo.com/">FrontSteps</a></li>
+                    <li>
+                      <a className="white-text" href="https://condocontrolcentral.com/login">
+                        Conto Control Central
+                      </a>
+                    </li>
                     <li><a className="white-text" href="https://www.kitchener.ca/">City of Kitchener</a></li>
                     <li>
                       <a className="white-text" href="https://www.kitchener.ca/en/getting-around/parking.aspx">
