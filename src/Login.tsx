@@ -85,7 +85,7 @@ export default function Login({ userManager }: { userManager: UserManager }): JS
           </Alert>
         )}
         <p>
-          If your email address matches one in our system you will recieve a login link.
+          If your email address matches one in our system you will receive a login link.
           Please check your email to continue.
         </p>
       </Grid>

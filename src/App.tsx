@@ -139,7 +139,7 @@ function App(): JSX.Element {
                   <ul>
                     <li>
                       <a className="white-text" href="https://condocontrolcentral.com/login">
-                        Conto Control Central
+                        Condo Control Central
                       </a>
                     </li>
                     <li><a className="white-text" href="https://www.kitchener.ca/">City of Kitchener</a></li>
