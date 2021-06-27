@@ -133,9 +133,12 @@ export default function Resevation(): JSX.Element {
   };
 
   const fetchAmenities = async (): Promise<void> => (userManager.getAmenities().then((result) => {
-    setAmenities(result);
+    const filteredAmenities = result.filter((filterAmenity) => (
+      filterAmenity.visible
+    ));
+    setAmenities(filteredAmenities);
     const amenityQuestions: { [id: number]: Question[] } = [];
-    Object.keys(result).forEach((i) => {
+    Object.keys(filteredAmenities).forEach((i) => {
       const a = result[Number(i)];
       amenityQuestions[a.id] = a.questions;
     });

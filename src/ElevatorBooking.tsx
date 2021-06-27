@@ -356,12 +356,30 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                 <Alert severity="info">
                   <AlertTitle>Available hours</AlertTitle>
                   <p>
-                    Elevator booking hours are Monday to Friday 9 AM - 5 PM and Saturdays 9 AM - 3 PM.
-                    Elevators are not available to book on Sundays or statutory holidays.
+                    <strong>
+                      Moving
+                    </strong>
                   </p>
                   <p>
+                    Elevator booking hours are Monday to Friday 9 AM - 5 PM and Saturdays 9 AM - 3 PM for moving.
                     Only owners can book the elevator for moves. If you are a tenant please contact your landlord.
                   </p>
+                  <p>
+                    <strong>
+                      Deliveries & Disposals
+                    </strong>
+                  </p>
+                  <p>
+                    Elevator booking hours are Monday to Friday 9 AM - 3 PM and Saturdays 9 AM - 12 PM for deliveries
+                    and disposals.
+                    There is one delivery space available for each morning and afternoon.
+                  </p>
+                  <p>
+                    <strong>
+                      Elevators are not available to book on Sundays or statutory holidays.
+                    </strong>
+                  </p>
+                  <p />
                 </Alert>
                 { errorMessage && (
                   <Alert severity="error">
