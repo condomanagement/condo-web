@@ -9,6 +9,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -64,6 +66,7 @@ export default function AmenityAdmin(): JSX.Element {
   const classes = useStyles();
   const [amenities, setAmenities] = useState<Amenity[]>([]);
   const [value, setValue] = useState('');
+  const [visible, setVisible] = useState(true);
   const [timeLimit, setTimeLimit] = useState(60);
   const [selectedAmenity, setSelectedAmenity] = useState<Amenity | undefined>(undefined);
   const [amenityOpen, setAmenityOpen] = useState(false);
@@ -83,6 +86,7 @@ export default function AmenityAdmin(): JSX.Element {
     const formData = new FormData();
     formData.append('resource[name]', value);
     formData.append('resource[time_limit]', String(timeLimit));
+    formData.append('resource[visible]', String(visible));
     admin.createAmenity(formData)
       .then((_response: boolean) => {
         setValue('');
@@ -109,6 +113,7 @@ export default function AmenityAdmin(): JSX.Element {
     setSelectedAmenity(amenity);
     setTimeLimit(amenity.timeLimit);
     setValue(amenity.name);
+    setVisible(amenity.visible);
     setAmenityOpen(true);
   }
 
@@ -121,6 +126,7 @@ export default function AmenityAdmin(): JSX.Element {
       const formData = new FormData();
       formData.append('resource[name]', value);
       formData.append('resource[time_limit]', String(timeLimit));
+      formData.append('resource[visible]', String(visible));
       formData.append('resource[id]', String(amenity.id));
       admin.editAmenity(formData, amenity.id)
         .then((_response: boolean) => {
@@ -133,6 +139,10 @@ export default function AmenityAdmin(): JSX.Element {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setValue(event.target.value);
+  };
+
+  const handleVisibilityChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setVisible(event.target.checked);
   };
 
   useEffect(() => {
@@ -265,6 +275,19 @@ export default function AmenityAdmin(): JSX.Element {
                 >
                   {times}
                 </Select>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={(
+                    <Switch
+                      checked={visible}
+                      onChange={handleVisibilityChange}
+                      name="visible"
+                      color="primary"
+                    />
+                  )}
+                  label="Visible"
+                />
               </Grid>
             </Grid>
           </DialogContent>
