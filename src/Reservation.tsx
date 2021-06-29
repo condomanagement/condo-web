@@ -139,7 +139,7 @@ export default function Resevation(): JSX.Element {
     setAmenities(filteredAmenities);
     const amenityQuestions: { [id: number]: Question[] } = [];
     Object.keys(filteredAmenities).forEach((i) => {
-      const a = result[Number(i)];
+      const a = filteredAmenities[Number(i)];
       amenityQuestions[a.id] = a.questions;
     });
     setQuestions(amenityQuestions);
