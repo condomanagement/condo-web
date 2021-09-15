@@ -58,6 +58,7 @@ const emptyUser = {
   email: '',
   admin: false,
   active: false,
+  vaccinated: false,
   parkingAdmin: false,
   type: UserType.None,
 };
@@ -80,6 +81,7 @@ export default function UserAdmin(): JSX.Element {
   const [userList, setUserList] = useState(<span />);
   const [hideInactive, setHideInactive] = useState(true);
   const [selectedUserId, setSelectedUserId] = useState<number | undefined>(undefined);
+  const [userVaccinated, setUserVaccinated] = useState(false);
 
   const admin = new AdminManager();
   if (!admin) { return (<div />); }
@@ -124,6 +126,10 @@ export default function UserAdmin(): JSX.Element {
     setUserActive(event.target.checked);
   };
 
+  const handleVaccineChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setUserVaccinated(event.target.checked);
+  };
+
   const handleHideInactive = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setHideInactive(event.target.checked);
   };
@@ -137,6 +143,7 @@ export default function UserAdmin(): JSX.Element {
     formData.append('user[unit]', String(unit));
     formData.append('user[admin]', String(userAdmin));
     formData.append('user[parking_admin]', String(userParkingAdmin));
+    formData.append('user[vaccinated]', String(userVaccinated));
     formData.append('user[active]', String(userActive));
     formData.append('user[resident_type]', String(userType));
     admin.createUser(formData)
@@ -155,6 +162,7 @@ export default function UserAdmin(): JSX.Element {
     setPhone(user.phone);
     setUserActive(user.active);
     setUserAdmin(user.admin);
+    setUserVaccinated(user.vaccinated);
     if (user.parkingAdmin) {
       setUserParkingAdmin(user.parkingAdmin);
     } else {
@@ -180,6 +188,7 @@ export default function UserAdmin(): JSX.Element {
       formData.append('user[parking_admin]', String(userParkingAdmin));
       formData.append('user[active]', String(userActive));
       formData.append('user[resident_type]', String(userType));
+      formData.append('user[vaccinated]', String(userVaccinated));
       admin.editUser(formData, Number(selectedUserId))
         .then((_response: boolean) => {
           fetchUsers();
@@ -206,7 +215,8 @@ export default function UserAdmin(): JSX.Element {
 
   const UserLI = (prop: UserProp): JSX.Element => {
     const { user } = prop;
-    const primary = user.name;
+    const vacState = user.vaccinated ? '💉' : '🦠';
+    const primary = `${vacState} ${user.name}`;
 
     return (
       <ListItem disabled={!user.active}>
@@ -419,6 +429,19 @@ export default function UserAdmin(): JSX.Element {
                   />
                 )}
                 label="Active"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={(
+                  <Switch
+                    checked={userVaccinated}
+                    onChange={handleVaccineChange}
+                    name="vaccinated"
+                    color="primary"
+                  />
+                )}
+                label="💉 Vaccinated"
               />
             </Grid>
           </Grid>
