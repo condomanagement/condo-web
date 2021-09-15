@@ -67,6 +67,7 @@ export default function AmenityAdmin(): JSX.Element {
   const [amenities, setAmenities] = useState<Amenity[]>([]);
   const [value, setValue] = useState('');
   const [visible, setVisible] = useState(true);
+  const [vaccine, setVaccine] = useState(false);
   const [timeLimit, setTimeLimit] = useState(60);
   const [selectedAmenity, setSelectedAmenity] = useState<Amenity | undefined>(undefined);
   const [amenityOpen, setAmenityOpen] = useState(false);
@@ -87,6 +88,7 @@ export default function AmenityAdmin(): JSX.Element {
     formData.append('resource[name]', value);
     formData.append('resource[time_limit]', String(timeLimit));
     formData.append('resource[visible]', String(visible));
+    formData.append('resource[vaccine]', String(vaccine));
     admin.createAmenity(formData)
       .then((_response: boolean) => {
         setValue('');
@@ -114,6 +116,7 @@ export default function AmenityAdmin(): JSX.Element {
     setTimeLimit(amenity.timeLimit);
     setValue(amenity.name);
     setVisible(amenity.visible);
+    setVaccine(amenity.vaccine);
     setAmenityOpen(true);
   }
 
@@ -127,6 +130,7 @@ export default function AmenityAdmin(): JSX.Element {
       formData.append('resource[name]', value);
       formData.append('resource[time_limit]', String(timeLimit));
       formData.append('resource[visible]', String(visible));
+      formData.append('resource[vaccine]', String(vaccine));
       formData.append('resource[id]', String(amenity.id));
       admin.editAmenity(formData, amenity.id)
         .then((_response: boolean) => {
@@ -145,6 +149,10 @@ export default function AmenityAdmin(): JSX.Element {
     setVisible(event.target.checked);
   };
 
+  const handleVaccineChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setVaccine(event.target.checked);
+  };
+
   useEffect(() => {
     fetchAmenities();
   }, [amenities.length]);
@@ -152,7 +160,8 @@ export default function AmenityAdmin(): JSX.Element {
   const AmenityLI = (prop: AmenityProp): JSX.Element => {
     const { children } = prop;
     const amenity = children;
-    const primary = amenity.name;
+    const icon = amenity.vaccine ? '💉' : '🦠';
+    const primary = `${icon} ${amenity.name}`;
     const secondary = minutesToReadable(amenity.timeLimit);
 
     return (
@@ -287,6 +296,19 @@ export default function AmenityAdmin(): JSX.Element {
                     />
                   )}
                   label="Visible"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={(
+                    <Switch
+                      checked={vaccine}
+                      onChange={handleVaccineChange}
+                      name="visible"
+                      color="primary"
+                    />
+                  )}
+                  label="💉 Requires Vaccine"
                 />
               </Grid>
             </Grid>
