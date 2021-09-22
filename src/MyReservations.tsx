@@ -7,6 +7,8 @@ import {
   makeStyles,
   withStyles,
 } from '@material-ui/core/styles';
+import { get as getCookie } from 'es-cookie';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -48,9 +50,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default function MyReservations(): JSX.Element {
+export default function MyReservations({ userManager }: { userManager: UserManager }): JSX.Element {
   const classes = useStyles();
   const [reservations, setReservations] = useState<MyReservation[]>([]);
+  const [auth, setAuth] = useState(false);
+  const [vaccinated, setVaccinated] = useState(false);
 
   const user = new UserManager();
   const fetchReservations = async (): Promise<void> => {
@@ -66,6 +70,30 @@ export default function MyReservations(): JSX.Element {
       });
   }
 
+  const checkLogin = (): void => {
+    const token = getCookie('token');
+    if (token) {
+      userManager.validateToken(token).then((_result) => {
+        if (userManager.loggedIn) {
+          setAuth(true);
+          setVaccinated(userManager.isVaccinated);
+        } else {
+          setAuth(false);
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (!userManager) { return; }
+    checkLogin();
+    const timer = setTimeout(() => {
+      checkLogin();
+      clearTimeout(timer);
+    }, 1000);
+  }, [auth]);
+
+
   useEffect(() => {
     fetchReservations();
   }, [reservations.length]);
@@ -73,6 +101,18 @@ export default function MyReservations(): JSX.Element {
   return (
     <div className="section flex-grow">
       <Grid container spacing={5}>
+        <Grid item xs={12}>
+          {vaccinated && (
+            <Alert severity="info">
+              <AlertTitle>💉 Thank you for getting vaccinated.</AlertTitle>
+            </Alert>
+          )}
+          {!vaccinated && (
+            <Alert severity="error">
+              <AlertTitle>We have not validated your vaccine yet.</AlertTitle>
+            </Alert>
+          )}
+        </Grid>
         <Grid item xs={12}>
           <h4 className="center">Amenity Reservations</h4>
           <TableContainer component={Paper}>

@@ -117,7 +117,7 @@ function App(): JSX.Element {
               <Route path="authenticate/:emailtoken" element={<Authenticate userManager={userManager} />} />
               <Route path="reservation" element={<Reservation />} />
               <Route path="elevator-booking" element={<ElevatorBooking userManager={userManager} />} />
-              <Route path="myreservations" element={<MyReservations />} />
+              <Route path="myreservations" element={<MyReservations userManager={userManager} />} />
             </Routes>
           </div>
           <footer
