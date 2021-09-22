@@ -16,6 +16,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import { get as getCookie } from 'es-cookie';
 import { useNavigate } from 'react-router-dom';
 import MomentUtils from '@date-io/moment';
 import { isMobile } from 'react-device-detect';
@@ -95,6 +96,7 @@ export default function Resevation(): JSX.Element {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [amenity, setAmenity] = useState<string | unknown>(null);
   const [amenities, setAmenities] = useState<Amenity[]>([]);
+  const [displayAmenities, setDisplayAmenities] = useState<Amenity[]>([]);
   const [answers, setAnswers] = useState<boolean[]>([]);
   const [questions, setQuestions] = useState<{ [id: number]: Question[] } >([]);
   const [thanks, setThanks] = useState(false);
@@ -102,6 +104,8 @@ export default function Resevation(): JSX.Element {
   const [errorMessage, setErrorMessage] = useState<string | unknown>(null);
   const [availability, setAvailability] = useState<JSX.Element | null>(null);
   const [selectedAmenityName, setSelectedAmenityName] = useState<string | unknown>('');
+  const [auth, setAuth] = useState(false);
+  const [vaccinated, setVaccinated] = useState(false);
 
   const userManager = new UserManager();
   const navigate = useNavigate();
@@ -210,13 +214,51 @@ export default function Resevation(): JSX.Element {
     });
   };
 
+  const filterVaccinatedAmenities = (): void => {
+    if (auth && !vaccinated) {
+      const filteredAmenities: Array<Amenity> = amenities.filter((filterAmenity) => (
+        !filterAmenity.vaccine
+      ));
+      setDisplayAmenities(filteredAmenities);
+    } else {
+      setDisplayAmenities(amenities);
+    }
+  };
+
+  const checkLogin = (): void => {
+    const token = getCookie('token');
+    if (token) {
+      userManager.validateToken(token).then((_result) => {
+        if (userManager.loggedIn) {
+          setAuth(true);
+          setVaccinated(userManager.isVaccinated);
+        } else {
+          setAuth(false);
+        }
+      });
+    }
+  };
+
   useEffect(() => {
     fetchAmenities();
   }, [amenities.length]);
 
   useEffect(() => {
+    filterVaccinatedAmenities();
+  }, [amenities.length, auth]);
+
+  useEffect(() => {
     findReservations();
   }, [amenity, selectedStartDate]);
+
+  useEffect(() => {
+    if (!userManager) { return; }
+    checkLogin();
+    const timer = setTimeout(() => {
+      checkLogin();
+      clearTimeout(timer);
+    }, 1000);
+  }, [auth]);
 
   const handleAmenityChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>): void => {
     const reserveAmenity = event.target.value;
@@ -433,6 +475,13 @@ export default function Resevation(): JSX.Element {
                     {errorMessage}
                   </Alert>
                 )}
+                { auth && !vaccinated && (
+                  <Alert severity="error">
+                    <AlertTitle>Some Amenities Are Unavailable</AlertTitle>
+                    Please submit your vaccine information to property management to
+                    access all amenities.
+                  </Alert>
+                )}
               </Grid>
               <MuiPickersUtilsProvider utils={MomentUtils}>
                 <Grid item xs={6}>
@@ -448,7 +497,7 @@ export default function Resevation(): JSX.Element {
                     style={{ width: '100%' }}
                   >
                     <option aria-label="None" value="" />
-                    {amenities.map(
+                    {displayAmenities.map(
                       (amenityOption: Amenity) => (
                         <option key={amenityOption.id} value={String(amenityOption.id)}>{amenityOption.name}</option>
                       ),
