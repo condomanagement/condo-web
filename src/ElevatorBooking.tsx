@@ -68,7 +68,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
   const [selectedEndDate, setSelectedEndDateChange] = useState<Date>(addMinutes(selectedStartDate, 30));
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [thanks, setThanks] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | unknown>(null);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [moveType, setMoveType] = useState(0);
   const [name1, setName1] = useState<string | unknown>(userManager.fullname);
   const [name2, setName2] = useState<string | unknown>(null);
@@ -113,11 +113,11 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
           setThanks(true);
           setSelectedStartDateChange(new Date());
           setSelectedEndDateChange(new Date());
-          setErrorMessage(null);
+          setErrorMessage('');
         } else if (response.error === 'Unprocessable Entity') {
           const err = 'Please make sure you have filled out the form correctly.';
           setErrorMessage(err);
-        } else {
+        } else if (response.error) {
           setErrorMessage(response.error);
         }
       });
@@ -383,7 +383,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                   </p>
                   <p />
                 </Alert>
-                { errorMessage && (
+                { errorMessage !== '' && (
                   <Alert severity="error">
                     <AlertTitle>Error</AlertTitle>
                     {errorMessage}
@@ -396,7 +396,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                   <Select
                     native
                     value={moveType}
-                    onChange={handleTypeChange}
+                    onChange={() => handleTypeChange}
                     inputProps={{
                       name: 'moveType',
                       id: 'moveType',
@@ -428,7 +428,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                       id="start"
                       value={selectedStartDate}
                       label="Date"
-                      onChange={(e): void => handleDateChange(e?.toString())}
+                      onChange={(e: Date | null): void => handleDateChange(e?.toString())}
                       style={{ width: '100%' }}
                     />
                   )}
@@ -451,7 +451,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                       id="startTime"
                       value={roundToMinuteInterval(selectedStartDate, 15)}
                       label="Start Time"
-                      onChange={(e): void => handleStartDateChange(e?.toString())}
+                      onChange={(e: Date | null): void => handleStartDateChange(e?.toString())}
                       style={{ width: '100%' }}
                       minutesStep={15}
                     />
@@ -475,7 +475,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                       id="endTime"
                       value={roundToMinuteInterval(selectedEndDate, 15)}
                       label="End Time"
-                      onChange={(e): void => handleEndDateChange(e?.toString())}
+                      onChange={(e: Date | null): void => handleEndDateChange(e?.toString())}
                       style={{ width: '100%' }}
                       minutesStep={15}
                     />

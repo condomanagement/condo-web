@@ -240,7 +240,7 @@ export default function AmenityAdmin(): JSX.Element {
                 <Select
                   native
                   value={timeLimit}
-                  onChange={handleTimeLimitChange}
+                  onChange={() => handleTimeLimitChange}
                   inputProps={{
                     name: 'timeLimit',
                     id: 'timeLimit',

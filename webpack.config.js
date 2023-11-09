@@ -52,10 +52,24 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    fallback: {
+      'zlib': require.resolve('browserify-zlib'),
+      'util': require.resolve('util/'),
+      'url': require.resolve('url/'),
+      'tty': require.resolve('tty-browserify'),
+      'stream': require.resolve('stream-browserify'),
+      'path': require.resolve('path-browserify'),
+      'os': require.resolve('os-browserify'),
+      'https': require.resolve('https-browserify'),
+      'http': require.resolve('stream-http'),
+      'assert': require.resolve('assert/'),
+      'buffer': require.resolve('buffer/'),
+      'fs': false,
+    }
   },
   output: {
     publicPath: '/',
-    filename: '[name].[hash].js',
+    filename: '[name].[fullhash].js',
     path: path.resolve(__dirname, 'build'),
     library: 'CondoWeb',
   },

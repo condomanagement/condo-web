@@ -103,9 +103,9 @@ export default function Resevation(): JSX.Element {
   const [questions, setQuestions] = useState<{ [id: number]: Question[] } >([]);
   const [thanks, setThanks] = useState(false);
   const [amenityTime, setAmenityTime] = useState<number>(60);
-  const [errorMessage, setErrorMessage] = useState<string | unknown>(null);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [availability, setAvailability] = useState<JSX.Element | null>(null);
-  const [selectedAmenityName, setSelectedAmenityName] = useState<string | unknown>('');
+  const [selectedAmenityName, setSelectedAmenityName] = useState<string>('');
   const [auth, setAuth] = useState(false);
   const [vaccinated, setVaccinated] = useState(false);
 
@@ -127,12 +127,12 @@ export default function Resevation(): JSX.Element {
           setSelectedEndDateChange(new Date());
           setAmenity(null);
           setAnswers([]);
-          setErrorMessage(null);
+          setErrorMessage('');
         } else if (response.error === 'Unprocessable Entity') {
           const err = 'Please make sure you have filled out the form correctly. '
             + 'If you could not check every box, then you cannot use this amenity.';
           setErrorMessage(err);
-        } else {
+        } else if (response.error) {
           setErrorMessage(response.error);
         }
       });
@@ -471,7 +471,7 @@ export default function Resevation(): JSX.Element {
             <Grid container spacing={5}>
               <Grid item xs={12}>
                 <h4 className="center">Reserve an Amenity</h4>
-                { errorMessage && (
+                { errorMessage !== '' && (
                   <Alert severity="error">
                     <AlertTitle>Error</AlertTitle>
                     {errorMessage}
@@ -491,7 +491,7 @@ export default function Resevation(): JSX.Element {
                   <Select
                     native
                     value={amenity}
-                    onChange={handleAmenityChange}
+                    onChange={() => handleAmenityChange}
                     inputProps={{
                       name: 'amenity',
                       id: 'amenity',
@@ -524,7 +524,7 @@ export default function Resevation(): JSX.Element {
                       id="start"
                       value={selectedStartDate}
                       label="Date"
-                      onChange={(e): void => handleDateChange(e?.toString())}
+                      onChange={(e: Date | null): void => handleDateChange(e?.toString())}
                       style={{ width: '100%' }}
                     />
                   )}
@@ -547,7 +547,7 @@ export default function Resevation(): JSX.Element {
                       id="startTime"
                       value={roundToMinuteInterval(selectedStartDate, 15)}
                       label="Start Time"
-                      onChange={(e): void => handleStartDateChange(e?.toString())}
+                      onChange={(e: Date | null): void => handleStartDateChange(e?.toString())}
                       style={{ width: '100%' }}
                       minutesStep={15}
                     />
@@ -571,7 +571,7 @@ export default function Resevation(): JSX.Element {
                       id="endTime"
                       value={roundToMinuteInterval(selectedEndDate, 15)}
                       label="End Time"
-                      onChange={(e): void => handleEndDateChange(e?.toString())}
+                      onChange={(e: Date | null): void => handleEndDateChange(e?.toString())}
                       style={{ width: '100%' }}
                       minutesStep={15}
                     />

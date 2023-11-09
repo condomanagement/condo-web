@@ -37,7 +37,17 @@ const minutesToReadable = (t: number): string => {
 };
 
 export default function AmenityLI(prop: AmenityProp): JSX.Element {
-  const { children } = prop;
+  const {
+    setAmenityToDelete,
+    setSelectedAmenity,
+    setDeleteOpen,
+    setTimeLimit,
+    setValue,
+    setVisible,
+    setVaccine,
+    setAmenityOpen,
+    children,
+  } = prop;
   const amenity = children;
   const icon = amenity.vaccine ? '💉' : '🦠';
   const primary = `${icon} ${amenity.name}`;

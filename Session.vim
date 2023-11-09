@@ -18,15 +18,13 @@ badd +50 src/ReservationAdmin.tsx
 badd +1 webpack.config.js
 badd +1 src/UserAdmin.tsx
 badd +1 src/Parking.tsx
-badd +1 src/Reservation.tsx
-badd +0 src/ElevatorBooking.tsx
-badd +196 src/AmenityAdmin.tsx
-badd +0 src/AmenityLi.tsx
+badd +525 src/Reservation.tsx
+badd +1 src/ElevatorBooking.tsx
+badd +192 src/AmenityAdmin.tsx
+badd +12 src/AmenityLi.tsx
 argglobal
 %argdel
 $argadd package.json
-tabnew +setlocal\ bufhidden=wipe
-tabnew +setlocal\ bufhidden=wipe
 tabnew +setlocal\ bufhidden=wipe
 tabnew +setlocal\ bufhidden=wipe
 tabnew +setlocal\ bufhidden=wipe
@@ -110,47 +108,7 @@ if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
 keepjumps 602
-normal! 028|
-tabnext
-edit src/AmenityAdmin.tsx
-argglobal
-balt src/ElevatorBooking.tsx
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let &fdl = &fdl
-let s:l = 189 - ((8 * winheight(0) + 11) / 23)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 189
-normal! 049|
-tabnext
-edit src/AmenityLi.tsx
-argglobal
-balt src/AmenityAdmin.tsx
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let &fdl = &fdl
-let s:l = 12 - ((11 * winheight(0) + 11) / 23)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 12
-normal! 033|
+normal! 01|
 tabnext
 edit src/Reservation.tsx
 argglobal
@@ -165,12 +123,12 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 99 - ((14 * winheight(0) + 11) / 23)
+let s:l = 523 - ((6 * winheight(0) + 6) / 13)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 99
-normal! 016|
+keepjumps 523
+normal! 014|
 tabnext 5
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
@@ -184,8 +142,7 @@ if filereadable(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
 set hlsearch
-let g:this_session = v:this_session
-let g:this_obsession = v:this_session
+nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

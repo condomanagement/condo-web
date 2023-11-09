@@ -26,7 +26,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
   const [color, setColor] = useState<string | unknown>(null);
   const [email, setEmail] = useState<string | unknown>(userManager.email);
   const [thanks, setThanks] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | unknown>(null);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   interface StyleProps {
     backgroundColor: string;
@@ -74,7 +74,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
       .then((response) => {
         if (response.success === true) {
           setThanks(true);
-        } else {
+        } else if (response.error) {
           setErrorMessage(response.error);
         }
       });
@@ -105,7 +105,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
             <Grid container spacing={5}>
               <Grid item xs={12}>
                 <h4 className="center">Register a Vehicle</h4>
-                { errorMessage && (
+                { errorMessage !== '' && (
                   <Alert severity="error">
                     <AlertTitle>Error</AlertTitle>
                     {errorMessage}
