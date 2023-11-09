@@ -23,11 +23,118 @@ import EditIcon from '@mui/icons-material/Edit';
 
 type UserProp = {
   user: User;
+  editUser: (user: User) => void;
 }
 
 type UsersProp = {
   localUsers: User[];
+  editUser: (user: User) => void;
 }
+
+function UserLI(prop: UserProp): JSX.Element {
+  const { user, editUser } = prop;
+  const vacState = user.vaccinated ? '💉' : '🦠';
+  const primary = `${vacState} ${user.name}`;
+
+  return (
+    <ListItem disabled={!user.active}>
+      <ListItemText
+        primary={primary}
+        secondary={(
+          <>
+            <Typography
+              component="span"
+              variant="body2"
+              style={{ display: 'inline' }}
+              color="textPrimary"
+            >
+              {`${user.unit}`}
+              {'  '}
+            </Typography>
+            <Typography
+              component="span"
+              variant="body2"
+              style={{ display: 'inline' }}
+              color="textPrimary"
+            >
+              ,
+              {'  '}
+              {`${user.email}`}
+
+            </Typography>
+            {user.active && (
+              <Typography
+                component="span"
+                variant="body2"
+                style={{ display: 'inline' }}
+                color="textPrimary"
+              >
+                ,
+                {'  '}
+                Active
+              </Typography>
+            )}
+            {!user.active && (
+              <Typography
+                component="span"
+                variant="body2"
+                style={{ display: 'inline' }}
+                color="textPrimary"
+              >
+                ,
+                {'  '}
+                Inactive
+              </Typography>
+            )}
+            {!user.admin && user.parkingAdmin && (
+              <Typography
+                component="span"
+                variant="body2"
+                style={{ display: 'inline' }}
+                color="textPrimary"
+              >
+                ,
+                {'  '}
+                Parking Administrator
+                {'  '}
+              </Typography>
+            )}
+            {user.admin && (
+              <Typography
+                component="span"
+                variant="body2"
+                style={{ display: 'inline' }}
+                color="textPrimary"
+              >
+                ,
+                {'  '}
+                Administrator
+                {'  '}
+              </Typography>
+            )}
+          </>
+        )}
+      />
+      <ListItemSecondaryAction>
+        <IconButton
+          edge="end"
+          aria-label="edit"
+          onClick={(): void => { editUser(user); }}
+          size="large"
+        >
+          <EditIcon />
+        </IconButton>
+      </ListItemSecondaryAction>
+    </ListItem>
+  );
+}
+
+const ListOfUsers = React.memo((prop: UsersProp) => {
+  const usersLI = prop.localUsers.map((user) => (
+    <UserLI key={user.id} user={user} editUser={prop.editUser} />
+  ));
+  return (<List>{usersLI}</List>);
+});
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -155,7 +262,7 @@ export default function UserAdmin(): JSX.Element {
       });
   }
 
-  function editUser(user: User): void {
+  const editUser = (user: User): void => {
     setSelectedUser(user);
     setSelectedUserId(user.id);
     setName(user.name);
@@ -172,7 +279,7 @@ export default function UserAdmin(): JSX.Element {
     }
     setUserOpen(true);
     setUserType(user.type);
-  }
+  };
 
   function updateUser(e: React.FormEvent): void {
     if (!selectedUserId) {
@@ -214,103 +321,6 @@ export default function UserAdmin(): JSX.Element {
         });
     }
   }
-
-  const UserLI = (prop: UserProp): JSX.Element => {
-    const { user } = prop;
-    const vacState = user.vaccinated ? '💉' : '🦠';
-    const primary = `${vacState} ${user.name}`;
-
-    return (
-      <ListItem disabled={!user.active}>
-        <ListItemText
-          primary={primary}
-          secondary={(
-            <>
-              <Typography
-                component="span"
-                variant="body2"
-                style={{ display: 'inline' }}
-                color="textPrimary"
-              >
-                {`${user.unit}`}
-                {'  '}
-              </Typography>
-              <Typography
-                component="span"
-                variant="body2"
-                style={{ display: 'inline' }}
-                color="textPrimary"
-              >
-                ,
-                {'  '}
-                {`${user.email}`}
-
-              </Typography>
-              {user.active && (
-                <Typography
-                  component="span"
-                  variant="body2"
-                  style={{ display: 'inline' }}
-                  color="textPrimary"
-                >
-                  ,
-                  {'  '}
-                  Active
-                </Typography>
-              )}
-              {!user.active && (
-                <Typography
-                  component="span"
-                  variant="body2"
-                  style={{ display: 'inline' }}
-                  color="textPrimary"
-                >
-                  ,
-                  {'  '}
-                  Inactive
-                </Typography>
-              )}
-              {!user.admin && user.parkingAdmin && (
-                <Typography
-                  component="span"
-                  variant="body2"
-                  style={{ display: 'inline' }}
-                  color="textPrimary"
-                >
-                  ,
-                  {'  '}
-                  Parking Administrator
-                  {'  '}
-                </Typography>
-              )}
-              {user.admin && (
-                <Typography
-                  component="span"
-                  variant="body2"
-                  style={{ display: 'inline' }}
-                  color="textPrimary"
-                >
-                  ,
-                  {'  '}
-                  Administrator
-                  {'  '}
-                </Typography>
-              )}
-            </>
-          )}
-        />
-        <ListItemSecondaryAction>
-          <IconButton
-            edge="end"
-            aria-label="edit"
-            onClick={(): void => { editUser(user); }}
-            size="large">
-            <EditIcon />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
-    );
-  };
 
   const userPopup = (
     <form className={classes.root} noValidate autoComplete="off" onSubmit={addUser}>
@@ -464,13 +474,6 @@ export default function UserAdmin(): JSX.Element {
     </form>
   );
 
-  const ListOfUsers = React.memo((prop: UsersProp) => {
-    const usersLI = prop.localUsers.map((user) => (
-      <UserLI key={user.id} user={user} />
-    ));
-    return (<List>{usersLI}</List>);
-  });
-
   useEffect(() => {
     fetchUsers();
   }, [users.length]);
@@ -480,7 +483,7 @@ export default function UserAdmin(): JSX.Element {
     if (hideInactive) {
       showUsers = showUsers.filter((user) => user.active);
     }
-    setUserList(<ListOfUsers localUsers={showUsers} />);
+    setUserList(<ListOfUsers localUsers={showUsers} editUser={editUser} />);
   }, [users, hideInactive]);
 
   return (

@@ -360,7 +360,8 @@ export default function ElevatorBookingAdmin(): JSX.Element {
                         edge="end"
                         aria-label="edit"
                         onClick={(): void => { showBooking(row); }}
-                        size="large">
+                        size="large"
+                      >
                         <EditIcon />
                       </IconButton>
                     </StyledTableCell>

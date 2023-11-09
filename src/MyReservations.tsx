@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { MyReservation, UserManager } from 'condo-brain';
-import { Grid } from '@mui/material';
+import { Alert, AlertTitle, Grid } from '@mui/material';
 import { Theme } from '@mui/material/styles';
 import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
 import withStyles from '@mui/styles/withStyles';
 import { get as getCookie } from 'es-cookie';
-import { Alert, AlertTitle } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -136,7 +135,8 @@ export default function MyReservations({ userManager }: { userManager: UserManag
                         edge="end"
                         aria-label="delete"
                         onClick={(): void => { deleteReservation(row.id); }}
-                        size="large">
+                        size="large"
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </StyledTableCell>

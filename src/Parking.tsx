@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import {
+  Alert,
+  AlertTitle,
   Button,
   Grid,
   Icon,
-  TextField,
-  Theme,
+  TextField, Theme,
 } from '@mui/material';
 import { isMobile } from 'react-device-detect';
 import DateFnsUtils from '@date-io/date-fns'; // eslint-disable-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -13,7 +14,6 @@ import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { UserManager } from 'condo-brain';
-import { Alert, AlertTitle } from '@mui/material';
 import './styles/application.scss';
 import './styles/parking.scss';
 

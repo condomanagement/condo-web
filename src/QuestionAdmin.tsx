@@ -5,7 +5,6 @@ import { Grid } from '@mui/material';
 import { Theme } from '@mui/material/styles';
 import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
-import Chip from '@mui/material/Chip';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -14,18 +13,8 @@ import DialogActions from '@mui/material/DialogActions';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import TextField from '@mui/material/TextField';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-
-type QuestionProp = {
-  children: Question;
-}
+import QuestionLI from './QuestionLi';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -63,7 +52,6 @@ export default function QuestionAdmin(): JSX.Element {
   const [selectedQuestion, setSelectedQuestion] = useState<Question | undefined>(undefined);
   const [amenities, setAmenities] = useState<Amenity[]>([]);
   const [amenityChecks, setAmenityChecks] = useState<boolean[]>([]);
-  const [expandedAmenities, setExpandedAmenities] = useState<boolean[]>([]);
   const [questionOpen, setQuestionOpen] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState(0);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
@@ -97,18 +85,6 @@ export default function QuestionAdmin(): JSX.Element {
       });
   }
 
-  function deleteQuestion(question: Question): void {
-    setQuestionToDelete(question.id);
-    setSelectedQuestion(question);
-    setDeleteOpen(true);
-  }
-
-  function editQuestion(question: Question): void {
-    setSelectedQuestion(question);
-    setValue(question.question);
-    setQuestionOpen(true);
-  }
-
   function updateQuestion(e: React.FormEvent, question?: Question): void {
     if (!question) {
       addQuestion(e);
@@ -137,25 +113,6 @@ export default function QuestionAdmin(): JSX.Element {
     admin.getAmenities().then((response) => {
       setAmenities(response);
     });
-  };
-
-  const openAmenity = (question: Question): void => {
-    setSelectedQuestion(question);
-    const checkedValues: boolean[] = [];
-    Object.keys(question.amenities).forEach((a) => {
-      const index = question.amenities[Number(a)].id;
-      checkedValues[index] = true;
-    });
-
-    Object.keys(amenities).forEach((a) => {
-      const index = amenities[Number(a)].id;
-      if (!checkedValues[index]) {
-        checkedValues[index] = false;
-      }
-    });
-
-    setAmenityChecks(checkedValues);
-    setAmenityOpen(true);
   };
 
   useEffect(() => {
@@ -187,81 +144,6 @@ export default function QuestionAdmin(): JSX.Element {
         fetchQuestion();
       });
     }
-  };
-
-  const expandQuestion = (id: number): void => {
-    const existing = expandedAmenities;
-    existing[id] = true;
-    setExpandedAmenities(existing);
-    fetchQuestion();
-  };
-
-  const QuestionLI = (prop: QuestionProp): JSX.Element => {
-    const { children } = prop;
-    const question = children;
-    const primary = question.question;
-    const numberOfAmenities = question.amenities?.length;
-    const remainingAmenities = numberOfAmenities - 3;
-    const secondary = (
-      <div className={classes.chips}>
-        {!(numberOfAmenities > 0) && (
-          <>
-            No associated amenities.
-          </>
-        )}
-        {question.amenities && question.amenities.map((amenity, index) => (
-          <>
-            {(index < 3 || expandedAmenities[question.id]) && (
-              <Chip
-                label={amenity.name}
-                classes={{ colorPrimary: classes.chip }}
-                color="primary"
-                size="small"
-              />
-            )}
-          </>
-        ))}
-        {(remainingAmenities > 0 && !expandedAmenities[question.id]) && (
-          <Chip
-            label={`${remainingAmenities} more.`}
-            classes={{ colorPrimary: classes.chip }}
-            onClick={(): void => expandQuestion(question.id)}
-            color="primary"
-            size="small"
-          />
-        )}
-        <IconButton aria-label="delete" size="small">
-          <AddIcon fontSize="inherit" onClick={(): void => openAmenity(question)} />
-        </IconButton>
-      </div>
-    );
-
-    return (
-      <ListItem>
-        <ListItemText
-          primary={primary}
-          secondary={secondary}
-        />
-        <ListItemSecondaryAction>
-          <>
-            <IconButton
-              edge="end"
-              aria-label="edit"
-              onClick={(): void => { editQuestion(question); }}
-              size="large">
-              <EditIcon />
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="delete"
-              onClick={(): void => { deleteQuestion(question); }}
-              size="large">
-              <DeleteIcon />
-            </IconButton>
-          </>
-        </ListItemSecondaryAction>
-      </ListItem>
-    );
   };
 
   const deleteConfirmation = (
@@ -335,7 +217,22 @@ export default function QuestionAdmin(): JSX.Element {
           <h4 className="center">Question Admin</h4>
           <Grid item xs={12}>
             <List>
-              {questions.map((question) => <QuestionLI key={question.id}>{question}</QuestionLI>)}
+              {questions.map((question) => (
+                <QuestionLI
+                  key={question.id}
+                  fetchQuestion={fetchQuestion}
+                  setQuestionToDelete={setQuestionToDelete}
+                  setSelectedQuestion={setSelectedQuestion}
+                  setDeleteOpen={setDeleteOpen}
+                  setQuestionOpen={setQuestionOpen}
+                  setValue={setValue}
+                  setAmenityOpen={setAmenityOpen}
+                  setAmenityChecks={setAmenityChecks}
+                  amenities={amenities}
+                >
+                  {question}
+                </QuestionLI>
+              ))}
             </List>
           </Grid>
           <Grid item xs={12} className="center">

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
+  AlertTitle,
   Button,
   Checkbox,
   FormControlLabel,
@@ -12,17 +14,17 @@ import {
   ListItemText,
   Select,
   TextField,
-  Theme,
-  Typography,
+  Theme, Typography,
 } from '@mui/material';
-import { Alert, AlertTitle } from '@mui/material';
 import { get as getCookie } from 'es-cookie';
 import { useNavigate } from 'react-router-dom';
-import MomentUtils from '@date-io/moment';
 import { isMobile } from 'react-device-detect';
 import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
-import { DatePicker, MuiPickersUtilsProvider, TimePicker } from '@material-ui/pickers';
+import { DatePicker, TimePicker } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+
 import {
   Amenity,
   Question,
@@ -484,7 +486,7 @@ export default function Resevation(): JSX.Element {
                   </Alert>
                 )}
               </Grid>
-              <MuiPickersUtilsProvider utils={MomentUtils}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <Grid item xs={6}>
                   <InputLabel htmlFor="age-native-simple">Amenity</InputLabel>
                   <Select
@@ -628,7 +630,7 @@ export default function Resevation(): JSX.Element {
                     </Button>
                   </Grid>
                 )}
-              </MuiPickersUtilsProvider>
+              </LocalizationProvider>
             </Grid>
           </div>
         </form>

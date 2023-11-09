@@ -188,7 +188,8 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
               className={clsx(classes.menuButton, {
                 [classes.hide]: openDrawer,
               })}
-              size="large">
+              size="large"
+            >
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
@@ -200,7 +201,8 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
               aria-haspopup="true"
               onClick={handleMenu}
               color="inherit"
-              size="large">
+              size="large"
+            >
               <Avatar md5Email={userManager.md5Email} name={userManager.fullname} color="#93C83E" size="40" round />
             </IconButton>
             <Menu

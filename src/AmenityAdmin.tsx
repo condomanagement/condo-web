@@ -159,7 +159,7 @@ export default function AmenityAdmin(): JSX.Element {
     fetchAmenities();
   }, [amenities.length]);
 
-  const AmenityLI = (prop: AmenityProp): JSX.Element => {
+  function AmenityLI(prop: AmenityProp): JSX.Element {
     const { children } = prop;
     const amenity = children;
     const icon = amenity.vaccine ? '💉' : '🦠';
@@ -178,21 +178,23 @@ export default function AmenityAdmin(): JSX.Element {
               edge="end"
               aria-label="edit"
               onClick={(): void => { editAmenity(amenity); }}
-              size="large">
+              size="large"
+            >
               <EditIcon />
             </IconButton>
             <IconButton
               edge="end"
               aria-label="delete"
               onClick={(): void => { deleteAmenity(amenity); }}
-              size="large">
+              size="large"
+            >
               <DeleteIcon />
             </IconButton>
           </>
         </ListItemSecondaryAction>
       </ListItem>
     );
-  };
+  }
 
   const times = [];
   for (let t = 15; t <= 240; t += 15) {
@@ -235,103 +237,105 @@ export default function AmenityAdmin(): JSX.Element {
     </Dialog>
   );
 
-  return <>
-    <h4 className="center">Amenity Admin</h4>
-    <div className="section flex-grow">
-      <Grid container spacing={5}>
-        <Grid item xs={12}>
-          <List>
-            {amenities.map((amenity) => <AmenityLI key={amenity.id}>{amenity}</AmenityLI>)}
-          </List>
-        </Grid>
-        <Grid item xs={12}>
-          <Button
-            className={classes.registerButton}
-            variant="contained"
-            onClick={(): void => {
-              setTimeLimit(60);
-              setValue('');
-              setSelectedAmenity(undefined);
-              setAmenityOpen(true);
-            }}
-          >
-            Add Amenity
-          </Button>
-        </Grid>
-      </Grid>
-    </div>
-    <form className={classes.root} noValidate autoComplete="off" onSubmit={addAmenity}>
-      <Dialog open={amenityOpen} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Edit Amenity</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {selectedAmenity?.name}
-          </DialogContentText>
-          <Grid container spacing={5}>
-            <Grid item xs={12}>
-              <TextField
-                id="standard-multiline-flexible"
-                label="Enter new amenity"
-                multiline
-                maxRows={4}
-                value={value}
-                onChange={handleChange}
-                style={{ width: '100%' }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <InputLabel htmlFor="time-limit">Time Limit</InputLabel>
-              <Select
-                native
-                value={timeLimit}
-                onChange={handleTimeLimitChange}
-                inputProps={{
-                  name: 'timeLimit',
-                  id: 'timeLimit',
-                }}
-                style={{ width: '100%' }}
-              >
-                {times}
-              </Select>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={(
-                  <Switch
-                    checked={visible}
-                    onChange={handleVisibilityChange}
-                    name="visible"
-                    color="primary"
-                  />
-                )}
-                label="Visible"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={(
-                  <Switch
-                    checked={vaccine}
-                    onChange={handleVaccineChange}
-                    name="visible"
-                    color="primary"
-                  />
-                )}
-                label="💉 Requires Vaccine"
-              />
-            </Grid>
+  return (
+    <>
+      <h4 className="center">Amenity Admin</h4>
+      <div className="section flex-grow">
+        <Grid container spacing={5}>
+          <Grid item xs={12}>
+            <List>
+              {amenities.map((amenity) => <AmenityLI key={amenity.id}>{amenity}</AmenityLI>)}
+            </List>
           </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={(): void => setAmenityOpen(false)} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={(e): void => updateAmenity(e, selectedAmenity)} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </form>
-    {deleteConfirmation}
-  </>;
+          <Grid item xs={12}>
+            <Button
+              className={classes.registerButton}
+              variant="contained"
+              onClick={(): void => {
+                setTimeLimit(60);
+                setValue('');
+                setSelectedAmenity(undefined);
+                setAmenityOpen(true);
+              }}
+            >
+              Add Amenity
+            </Button>
+          </Grid>
+        </Grid>
+      </div>
+      <form className={classes.root} noValidate autoComplete="off" onSubmit={addAmenity}>
+        <Dialog open={amenityOpen} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">Edit Amenity</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {selectedAmenity?.name}
+            </DialogContentText>
+            <Grid container spacing={5}>
+              <Grid item xs={12}>
+                <TextField
+                  id="standard-multiline-flexible"
+                  label="Enter new amenity"
+                  multiline
+                  maxRows={4}
+                  value={value}
+                  onChange={handleChange}
+                  style={{ width: '100%' }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel htmlFor="time-limit">Time Limit</InputLabel>
+                <Select
+                  native
+                  value={timeLimit}
+                  onChange={handleTimeLimitChange}
+                  inputProps={{
+                    name: 'timeLimit',
+                    id: 'timeLimit',
+                  }}
+                  style={{ width: '100%' }}
+                >
+                  {times}
+                </Select>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={(
+                    <Switch
+                      checked={visible}
+                      onChange={handleVisibilityChange}
+                      name="visible"
+                      color="primary"
+                    />
+                  )}
+                  label="Visible"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={(
+                    <Switch
+                      checked={vaccine}
+                      onChange={handleVaccineChange}
+                      name="visible"
+                      color="primary"
+                    />
+                  )}
+                  label="💉 Requires Vaccine"
+                />
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={(): void => setAmenityOpen(false)} color="secondary">
+              Cancel
+            </Button>
+            <Button onClick={(e): void => updateAmenity(e, selectedAmenity)} color="primary">
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </form>
+      {deleteConfirmation}
+    </>
+  );
 }
