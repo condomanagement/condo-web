@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { AdminManager, Amenity } from 'condo-brain';
-import { Grid } from '@material-ui/core';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import TextField from '@material-ui/core/TextField';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogActions from '@material-ui/core/DialogActions';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import { Grid } from '@mui/material';
+import { Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import TextField from '@mui/material/TextField';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 type AmenityProp = {
   children: Amenity;
@@ -172,10 +174,18 @@ export default function AmenityAdmin(): JSX.Element {
         />
         <ListItemSecondaryAction>
           <>
-            <IconButton edge="end" aria-label="edit" onClick={(): void => { editAmenity(amenity); }}>
+            <IconButton
+              edge="end"
+              aria-label="edit"
+              onClick={(): void => { editAmenity(amenity); }}
+              size="large">
               <EditIcon />
             </IconButton>
-            <IconButton edge="end" aria-label="delete" onClick={(): void => { deleteAmenity(amenity); }}>
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              onClick={(): void => { deleteAmenity(amenity); }}
+              size="large">
               <DeleteIcon />
             </IconButton>
           </>
@@ -225,105 +235,103 @@ export default function AmenityAdmin(): JSX.Element {
     </Dialog>
   );
 
-  return (
-    <>
-      <h4 className="center">Amenity Admin</h4>
-      <div className="section flex-grow">
-        <Grid container spacing={5}>
-          <Grid item xs={12}>
-            <List>
-              {amenities.map((amenity) => <AmenityLI key={amenity.id}>{amenity}</AmenityLI>)}
-            </List>
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              className={classes.registerButton}
-              variant="contained"
-              onClick={(): void => {
-                setTimeLimit(60);
-                setValue('');
-                setSelectedAmenity(undefined);
-                setAmenityOpen(true);
-              }}
-            >
-              Add Amenity
-            </Button>
-          </Grid>
+  return <>
+    <h4 className="center">Amenity Admin</h4>
+    <div className="section flex-grow">
+      <Grid container spacing={5}>
+        <Grid item xs={12}>
+          <List>
+            {amenities.map((amenity) => <AmenityLI key={amenity.id}>{amenity}</AmenityLI>)}
+          </List>
         </Grid>
-      </div>
-      <form className={classes.root} noValidate autoComplete="off" onSubmit={addAmenity}>
-        <Dialog open={amenityOpen} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Edit Amenity</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {selectedAmenity?.name}
-            </DialogContentText>
-            <Grid container spacing={5}>
-              <Grid item xs={12}>
-                <TextField
-                  id="standard-multiline-flexible"
-                  label="Enter new amenity"
-                  multiline
-                  rowsMax={4}
-                  value={value}
-                  onChange={handleChange}
-                  style={{ width: '100%' }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <InputLabel htmlFor="time-limit">Time Limit</InputLabel>
-                <Select
-                  native
-                  value={timeLimit}
-                  onChange={handleTimeLimitChange}
-                  inputProps={{
-                    name: 'timeLimit',
-                    id: 'timeLimit',
-                  }}
-                  style={{ width: '100%' }}
-                >
-                  {times}
-                </Select>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={(
-                    <Switch
-                      checked={visible}
-                      onChange={handleVisibilityChange}
-                      name="visible"
-                      color="primary"
-                    />
-                  )}
-                  label="Visible"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={(
-                    <Switch
-                      checked={vaccine}
-                      onChange={handleVaccineChange}
-                      name="visible"
-                      color="primary"
-                    />
-                  )}
-                  label="💉 Requires Vaccine"
-                />
-              </Grid>
+        <Grid item xs={12}>
+          <Button
+            className={classes.registerButton}
+            variant="contained"
+            onClick={(): void => {
+              setTimeLimit(60);
+              setValue('');
+              setSelectedAmenity(undefined);
+              setAmenityOpen(true);
+            }}
+          >
+            Add Amenity
+          </Button>
+        </Grid>
+      </Grid>
+    </div>
+    <form className={classes.root} noValidate autoComplete="off" onSubmit={addAmenity}>
+      <Dialog open={amenityOpen} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Edit Amenity</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {selectedAmenity?.name}
+          </DialogContentText>
+          <Grid container spacing={5}>
+            <Grid item xs={12}>
+              <TextField
+                id="standard-multiline-flexible"
+                label="Enter new amenity"
+                multiline
+                maxRows={4}
+                value={value}
+                onChange={handleChange}
+                style={{ width: '100%' }}
+              />
             </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={(): void => setAmenityOpen(false)} color="secondary">
-              Cancel
-            </Button>
-            <Button onClick={(e): void => updateAmenity(e, selectedAmenity)} color="primary">
-              Save
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </form>
-      {deleteConfirmation}
-    </>
-  );
+            <Grid item xs={12}>
+              <InputLabel htmlFor="time-limit">Time Limit</InputLabel>
+              <Select
+                native
+                value={timeLimit}
+                onChange={handleTimeLimitChange}
+                inputProps={{
+                  name: 'timeLimit',
+                  id: 'timeLimit',
+                }}
+                style={{ width: '100%' }}
+              >
+                {times}
+              </Select>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={(
+                  <Switch
+                    checked={visible}
+                    onChange={handleVisibilityChange}
+                    name="visible"
+                    color="primary"
+                  />
+                )}
+                label="Visible"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={(
+                  <Switch
+                    checked={vaccine}
+                    onChange={handleVaccineChange}
+                    name="visible"
+                    color="primary"
+                  />
+                )}
+                label="💉 Requires Vaccine"
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={(): void => setAmenityOpen(false)} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={(e): void => updateAmenity(e, selectedAmenity)} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </form>
+    {deleteConfirmation}
+  </>;
 }

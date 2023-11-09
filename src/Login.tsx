@@ -1,11 +1,14 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import Button from '@mui/material/Button';
+import Icon from '@mui/material/Icon';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import { Alert, AlertTitle } from '@mui/material';
 import { UserManager } from 'condo-brain';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import { Theme } from '@mui/material/styles';
+
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {

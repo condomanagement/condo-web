@@ -1,39 +1,36 @@
 import React from 'react';
-import {
-  Theme,
-  createStyles,
-  makeStyles,
-  useTheme,
-} from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+import { Theme, useTheme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import AppBar from '@mui/material/AppBar';
+import Button from '@mui/material/Button';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDolly } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { get as getCookie } from 'es-cookie';
 import { UserManager } from 'condo-brain';
-import Link from '@material-ui/core/Link';
-import Tooltip from '@material-ui/core/Tooltip';
+import Link from '@mui/material/Link';
+import Tooltip from '@mui/material/Tooltip';
 import clsx from 'clsx';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import LocalParking from '@material-ui/icons/LocalParking';
-import Settings from '@material-ui/icons/Settings';
-import Schedule from '@material-ui/icons/Schedule';
-import EventAvailable from '@material-ui/icons/EventAvailable';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import LocalParking from '@mui/icons-material/LocalParking';
+import Settings from '@mui/icons-material/Settings';
+import Schedule from '@mui/icons-material/Schedule';
+import EventAvailable from '@mui/icons-material/EventAvailable';
 import Avatar from 'react-avatar';
 
 const drawerWidth = 240;
@@ -90,7 +87,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     [theme.breakpoints.up('sm')]: {
       width: theme.spacing(9) + 1,
     },
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       width: 0,
       display: 'none',
     },
@@ -191,7 +188,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
               className={clsx(classes.menuButton, {
                 [classes.hide]: openDrawer,
               })}
-            >
+              size="large">
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
@@ -203,7 +200,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
               aria-haspopup="true"
               onClick={handleMenu}
               color="inherit"
-            >
+              size="large">
               <Avatar md5Email={userManager.md5Email} name={userManager.fullname} color="#93C83E" size="40" round />
             </IconButton>
             <Menu
@@ -240,7 +237,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
           }}
         >
           <div className={classes.toolbar}>
-            <IconButton onClick={handleDrawerClose}>
+            <IconButton onClick={handleDrawerClose} size="large">
               {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </IconButton>
           </div>

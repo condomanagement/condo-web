@@ -52,14 +52,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
-    fallback: {
-      'os':  require.resolve('os-browserify/browser'),
-      'tty': require.resolve("tty-browserify"),
-      "http": require.resolve("stream-http"),
-       "https": require.resolve("https-browserify"),
-      'stream': require.resolve("stream-browserify"),
-      "zlib": require.resolve("browserify-zlib")
-    },
   },
   output: {
     publicPath: '/',
@@ -79,7 +71,7 @@ module.exports = {
   ],
   devServer: {
     // Serve index.html as the base
-    contentBase: resolveAppPath('public'),
+    static: resolveAppPath('public'),
     // Enable compression
     compress: true,
     historyApiFallback: true,
@@ -88,7 +80,6 @@ module.exports = {
     host,
     port: 3001,
     // Public path is root of content base
-    publicPath: '/',
     proxy: {
       '/api': 'http://localhost:3000'
     },

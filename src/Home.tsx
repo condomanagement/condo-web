@@ -2,11 +2,12 @@ import React from 'react';
 import {
   Button,
   Grid,
-} from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useNavigate } from 'react-router-dom';
-import LocalParking from '@material-ui/icons/LocalParking';
-import HomeIcon from '@material-ui/icons/Home';
+import LocalParking from '@mui/icons-material/LocalParking';
+import HomeIcon from '@mui/icons-material/Home';
 import './styles/application.scss';
 import './styles/parking.scss';
 

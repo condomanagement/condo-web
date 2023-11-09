@@ -5,14 +5,15 @@ import {
   Icon,
   TextField,
   Theme,
-} from '@material-ui/core';
+} from '@mui/material';
 import { isMobile } from 'react-device-detect';
 import DateFnsUtils from '@date-io/date-fns'; // eslint-disable-line no-unused-vars, @typescript-eslint/no-unused-vars
 import MaterialUtils from '@date-io/moment';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { UserManager } from 'condo-brain';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Alert, AlertTitle } from '@mui/material';
 import './styles/application.scss';
 import './styles/parking.scss';
 

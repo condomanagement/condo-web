@@ -11,11 +11,12 @@ import {
   TextField,
   Theme,
   Typography,
-} from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
+} from '@mui/material';
+import { Alert, AlertTitle } from '@mui/material';
 import MomentUtils from '@date-io/moment';
 import { isMobile } from 'react-device-detect';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { DatePicker, MuiPickersUtilsProvider, TimePicker } from '@material-ui/pickers';
 import { UserManager, UserType } from 'condo-brain';
 import moment from 'moment';

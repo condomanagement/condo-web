@@ -14,13 +14,14 @@ import {
   TextField,
   Theme,
   Typography,
-} from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
+} from '@mui/material';
+import { Alert, AlertTitle } from '@mui/material';
 import { get as getCookie } from 'es-cookie';
 import { useNavigate } from 'react-router-dom';
 import MomentUtils from '@date-io/moment';
 import { isMobile } from 'react-device-detect';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { DatePicker, MuiPickersUtilsProvider, TimePicker } from '@material-ui/pickers';
 import {
   Amenity,
@@ -28,8 +29,8 @@ import {
   ReservationTime,
   UserManager,
 } from 'condo-brain';
-import Schedule from '@material-ui/icons/Schedule';
-import EventAvailable from '@material-ui/icons/EventAvailable';
+import Schedule from '@mui/icons-material/Schedule';
+import EventAvailable from '@mui/icons-material/EventAvailable';
 import moment from 'moment';
 import './styles/application.scss';
 import './styles/parking.scss';

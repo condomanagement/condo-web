@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { AdminManager, Amenity, Question } from 'condo-brain';
-import { Grid } from '@material-ui/core';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import Chip from '@material-ui/core/Chip';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogActions from '@material-ui/core/DialogActions';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import TextField from '@material-ui/core/TextField';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
+import { Grid } from '@mui/material';
+import { Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import Chip from '@mui/material/Chip';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import TextField from '@mui/material/TextField';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 
 type QuestionProp = {
   children: Question;
@@ -242,10 +244,18 @@ export default function QuestionAdmin(): JSX.Element {
         />
         <ListItemSecondaryAction>
           <>
-            <IconButton edge="end" aria-label="edit" onClick={(): void => { editQuestion(question); }}>
+            <IconButton
+              edge="end"
+              aria-label="edit"
+              onClick={(): void => { editQuestion(question); }}
+              size="large">
               <EditIcon />
             </IconButton>
-            <IconButton edge="end" aria-label="delete" onClick={(): void => { deleteQuestion(question); }}>
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              onClick={(): void => { deleteQuestion(question); }}
+              size="large">
               <DeleteIcon />
             </IconButton>
           </>
@@ -298,7 +308,7 @@ export default function QuestionAdmin(): JSX.Element {
                 id="standard-multiline-flexible"
                 label="Enter new question"
                 multiline
-                rowsMax={4}
+                maxRows={4}
                 value={value}
                 onChange={handleChange}
                 style={{ width: '100%' }}
