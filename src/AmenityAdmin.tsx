@@ -8,24 +8,15 @@ import makeStyles from '@mui/styles/makeStyles';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import TextField from '@mui/material/TextField';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-
-type AmenityProp = {
-  children: Amenity;
-}
+import AmenityLI from './AmenityLi';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -107,21 +98,6 @@ export default function AmenityAdmin(): JSX.Element {
       });
   }
 
-  function deleteAmenity(amenity: Amenity): void {
-    setAmenityToDelete(amenity.id);
-    setSelectedAmenity(amenity);
-    setDeleteOpen(true);
-  }
-
-  function editAmenity(amenity: Amenity): void {
-    setSelectedAmenity(amenity);
-    setTimeLimit(amenity.timeLimit);
-    setValue(amenity.name);
-    setVisible(amenity.visible);
-    setVaccine(amenity.vaccine);
-    setAmenityOpen(true);
-  }
-
   function updateAmenity(e: React.FormEvent, amenity?: Amenity): void {
     if (!amenity) {
       addAmenity(e);
@@ -158,43 +134,6 @@ export default function AmenityAdmin(): JSX.Element {
   useEffect(() => {
     fetchAmenities();
   }, [amenities.length]);
-
-  function AmenityLI(prop: AmenityProp): JSX.Element {
-    const { children } = prop;
-    const amenity = children;
-    const icon = amenity.vaccine ? '💉' : '🦠';
-    const primary = `${icon} ${amenity.name}`;
-    const secondary = minutesToReadable(amenity.timeLimit);
-
-    return (
-      <ListItem>
-        <ListItemText
-          primary={primary}
-          secondary={secondary}
-        />
-        <ListItemSecondaryAction>
-          <>
-            <IconButton
-              edge="end"
-              aria-label="edit"
-              onClick={(): void => { editAmenity(amenity); }}
-              size="large"
-            >
-              <EditIcon />
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="delete"
-              onClick={(): void => { deleteAmenity(amenity); }}
-              size="large"
-            >
-              <DeleteIcon />
-            </IconButton>
-          </>
-        </ListItemSecondaryAction>
-      </ListItem>
-    );
-  }
 
   const times = [];
   for (let t = 15; t <= 240; t += 15) {
@@ -244,7 +183,21 @@ export default function AmenityAdmin(): JSX.Element {
         <Grid container spacing={5}>
           <Grid item xs={12}>
             <List>
-              {amenities.map((amenity) => <AmenityLI key={amenity.id}>{amenity}</AmenityLI>)}
+              {amenities.map((amenity) => (
+                <AmenityLI
+                  key={amenity.id}
+                  setAmenityToDelete={setAmenityToDelete}
+                  setSelectedAmenity={setSelectedAmenity}
+                  setDeleteOpen={setDeleteOpen}
+                  setTimeLimit={setTimeLimit}
+                  setValue={setValue}
+                  setVisible={setVisible}
+                  setVaccine={setVaccine}
+                  setAmenityOpen={setAmenityOpen}
+                >
+                  {amenity}
+                </AmenityLI>
+              ))}
             </List>
           </Grid>
           <Grid item xs={12}>

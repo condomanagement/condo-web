@@ -13,11 +13,12 @@ import {
   TextField,
   Theme, Typography,
 } from '@mui/material';
-import MomentUtils from '@date-io/moment';
 import { isMobile } from 'react-device-detect';
 import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
-import { DatePicker, MuiPickersUtilsProvider, TimePicker } from '@material-ui/pickers';
+import { DatePicker, TimePicker } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { UserManager, UserType } from 'condo-brain';
 import moment from 'moment';
 import './styles/application.scss';
@@ -389,7 +390,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                   </Alert>
                 )}
               </Grid>
-              <MuiPickersUtilsProvider utils={MomentUtils}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <Grid item xs={6}>
                   <InputLabel htmlFor="age-native-simple">Type</InputLabel>
                   <Select
@@ -607,7 +608,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                     </Button>
                   </Grid>
                 )}
-              </MuiPickersUtilsProvider>
+              </LocalizationProvider>
             </Grid>
           </div>
         </form>

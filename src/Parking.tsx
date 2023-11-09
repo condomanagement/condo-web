@@ -8,11 +8,11 @@ import {
   TextField, Theme,
 } from '@mui/material';
 import { isMobile } from 'react-device-detect';
-import DateFnsUtils from '@date-io/date-fns'; // eslint-disable-line no-unused-vars, @typescript-eslint/no-unused-vars
-import MaterialUtils from '@date-io/moment';
 import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
-import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { DatePicker } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { UserManager } from 'condo-brain';
 import './styles/application.scss';
 import './styles/parking.scss';
@@ -112,7 +112,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
                   </Alert>
                 )}
               </Grid>
-              <MuiPickersUtilsProvider utils={MaterialUtils}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <Grid item xs={6}>
                   {isMobile && (
                     <TextField
@@ -214,7 +214,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
                     Register
                   </Button>
                 </Grid>
-              </MuiPickersUtilsProvider>
+              </LocalizationProvider>
             </Grid>
           </div>
         </form>
