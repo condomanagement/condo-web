@@ -1,14 +1,14 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
-const fs = require('fs');
+const webpack = require('webpack');
+// const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const appDirectory = fs.realpathSync(process.cwd());
-const resolveAppPath = relativePath => path.resolve(appDirectory, relativePath);
+const resolveAppPath = relativePath => path.resolve(path.resolve(__dirname), relativePath);
 // Host
-const host = process.env.HOST || 'localhost';
+// const host = process.env.HOST || 'localhost';
 
 // Required for babel-preset-react-app
-process.env.NODE_ENV = 'development';
+// process.env.NODE_ENV = 'development';
 
 module.exports = {
   entry: './src/index.tsx',
@@ -64,7 +64,7 @@ module.exports = {
       'http': require.resolve('stream-http'),
       'assert': require.resolve('assert/'),
       'buffer': require.resolve('buffer/'),
-      'fs': false,
+      'process': require.resolve('process/browser'),
     }
   },
   output: {
@@ -82,6 +82,9 @@ module.exports = {
       inject: 'body',
       template: resolveAppPath('public/index.html'),
     }),
+      new webpack.ProvidePlugin({
+             process: 'process/browser',
+      }),
   ],
   devServer: {
     // Serve index.html as the base
@@ -91,7 +94,7 @@ module.exports = {
     historyApiFallback: true,
     // Enable hot reloading
     hot: true,
-    host,
+    host: 'localhost',
     port: 3001,
     // Public path is root of content base
     proxy: {

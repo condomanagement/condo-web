@@ -13,23 +13,47 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +90 package.json
+badd +27 package.json
 badd +50 src/ReservationAdmin.tsx
-badd +1 webpack.config.js
-badd +1 src/UserAdmin.tsx
+badd +3 webpack.config.js
+badd +7 src/UserAdmin.tsx
 badd +1 src/Parking.tsx
 badd +525 src/Reservation.tsx
-badd +1 src/ElevatorBooking.tsx
-badd +192 src/AmenityAdmin.tsx
-badd +12 src/AmenityLi.tsx
+badd +454 src/ElevatorBooking.tsx
+badd +243 src/AmenityAdmin.tsx
+badd +20 src/AmenityLi.tsx
+badd +25 src/App.tsx
+badd +2 src/exports.d.ts
+badd +22 tsconfig.build.json
+badd +24 tsconfig.json
+badd +0 fallback:\ \{
+badd +0 src/Admin.tsx
 argglobal
 %argdel
 $argadd package.json
 tabnew +setlocal\ bufhidden=wipe
 tabnew +setlocal\ bufhidden=wipe
-tabnew +setlocal\ bufhidden=wipe
-tabnew +setlocal\ bufhidden=wipe
 tabrewind
+edit package.json
+argglobal
+balt webpack.config.js
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let &fdl = &fdl
+let s:l = 59 - ((6 * winheight(0) + 6) / 13)
+if s:l < 1 | let s:l = 1 | endif
+keepjumps exe s:l
+normal! zt
+keepjumps 59
+normal! 04|
+tabnext
 edit webpack.config.js
 argglobal
 balt package.json
@@ -43,14 +67,14 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 83 - ((8 * winheight(0) + 6) / 13)
+let s:l = 74 - ((6 * winheight(0) + 6) / 13)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 83
-normal! 012|
+keepjumps 74
+normal! 024|
 tabnext
-edit src/UserAdmin.tsx
+edit src/Admin.tsx
 argglobal
 balt webpack.config.js
 setlocal fdm=manual
@@ -63,73 +87,13 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 7 - ((6 * winheight(0) + 6) / 13)
+let s:l = 10 - ((6 * winheight(0) + 6) / 13)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 7
-normal! 0
-tabnext
-edit src/Parking.tsx
-argglobal
-balt src/ReservationAdmin.tsx
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let &fdl = &fdl
-let s:l = 11 - ((6 * winheight(0) + 6) / 13)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 11
-normal! 052|
-tabnext
-edit src/ElevatorBooking.tsx
-argglobal
-balt src/Parking.tsx
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let &fdl = &fdl
-let s:l = 602 - ((6 * winheight(0) + 6) / 13)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 602
-normal! 01|
-tabnext
-edit src/Reservation.tsx
-argglobal
-balt src/Parking.tsx
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let &fdl = &fdl
-let s:l = 523 - ((6 * winheight(0) + 6) / 13)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 523
-normal! 014|
-tabnext 5
+keepjumps 10
+normal! 07|
+tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif
@@ -142,7 +106,6 @@ if filereadable(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
 set hlsearch
-nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :
