@@ -16,9 +16,9 @@ import {
 import { isMobile } from 'react-device-detect';
 import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
-import { DatePicker, TimePicker } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { UserManager, UserType } from 'condo-brain';
 import moment from 'moment';
 import './styles/application.scss';
@@ -390,7 +390,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                   </Alert>
                 )}
               </Grid>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Grid item xs={6}>
                   <InputLabel htmlFor="age-native-simple">Type</InputLabel>
                   <Select
@@ -425,11 +425,10 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                   )}
                   { !isMobile && (
                     <DatePicker
-                      id="start"
                       value={selectedStartDate}
                       label="Date"
                       onChange={(e: Date | null): void => handleDateChange(e?.toString())}
-                      style={{ width: '100%' }}
+                      sx={{ width: '100%' }}
                     />
                   )}
                 </Grid>
@@ -448,11 +447,10 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                   )}
                   { !isMobile && (
                     <TimePicker
-                      id="startTime"
                       value={roundToMinuteInterval(selectedStartDate, 15)}
                       label="Start Time"
                       onChange={(e: Date | null): void => handleStartDateChange(e?.toString())}
-                      style={{ width: '100%' }}
+                      sx={{ width: '100%' }}
                       minutesStep={15}
                     />
                   )}
@@ -472,11 +470,10 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                   )}
                   { !isMobile && (
                     <TimePicker
-                      id="endTime"
                       value={roundToMinuteInterval(selectedEndDate, 15)}
                       label="End Time"
                       onChange={(e: Date | null): void => handleEndDateChange(e?.toString())}
-                      style={{ width: '100%' }}
+                      sx={{ width: '100%' }}
                       minutesStep={15}
                     />
                   )}

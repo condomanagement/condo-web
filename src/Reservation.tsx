@@ -21,9 +21,9 @@ import { useNavigate } from 'react-router-dom';
 import { isMobile } from 'react-device-detect';
 import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
-import { DatePicker, TimePicker } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {
   Amenity,
   Question,
@@ -96,7 +96,7 @@ export default function Resevation(): JSX.Element {
   const [selectedStartDate, setSelectedStartDateChange] = useState<Date>(roundToMinuteInterval(new Date(), 15));
   const [selectedEndDate, setSelectedEndDateChange] = useState<Date>(addMinutes(selectedStartDate, 30));
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [amenity, setAmenity] = useState<string | unknown>(null);
+  const [amenity, setAmenity] = useState<string>('');
   const [amenities, setAmenities] = useState<Amenity[]>([]);
   const [displayAmenities, setDisplayAmenities] = useState<Amenity[]>([]);
   const [answers, setAnswers] = useState<boolean[]>([]);
@@ -125,7 +125,7 @@ export default function Resevation(): JSX.Element {
           setThanks(true);
           setSelectedStartDateChange(new Date());
           setSelectedEndDateChange(new Date());
-          setAmenity(null);
+          setAmenity('');
           setAnswers([]);
           setErrorMessage('');
         } else if (response.error === 'Unprocessable Entity') {
@@ -263,7 +263,7 @@ export default function Resevation(): JSX.Element {
   }, [auth]);
 
   const handleAmenityChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>): void => {
-    const reserveAmenity = event.target.value;
+    const reserveAmenity = event.target.value as string;
     setAmenity(reserveAmenity);
     Object.keys(amenities).forEach((a) => {
       const loopAmenity = amenities[Number(a)];
@@ -485,7 +485,7 @@ export default function Resevation(): JSX.Element {
                   </Alert>
                 )}
               </Grid>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Grid item xs={6}>
                   <InputLabel htmlFor="age-native-simple">Amenity</InputLabel>
                   <Select
@@ -521,11 +521,10 @@ export default function Resevation(): JSX.Element {
                   )}
                   { !isMobile && (
                     <DatePicker
-                      id="start"
                       value={selectedStartDate}
                       label="Date"
                       onChange={(e: Date | null): void => handleDateChange(e?.toString())}
-                      style={{ width: '100%' }}
+                      sx={{ width: '100%' }}
                     />
                   )}
                 </Grid>
@@ -544,11 +543,10 @@ export default function Resevation(): JSX.Element {
                   )}
                   { !isMobile && (
                     <TimePicker
-                      id="startTime"
                       value={roundToMinuteInterval(selectedStartDate, 15)}
                       label="Start Time"
                       onChange={(e: Date | null): void => handleStartDateChange(e?.toString())}
-                      style={{ width: '100%' }}
+                      sx={{ width: '100%' }}
                       minutesStep={15}
                     />
                   )}
@@ -568,11 +566,10 @@ export default function Resevation(): JSX.Element {
                   )}
                   { !isMobile && (
                     <TimePicker
-                      id="endTime"
                       value={roundToMinuteInterval(selectedEndDate, 15)}
                       label="End Time"
                       onChange={(e: Date | null): void => handleEndDateChange(e?.toString())}
-                      style={{ width: '100%' }}
+                      sx={{ width: '100%' }}
                       minutesStep={15}
                     />
                   )}
@@ -584,7 +581,7 @@ export default function Resevation(): JSX.Element {
                     </Alert>
                   </Grid>
                 )}
-                {amenity && questions[Number(amenity)].map(
+                {amenity !== '' && questions[Number(amenity)].map(
                   (questionOption) => (
                     <Grid item xs={12} key={questionOption.id}>
                       <FormControlLabel

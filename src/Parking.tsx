@@ -7,12 +7,8 @@ import {
   Icon,
   TextField, Theme,
 } from '@mui/material';
-import { isMobile } from 'react-device-detect';
 import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
-import { DatePicker } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { UserManager } from 'condo-brain';
 import './styles/application.scss';
 import './styles/parking.scss';
@@ -20,10 +16,10 @@ import './styles/parking.scss';
 export default function Parking({ userManager }: { userManager: UserManager }): JSX.Element {
   const [selectedStartDate, handleStartDateChange] = useState<Date | null>(new Date());
   const [selectedEndDate, handleEndDateChange] = useState<Date | null>(new Date());
-  const [license, setLicense] = useState<string | unknown>(null);
+  const [license, setLicense] = useState<string | unknown>('');
   const [unit, setUnit] = useState<string | unknown>(userManager.unit);
-  const [make, setMake] = useState<string | unknown>(null);
-  const [color, setColor] = useState<string | unknown>(null);
+  const [make, setMake] = useState<string | unknown>('');
+  const [color, setColor] = useState<string | unknown>('');
   const [email, setEmail] = useState<string | unknown>(userManager.email);
   const [thanks, setThanks] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -112,109 +108,85 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
                   </Alert>
                 )}
               </Grid>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <Grid item xs={6}>
-                  {isMobile && (
-                    <TextField
-                      id="start"
-                      label="Start Date"
-                      type="date"
-                      defaultValue={selectedStartDate}
-                      onChange={(e): void => handleNativeStartDateChange(e.target.value)}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                  {!isMobile && (
-                    <DatePicker
-                      id="start"
-                      value={selectedStartDate}
-                      label="Start Date"
-                      onChange={handleStartDateChange}
-                      style={{ width: '100%' }}
-                    />
-                  )}
-                </Grid>
-                <Grid item xs={6}>
-                  {isMobile && (
-                    <TextField
-                      id="end"
-                      label="End Date"
-                      type="date"
-                      defaultValue={selectedEndDate}
-                      onChange={(e): void => handleNativeEndDateChange(e.target.value)}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                  {!isMobile && (
-                    <DatePicker
-                      id="end"
-                      value={selectedEndDate}
-                      label="End Date"
-                      onChange={handleEndDateChange}
-                      style={{ width: '100%' }}
-                    />
-                  )}
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    id="license"
-                    label="License Plate"
-                    style={{ width: '100%' }}
-                    value={license}
-                    onChange={(e): void => setLicense(e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    id="unit"
-                    label="Unit Number"
-                    style={{ width: '100%' }}
-                    value={unit}
-                    onChange={(e): void => setUnit(e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    id="make"
-                    label="Vehicle Make"
-                    style={{ width: '100%' }}
-                    value={make}
-                    onChange={(e): void => setMake(e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    id="color"
-                    label="Vehicle Colour"
-                    style={{ width: '100%' }}
-                    value={color}
-                    onChange={(e): void => setColor(e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    id="email"
-                    label="Email or Phone Number"
-                    style={{ width: '100%' }}
-                    value={email}
-                    onChange={(e): void => setEmail(e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} className="center">
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    className={classes.registerButton}
-                    endIcon={<Icon>directions_car</Icon>}
-                  >
-                    Register
-                  </Button>
-                </Grid>
-              </LocalizationProvider>
+              <Grid item xs={6}>
+                <TextField
+                  id="start"
+                  label="Start Date"
+                  type="date"
+                  defaultValue={selectedStartDate}
+                  onChange={(e): void => handleNativeStartDateChange(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="end"
+                  label="End Date"
+                  type="date"
+                  defaultValue={selectedEndDate}
+                  onChange={(e): void => handleNativeEndDateChange(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="license"
+                  label="License Plate"
+                  style={{ width: '100%' }}
+                  value={license}
+                  onChange={(e): void => setLicense(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="unit"
+                  label="Unit Number"
+                  style={{ width: '100%' }}
+                  value={unit}
+                  onChange={(e): void => setUnit(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="make"
+                  label="Vehicle Make"
+                  style={{ width: '100%' }}
+                  value={make}
+                  onChange={(e): void => setMake(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="color"
+                  label="Vehicle Colour"
+                  style={{ width: '100%' }}
+                  value={color}
+                  onChange={(e): void => setColor(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  id="email"
+                  label="Email or Phone Number"
+                  style={{ width: '100%' }}
+                  value={email}
+                  onChange={(e): void => setEmail(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} className="center">
+                <Button
+                  variant="contained"
+                  type="submit"
+                  className={classes.registerButton}
+                  endIcon={<Icon>directions_car</Icon>}
+                >
+                  Register
+                </Button>
+              </Grid>
             </Grid>
           </div>
         </form>
