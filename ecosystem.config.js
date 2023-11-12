@@ -1,6 +1,6 @@
 module.exports = {
   apps: [{
-    name: 'housing-sound-advocacy',
+    name: 'condo-web',
     script: './server-dist/server.js',
     env_production: {
       NODE_ENV: 'production',

@@ -28,7 +28,7 @@ jobs:
           npm run build-server --if-present
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: zip -r release.zip .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -49,9 +49,6 @@ jobs:
         with:
           name: node-app
 
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
-
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
@@ -59,4 +56,4 @@ jobs:
           app-name: 'condo-web'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B562CD3665B240149918D657B05A9639 }}
-          package: .
+          package: release.zip

@@ -46,7 +46,7 @@ async function createServer(): Promise<Express> {
 
 
   app.use('/', cors(corsOptions), express.static('build'));
-  app.use('/api', cors(corsOptions), proxy('https://condo-web.azurewebsites.net'));
+  app.use('/api', proxy('https://condo-api.azurewebsites.net'));
 
   app.use(notFoundHandler);
 
