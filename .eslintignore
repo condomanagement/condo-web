@@ -1,5 +1,6 @@
 dist/
 build/
+server-dist/
 coverage/
 scripts/
 docs/
