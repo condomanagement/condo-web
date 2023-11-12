@@ -2,13 +2,14 @@ import express, { Express } from 'express';
 import rateLimit from 'express-rate-limit';
 import nocache from 'nocache';
 import cors, { CorsOptions } from 'cors';
-import proxy from 'express-http-proxy';
+import httpProxy from 'http-proxy';
 import notFoundHandler from './middleware/not-found.middleware';
 
 const port = process.env.PORT || 8080;
 
 async function createServer(): Promise<Express> {
   const app: Express = express();
+  const apiProxy = httpProxy.createProxyServer();
 
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -23,10 +24,11 @@ async function createServer(): Promise<Express> {
     express.urlencoded({ extended: true }),
   );
   const allowedOrigins = [
-    'http://localhost:8000',
+    'http://localhost:8080',
     'https://arrowlofts.org',
     'https://www.arrowlofts.org',
     'https://condo-web.azurewebsites.net',
+    'https://condo-api.azurewebsites.net',
   ];
 
   const corsOptions: CorsOptions = {
@@ -34,6 +36,7 @@ async function createServer(): Promise<Express> {
     origin: (origin, callback) => {
       // allow requests with no origin
       // (like mobile apps or curl requests)
+      console.warn('origin', origin);
       if (!origin) return callback(null, true);
       if (allowedOrigins.indexOf(origin) === -1) {
         const msg = 'The CORS policy for this site does not '
@@ -46,7 +49,10 @@ async function createServer(): Promise<Express> {
 
 
   app.use('/', cors(corsOptions), express.static('build'));
-  app.use('/api', proxy('https://condo-api.azurewebsites.net'));
+  app.use('/login', cors(corsOptions), express.static('build'));
+  app.all('/api/*', cors(corsOptions), (req, res) => {
+    apiProxy.web(req, res, { target: 'https://condo-api.azurewebsites.net', secure: false });
+  });
 
   app.use(notFoundHandler);
 
