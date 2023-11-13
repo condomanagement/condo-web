@@ -47,6 +47,10 @@ async function createServer(): Promise<Express> {
     },
   };
 
+  apiProxy.on('proxyReq', (proxyReq) => {
+    proxyReq.setHeader('Host', 'condo-api.azurewebsites.net');
+  });
+
 
   app.use('/', cors(corsOptions), express.static('build'));
   app.use('/login', cors(corsOptions), express.static('build'));
