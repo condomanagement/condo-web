@@ -48,6 +48,7 @@ async function createServer(): Promise<Express> {
   };
 
   apiProxy.on('proxyReq', (proxyReq) => {
+    console.warn('Changing header');
     proxyReq.setHeader('Host', 'condo-api.azurewebsites.net');
   });
 
@@ -70,6 +71,12 @@ async function createServer(): Promise<Express> {
     apiProxy.web(req, res, { target: 'https://condo-api.azurewebsites.net', secure: false });
     next();
   });
+
+  app.all('/healthcheck*', (req, res, next) => {
+    apiProxy.web(req, res, { target: 'https://condo-api.azurewebsites.net', secure: false });
+    next();
+  });
+
 
   app.use(notFoundHandler);
 
