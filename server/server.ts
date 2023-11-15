@@ -27,6 +27,7 @@ async function createServer(): Promise<Express> {
     'http://localhost:8080',
     'https://arrowlofts.org',
     'https://www.arrowlofts.org',
+    'https://azure.arrowlofts.org',
     'https://condo-web.azurewebsites.net',
     'https://condo-api.azurewebsites.net',
   ];
