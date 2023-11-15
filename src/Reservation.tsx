@@ -18,12 +18,8 @@ import {
 } from '@mui/material';
 import { get as getCookie } from 'es-cookie';
 import { useNavigate } from 'react-router-dom';
-import { isMobile } from 'react-device-detect';
 import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
-import { DatePicker, TimePicker } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {
   Amenity,
   Question,
@@ -95,7 +91,6 @@ const formatTime = (date: Date): string => {
 export default function Resevation(): JSX.Element {
   const [selectedStartDate, setSelectedStartDateChange] = useState<Date>(roundToMinuteInterval(new Date(), 15));
   const [selectedEndDate, setSelectedEndDateChange] = useState<Date>(addMinutes(selectedStartDate, 30));
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [amenity, setAmenity] = useState<string>('');
   const [amenities, setAmenities] = useState<Amenity[]>([]);
   const [displayAmenities, setDisplayAmenities] = useState<Amenity[]>([]);
@@ -111,6 +106,11 @@ export default function Resevation(): JSX.Element {
 
   const userManager = new UserManager();
   const navigate = useNavigate();
+  const currentDate = new Date();
+  const maxDate = new Date(currentDate.getTime() - (currentDate.getTimezoneOffset() * 60000))
+    .toISOString()
+    .split('T')[0]
+    .toString();
 
   const reserve = (e: React.FormEvent): void => {
     e.preventDefault();
@@ -309,33 +309,6 @@ export default function Resevation(): JSX.Element {
     setSelectedEndDateChange(endDate);
   };
 
-  const handleDateChange = (date: string | undefined): void => {
-    let setDate = new Date();
-    if (date) {
-      setDate = new Date(date);
-    }
-    setSelectedDate(setDate);
-
-    const startDate = new Date(
-      setDate.getFullYear(),
-      setDate.getMonth(),
-      setDate.getDate(),
-      selectedStartDate?.getHours(),
-      selectedStartDate?.getMinutes(),
-    );
-
-    setSelectedStartDateChange(startDate);
-
-    const endDate = new Date(
-      setDate.getFullYear(),
-      setDate.getMonth(),
-      setDate.getDate(),
-      selectedEndDate?.getHours() || new Date().getHours(),
-      selectedEndDate?.getMinutes() || new Date().getMinutes(),
-    );
-    setSelectedEndDateChange(endDate);
-  };
-
   const handleNativeStartTimeChange = (date: string): void => {
     const [hour, minute] = date.split(':');
     const startDate = new Date(
@@ -349,23 +322,6 @@ export default function Resevation(): JSX.Element {
     setSelectedStartDateChange(roundToMinuteInterval(startDate, 15));
   };
 
-  const handleStartDateChange = (date: string | undefined): void => {
-    let setTime = new Date();
-    if (date) {
-      setTime = new Date(date);
-    }
-
-    const startDate = new Date(
-      selectedDate?.getFullYear() || new Date().getFullYear(),
-      selectedDate?.getMonth() || new Date().getMonth(),
-      selectedDate?.getDate() || new Date().getDate(),
-      setTime.getHours(),
-      setTime.getMinutes(),
-    );
-
-    setSelectedStartDateChange(roundToMinuteInterval(startDate, 15));
-  };
-
   const handleNativeEndTimeChange = (date: string): void => {
     const [hour, minute] = date.split(':');
     const endDate = new Date(
@@ -374,23 +330,6 @@ export default function Resevation(): JSX.Element {
       selectedEndDate?.getDate() || new Date().getDate(),
       Number(hour),
       Number(minute),
-    );
-
-    setSelectedEndDateChange(roundToMinuteInterval(endDate, 15));
-  };
-
-  const handleEndDateChange = (date: string | undefined): void => {
-    let setTime = new Date();
-    if (date) {
-      setTime = new Date(date);
-    }
-
-    const endDate = new Date(
-      selectedDate?.getFullYear() || new Date().getFullYear(),
-      selectedDate?.getMonth() || new Date().getMonth(),
-      selectedDate?.getDate() || new Date().getDate(),
-      setTime.getHours(),
-      setTime.getMinutes(),
     );
 
     setSelectedEndDateChange(roundToMinuteInterval(endDate, 15));
@@ -485,148 +424,117 @@ export default function Resevation(): JSX.Element {
                   </Alert>
                 )}
               </Grid>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Grid item xs={6}>
-                  <InputLabel htmlFor="age-native-simple">Amenity</InputLabel>
-                  <Select
-                    native
-                    value={amenity}
-                    onChange={() => handleAmenityChange}
-                    inputProps={{
-                      name: 'amenity',
-                      id: 'amenity',
-                    }}
-                    style={{ width: '100%' }}
-                  >
-                    <option aria-label="None" value="" />
-                    {displayAmenities.map(
-                      (amenityOption: Amenity) => (
-                        <option key={amenityOption.id} value={String(amenityOption.id)}>{amenityOption.name}</option>
-                      ),
-                    )}
-                  </Select>
-                </Grid>
-                <Grid item xs={6}>
-                  { isMobile && (
-                    <TextField
-                      id="start"
-                      label="Date"
-                      type="date"
-                      defaultValue={formatDate(selectedStartDate)}
-                      onChange={(e): void => handleNativeDateChange(e.target.value)}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
+              <Grid item xs={6}>
+                <InputLabel htmlFor="age-native-simple">Amenity</InputLabel>
+                <Select
+                  native
+                  value={amenity}
+                  onChange={() => handleAmenityChange}
+                  inputProps={{
+                    name: 'amenity',
+                    id: 'amenity',
+                  }}
+                  style={{ width: '100%' }}
+                >
+                  <option aria-label="None" value="" />
+                  {displayAmenities.map(
+                    (amenityOption: Amenity) => (
+                      <option key={amenityOption.id} value={String(amenityOption.id)}>{amenityOption.name}</option>
+                    ),
                   )}
-                  { !isMobile && (
-                    <DatePicker
-                      value={selectedStartDate}
-                      label="Date"
-                      onChange={(e: Date | null): void => handleDateChange(e?.toString())}
-                      sx={{ width: '100%' }}
-                    />
-                  )}
-                </Grid>
-                <Grid item xs={6}>
-                  { isMobile && (
-                    <TextField
-                      id="startTime"
-                      label="Start Time"
-                      type="time"
-                      value={formatTime(roundToMinuteInterval(selectedStartDate, 15))}
-                      onChange={(e): void => handleNativeStartTimeChange(e.target.value)}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                  { !isMobile && (
-                    <TimePicker
-                      value={roundToMinuteInterval(selectedStartDate, 15)}
-                      label="Start Time"
-                      onChange={(e: Date | null): void => handleStartDateChange(e?.toString())}
-                      sx={{ width: '100%' }}
-                      minutesStep={15}
-                    />
-                  )}
-                </Grid>
-                <Grid item xs={6}>
-                  { isMobile && (
-                    <TextField
-                      id="endTime"
-                      label="End Time"
-                      type="time"
-                      value={formatTime(roundToMinuteInterval(selectedEndDate, 15))}
-                      onChange={(e): void => handleNativeEndTimeChange(e.target.value)}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                  { !isMobile && (
-                    <TimePicker
-                      value={roundToMinuteInterval(selectedEndDate, 15)}
-                      label="End Time"
-                      onChange={(e: Date | null): void => handleEndDateChange(e?.toString())}
-                      sx={{ width: '100%' }}
-                      minutesStep={15}
-                    />
-                  )}
-                </Grid>
-                { availability && (
-                  <Grid item xs={12}>
-                    <Alert severity="info">
-                      {availability}
-                    </Alert>
-                  </Grid>
-                )}
-                {amenity !== '' && questions[Number(amenity)].map(
-                  (questionOption) => (
-                    <Grid item xs={12} key={questionOption.id}>
-                      <FormControlLabel
-                        control={(
-                          <Checkbox
-                            checked={answers[questionOption.id]}
-                            onChange={handleAnswerChange}
-                            name={String(questionOption.id)}
-                            color="primary"
-                          />
-                        )}
-                        label={questionOption.question}
-                      />
-                    </Grid>
-                  ),
-                )}
+                </Select>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="start"
+                  label="Date"
+                  type="date"
+                  inputProps={{
+                    max: maxDate,
+                  }}
+                  defaultValue={formatDate(selectedStartDate)}
+                  onChange={(e): void => handleNativeDateChange(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="startTime"
+                  label="Start Time"
+                  type="time"
+                  value={formatTime(roundToMinuteInterval(selectedStartDate, 15))}
+                  onChange={(e): void => handleNativeStartTimeChange(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="endTime"
+                  label="End Time"
+                  type="time"
+                  value={formatTime(roundToMinuteInterval(selectedEndDate, 15))}
+                  onChange={(e): void => handleNativeEndTimeChange(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
+              { availability && (
                 <Grid item xs={12}>
-                  <Typography>
-                    Please ensure that you follow the posted instructions as well as complying with the
-                    {' '}
-                    <Link href="https://wscc556.frontsteps.com/folders/" target="_blank" rel="noopener">
-                      Arrow Lofts condo rules
-                    </Link>
-                    .
-                  </Typography>
+                  <Alert severity="info">
+                    {availability}
+                  </Alert>
                 </Grid>
-                {amenity && (
-                  <Grid item xs={12} className="center">
-                    <Button
-                      variant="contained"
-                      type="submit"
-                      className={classes.registerButton}
-                      endIcon={<Icon>add</Icon>}
-                    >
-                      Reserve
-                      {selectedAmenityName && (
-                        <>
-                          {'  '}
-                          {selectedAmenityName}
-                        </>
+              )}
+              {amenity !== '' && questions[Number(amenity)].map(
+                (questionOption) => (
+                  <Grid item xs={12} key={questionOption.id}>
+                    <FormControlLabel
+                      control={(
+                        <Checkbox
+                          checked={answers[questionOption.id]}
+                          onChange={handleAnswerChange}
+                          name={String(questionOption.id)}
+                          color="primary"
+                        />
                       )}
-                    </Button>
+                      label={questionOption.question}
+                    />
                   </Grid>
-                )}
-              </LocalizationProvider>
+                ),
+              )}
+              <Grid item xs={12}>
+                <Typography>
+                  Please ensure that you follow the posted instructions as well as complying with the
+                  {' '}
+                  <Link href="https://wscc556.frontsteps.com/folders/" target="_blank" rel="noopener">
+                    Arrow Lofts condo rules
+                  </Link>
+                  .
+                </Typography>
+              </Grid>
+              {amenity && (
+                <Grid item xs={12} className="center">
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    className={classes.registerButton}
+                    endIcon={<Icon>add</Icon>}
+                  >
+                    Reserve
+                    {selectedAmenityName && (
+                      <>
+                        {'  '}
+                        {selectedAmenityName}
+                      </>
+                    )}
+                  </Button>
+                </Grid>
+              )}
             </Grid>
           </div>
         </form>
