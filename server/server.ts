@@ -9,7 +9,7 @@ const port = process.env.PORT || 8080;
 
 async function createServer(): Promise<Express> {
   const app: Express = express();
-  const apiProxy = httpProxy.createProxyServer();
+  const apiProxy = httpProxy.createProxyServer({ changeOrigin: true });
 
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -36,7 +36,6 @@ async function createServer(): Promise<Express> {
     origin: (origin, callback) => {
       // allow requests with no origin
       // (like mobile apps or curl requests)
-      console.warn('origin', origin);
       if (!origin) return callback(null, true);
       if (allowedOrigins.indexOf(origin) === -1) {
         const msg = 'The CORS policy for this site does not '
@@ -46,12 +45,6 @@ async function createServer(): Promise<Express> {
       return callback(null, true);
     },
   };
-
-  apiProxy.on('proxyReq', (proxyReq) => {
-    console.warn('Changing header');
-    proxyReq.setHeader('Host', 'condo-api.azurewebsites.net');
-  });
-
 
   app.use('/', cors(corsOptions), express.static('build'));
   app.use('/login', cors(corsOptions), express.static('build'));
@@ -66,17 +59,13 @@ async function createServer(): Promise<Express> {
   app.use('/manifest.json', cors(corsOptions), express.static('public/manifest.json'));
   app.use('/logo192.png', cors(corsOptions), express.static('public/logo192.png'));
   app.use('/logo512.png', cors(corsOptions), express.static('public/logo512.png'));
-  app.all('/api/*', cors(corsOptions), (req, res, next) => {
-    console.warn('api request', req.url);
-    apiProxy.web(req, res, { target: 'https://condo-api.azurewebsites.net', secure: false });
-    next();
+  app.all('/api/*', cors(corsOptions), (req, res) => {
+    apiProxy.web(req, res, { target: 'https://api.arrowlofts.org', secure: true });
   });
 
-  app.all('/healthcheck*', (req, res, next) => {
-    apiProxy.web(req, res, { target: 'https://condo-api.azurewebsites.net', secure: false });
-    next();
+  app.all('/healthcheck', (req, res) => {
+    apiProxy.web(req, res, { target: 'https://api.arrowlofts.org', secure: true });
   });
-
 
   app.use(notFoundHandler);
 
