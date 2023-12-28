@@ -13,6 +13,7 @@ import {
   ListItem,
   ListItemText,
   Select,
+  SelectChangeEvent,
   TextField,
   Theme, Typography,
 } from '@mui/material';
@@ -262,7 +263,7 @@ export default function Resevation(): JSX.Element {
     }, 1000);
   }, [auth]);
 
-  const handleAmenityChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>): void => {
+  const handleAmenityChange = (event: SelectChangeEvent<string>): void => {
     const reserveAmenity = event.target.value as string;
     setAmenity(reserveAmenity);
     Object.keys(amenities).forEach((a) => {
@@ -338,22 +339,8 @@ export default function Resevation(): JSX.Element {
   const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
       '& .MuiTextField-root': {
-        margin: theme.spacing(1),
         width: '100%',
       },
-    },
-    registerButton: {
-      backgroundColor: '#f37f30',
-      color: 'white',
-      marginBottom: '20px',
-    },
-    paper: {
-      position: 'absolute',
-      width: 400,
-      backgroundColor: theme.palette.background.paper,
-      border: '2px solid #000',
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
     },
   }));
 
@@ -377,7 +364,11 @@ export default function Resevation(): JSX.Element {
             <Grid item xs={12} className="center">
               <Button
                 variant="contained"
-                className={classes.registerButton}
+                sx={{
+                  backgroundColor: '#f37f30',
+                  color: 'white',
+                  marginBottom: '20px',
+                }}
                 onClick={(): void => {
                   setAvailability(null);
                   setThanks(false);
@@ -394,7 +385,11 @@ export default function Resevation(): JSX.Element {
               <Button
                 variant="contained"
                 onClick={(): void => navigate('/myreservations')}
-                className={classes.registerButton}
+                sx={{
+                  backgroundColor: '#f37f30',
+                  color: 'white',
+                  marginBottom: '20px',
+                }}
                 startIcon={<Schedule />}
                 type="submit"
               >
@@ -429,7 +424,7 @@ export default function Resevation(): JSX.Element {
                 <Select
                   native
                   value={amenity}
-                  onChange={() => handleAmenityChange}
+                  onChange={handleAmenityChange}
                   inputProps={{
                     name: 'amenity',
                     id: 'amenity',
@@ -522,7 +517,11 @@ export default function Resevation(): JSX.Element {
                   <Button
                     variant="contained"
                     type="submit"
-                    className={classes.registerButton}
+                    sx={{
+                      backgroundColor: '#f37f30',
+                      color: 'white',
+                      marginBottom: '20px',
+                    }}
                     endIcon={<Icon>add</Icon>}
                   >
                     Reserve

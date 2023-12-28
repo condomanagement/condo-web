@@ -1,8 +1,15 @@
 import React from 'react';
-import { Theme, useTheme } from '@mui/material/styles';
+import {
+  CSSObject,
+  Theme,
+  styled,
+  useTheme,
+} from '@mui/material/styles';
+import MuiDrawer from '@mui/material/Drawer';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
-import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -16,15 +23,13 @@ import { get as getCookie } from 'es-cookie';
 import { UserManager } from 'condo-brain';
 import Link from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
-import clsx from 'clsx';
-import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LocalParking from '@mui/icons-material/LocalParking';
@@ -35,93 +40,91 @@ import Avatar from 'react-avatar';
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  root: {
+const openedMixin = (theme: Theme): CSSObject => ({
+  width: drawerWidth,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
+});
+
+const closedMixin = (theme: Theme): CSSObject => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: 'hidden',
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up('sm')]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
   },
-  menuButton: {
-    marginRight: 36,
-  },
-  title: {
-    flexGrow: 1,
-  },
-  orangeBg: {
-    backgroundColor: '#f37f30',
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
+});
+
+export const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+}));
+
+interface AppBarProps extends MuiAppBarProps {
+  open?: boolean;
+}
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<AppBarProps>(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(['width', 'margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-  },
-  hide: {
-    display: 'none',
-  },
-  drawer: {
+  }),
+}));
+
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: 'nowrap',
-  },
-  drawerOpen: {
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
+    boxSizing: 'border-box',
+    ...(open && {
+      ...openedMixin(theme),
+      '& .MuiDrawer-paper': openedMixin(theme),
     }),
-  },
-  drawerClose: {
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+    ...(!open && {
+      ...closedMixin(theme),
+      '& .MuiDrawer-paper': closedMixin(theme),
     }),
-    overflowX: 'hidden',
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
-    },
-    [theme.breakpoints.down('sm')]: {
-      width: 0,
-      display: 'none',
-    },
-  },
-  toolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-}));
+  }),
+);
 
 export default function NavBar({ userManager }: { userManager: UserManager }): JSX.Element {
-  const classes = useStyles();
   const theme = useTheme();
   const [auth, setAuth] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [openDrawer, setOpenDrawer] = React.useState(false);
   const [pageTitle, setPageTitle] = React.useState('Amenity Reservation');
+  const [open, setOpen] = React.useState(false);
 
-  const handleDrawerOpen = (): void => {
-    setOpenDrawer(true);
+  const handleDrawerOpen = () => {
+    setOpen(true);
   };
 
-  const handleDrawerClose = (): void => {
-    setOpenDrawer(false);
+  const handleDrawerClose = () => {
+    setOpen(false);
   };
-  const open = Boolean(anchorEl);
+
+  const avatarOpen = Boolean(anchorEl);
 
   const navigate = useNavigate();
 
@@ -171,28 +174,26 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
   let toolBar;
   if (auth) {
     toolBar = (
-      <>
+      <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar
           position="fixed"
-          className={clsx(classes.appBar, {
-            [classes.appBarShift]: openDrawer,
-          })}
+          open={open}
         >
-          <Toolbar className={classes.orangeBg}>
+          <Toolbar sx={{ backgroundColor: '#f37f30' }}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
               onClick={handleDrawerOpen}
               edge="start"
-              className={clsx(classes.menuButton, {
-                [classes.hide]: openDrawer,
-              })}
-              size="large"
+              sx={{
+                marginRight: 5,
+                ...(open && { display: 'none' }),
+              }}
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" className={classes.title}>
+            <Typography variant="h6" sx={{ flexGrow: 1 }}>
               {pageTitle}
             </Typography>
             <IconButton
@@ -217,7 +218,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
                 vertical: 'top',
                 horizontal: 'right',
               }}
-              open={open}
+              open={avatarOpen}
               onClose={handleClose}
             >
               <MenuItem onClick={(): void => navigate('myreservations')}>My Reservations</MenuItem>
@@ -227,22 +228,13 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
         </AppBar>
         <Drawer
           variant="permanent"
-          className={clsx(classes.drawer, {
-            [classes.drawerOpen]: openDrawer,
-            [classes.drawerClose]: !openDrawer,
-          })}
-          classes={{
-            paper: clsx({
-              [classes.drawerOpen]: openDrawer,
-              [classes.drawerClose]: !openDrawer,
-            }),
-          }}
+          open={open}
         >
-          <div className={classes.toolbar}>
-            <IconButton onClick={handleDrawerClose} size="large">
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
               {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </IconButton>
-          </div>
+          </DrawerHeader>
           <Divider />
           <List>
             <Link
@@ -255,11 +247,11 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
               color="inherit"
               underline="none"
             >
-              <Tooltip title="Visitor Parking Registration">
-                <ListItem button key="parking">
+              <Tooltip title="Visitor Parking Registration" placement="right-end">
+                <ListItemButton key="parking">
                   <ListItemIcon style={{ paddingLeft: '5px' }}><LocalParking /></ListItemIcon>
                   <ListItemText primary="Parking" />
-                </ListItem>
+                </ListItemButton>
               </Tooltip>
             </Link>
 
@@ -274,10 +266,10 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
               underline="none"
             >
               <Tooltip title="Amenity Reservation">
-                <ListItem button key="reservation">
+                <ListItemButton key="reservation">
                   <ListItemIcon style={{ paddingLeft: '5px' }}><EventAvailable /></ListItemIcon>
                   <ListItemText primary="Reserve Amenity" />
-                </ListItem>
+                </ListItemButton>
               </Tooltip>
             </Link>
 
@@ -292,12 +284,12 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
               underline="none"
             >
               <Tooltip title="Elevator Booking">
-                <ListItem button key="elevator-booking">
+                <ListItemButton key="elevator-booking">
                   <ListItemIcon style={{ paddingLeft: '5px' }}>
                     <FontAwesomeIcon icon={faDolly} size="lg" />
                   </ListItemIcon>
                   <ListItemText primary="Elevator Booking" />
-                </ListItem>
+                </ListItemButton>
               </Tooltip>
             </Link>
 
@@ -312,10 +304,10 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
               underline="none"
             >
               <Tooltip title="My Reservations">
-                <ListItem button key="myreservations">
+                <ListItemButton key="myreservations">
                   <ListItemIcon style={{ paddingLeft: '5px' }}><Schedule /></ListItemIcon>
                   <ListItemText primary="My reservations" />
-                </ListItem>
+                </ListItemButton>
               </Tooltip>
             </Link>
           </List>
@@ -334,23 +326,23 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
                   underline="none"
                 >
                   <Tooltip title="Administration">
-                    <ListItem button key="administration">
+                    <ListItemButton key="administration">
                       <ListItemIcon style={{ paddingLeft: '5px' }}><Settings /></ListItemIcon>
                       <ListItemText primary="Administration" />
-                    </ListItem>
+                    </ListItemButton>
                   </Tooltip>
                 </Link>
               </List>
             </>
           )}
         </Drawer>
-      </>
+      </Box>
     );
   } else {
     toolBar = (
       <AppBar position="static">
-        <Toolbar className={classes.orangeBg}>
-          <Typography variant="h6" className={classes.title} />
+        <Toolbar sx={{ backgroundColor: '#f37f30' }}>
+          <Typography variant="h6" sx={{ flexGrow: 1 }} />
           <Button
             color="inherit"
             href="/login"
@@ -363,7 +355,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
   }
 
   return (
-    <div className={classes.root}>
+    <div>
       {toolBar}
     </div>
   );

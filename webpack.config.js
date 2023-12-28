@@ -98,7 +98,7 @@ module.exports = {
     port: 3001,
     // Public path is root of content base
     proxy: {
-      '/api': 'https://condo-api.azurewebsites.net'
+      '/api': 'http://localhost:3000'
     },
   },
 };

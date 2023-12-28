@@ -3,8 +3,6 @@ import {
   Button,
   Grid,
 } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
 import { useNavigate } from 'react-router-dom';
 import LocalParking from '@mui/icons-material/LocalParking';
 import HomeIcon from '@mui/icons-material/Home';
@@ -12,15 +10,6 @@ import './styles/application.scss';
 import './styles/parking.scss';
 
 export default function Home(): JSX.Element {
-  const useStyles = makeStyles(() => createStyles({
-    registerButton: {
-      backgroundColor: '#f37f30',
-      color: 'white',
-      marginBottom: '20px',
-    },
-  }));
-
-  const classes = useStyles();
   const navigate = useNavigate();
 
   return (
@@ -29,7 +18,11 @@ export default function Home(): JSX.Element {
         <Grid item xs={12}>
           <Button
             variant="contained"
-            className={classes.registerButton}
+            sx={{
+              backgroundColor: '#f37f30',
+              color: 'white',
+              marginBottom: '20px',
+            }}
             onClick={(): void => navigate('/login')}
             startIcon={<HomeIcon />}
             type="submit"
@@ -41,7 +34,11 @@ export default function Home(): JSX.Element {
           <Button
             variant="contained"
             onClick={(): void => navigate('/parking')}
-            className={classes.registerButton}
+            sx={{
+              backgroundColor: '#f37f30',
+              color: 'white',
+              marginBottom: '20px',
+            }}
             startIcon={<LocalParking />}
             type="submit"
           >

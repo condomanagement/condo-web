@@ -10,13 +10,10 @@ import {
   InputLabel,
   Link,
   Select,
+  SelectChangeEvent,
   TextField,
-  Theme, Typography,
+  Typography,
 } from '@mui/material';
-import { isMobile } from 'react-device-detect';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { UserManager, UserType } from 'condo-brain';
@@ -176,34 +173,6 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
     computeDeposit(moveType, startDate, endDate);
   };
 
-  const handleDateChange = (date: string | undefined): void => {
-    let setDate = new Date();
-    if (date) {
-      setDate = new Date(date);
-    }
-    setSelectedDate(setDate);
-
-    const startDate = new Date(
-      setDate.getFullYear(),
-      setDate.getMonth(),
-      setDate.getDate(),
-      selectedStartDate?.getHours(),
-      selectedStartDate?.getMinutes(),
-    );
-
-    setSelectedStartDateChange(startDate);
-
-    const endDate = new Date(
-      setDate.getFullYear(),
-      setDate.getMonth(),
-      setDate.getDate(),
-      selectedEndDate?.getHours() || new Date().getHours(),
-      selectedEndDate?.getMinutes() || new Date().getMinutes(),
-    );
-    setSelectedEndDateChange(endDate);
-    computeDeposit(moveType, startDate, endDate);
-  };
-
   const handleNativeStartTimeChange = (date: string): void => {
     const [hour, minute] = date.split(':');
     const startDate = new Date(
@@ -219,25 +188,6 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
     computeDeposit(moveType, roundedStart, selectedEndDate);
   };
 
-  const handleStartDateChange = (date: string | undefined): void => {
-    let setTime = new Date();
-    if (date) {
-      setTime = new Date(date);
-    }
-
-    const startDate = new Date(
-      selectedDate?.getFullYear() || new Date().getFullYear(),
-      selectedDate?.getMonth() || new Date().getMonth(),
-      selectedDate?.getDate() || new Date().getDate(),
-      setTime.getHours(),
-      setTime.getMinutes(),
-    );
-
-    const roundedStart = roundToMinuteInterval(startDate, 15);
-    setSelectedStartDateChange(roundedStart);
-    computeDeposit(moveType, roundedStart, selectedEndDate);
-  };
-
   const handleNativeEndTimeChange = (date: string): void => {
     const [hour, minute] = date.split(':');
     const endDate = new Date(
@@ -246,25 +196,6 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
       selectedEndDate?.getDate() || new Date().getDate(),
       Number(hour),
       Number(minute),
-    );
-
-    const roundedEnd = roundToMinuteInterval(endDate, 15);
-    setSelectedEndDateChange(roundedEnd);
-    computeDeposit(moveType, selectedStartDate, roundedEnd);
-  };
-
-  const handleEndDateChange = (date: string | undefined): void => {
-    let setTime = new Date();
-    if (date) {
-      setTime = new Date(date);
-    }
-
-    const endDate = new Date(
-      selectedDate?.getFullYear() || new Date().getFullYear(),
-      selectedDate?.getMonth() || new Date().getMonth(),
-      selectedDate?.getDate() || new Date().getDate(),
-      setTime.getHours(),
-      setTime.getMinutes(),
     );
 
     const roundedEnd = roundToMinuteInterval(endDate, 15);
@@ -288,7 +219,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
     }
   };
 
-  const handleTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>): void => {
+  const handleTypeChange = (event: SelectChangeEvent<string>): void => {
     setMoveType(Number(event.target.value));
     if (event.target.value === '1') {
       setDeposit(0);
@@ -300,30 +231,6 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
       computeDeposit(Number(event.target.value), selectedStartDate, selectedEndDate);
     }
   };
-
-  const useStyles = makeStyles((theme: Theme) => createStyles({
-    root: {
-      '& .MuiTextField-root': {
-        margin: theme.spacing(1),
-        width: '100%',
-      },
-    },
-    registerButton: {
-      backgroundColor: '#f37f30',
-      color: 'white',
-      marginBottom: '20px',
-    },
-    paper: {
-      position: 'absolute',
-      width: 400,
-      backgroundColor: theme.palette.background.paper,
-      border: '2px solid #000',
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
-    },
-  }));
-
-  const classes = useStyles();
 
   useEffect(() => {
     if (userManager.userType !== UserType.Owner) {
@@ -350,7 +257,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
         </div>
       )}
       { !thanks && (
-        <form className={classes.root} noValidate autoComplete="off" onSubmit={reserve}>
+        <form noValidate autoComplete="off" onSubmit={reserve}>
           <div className="section flex-grow">
             <Grid container spacing={5}>
               <Grid item xs={12}>
@@ -395,8 +302,8 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                   <InputLabel htmlFor="age-native-simple">Type</InputLabel>
                   <Select
                     native
-                    value={moveType}
-                    onChange={() => handleTypeChange}
+                    value={String(moveType)}
+                    onChange={handleTypeChange}
                     inputProps={{
                       name: 'moveType',
                       id: 'moveType',
@@ -411,79 +318,50 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                   </Select>
                 </Grid>
                 <Grid item xs={6}>
-                  { isMobile && (
-                    <TextField
-                      id="start"
-                      label="Date"
-                      type="date"
-                      defaultValue={formatDate(selectedStartDate)}
-                      onChange={(e): void => handleNativeDateChange(e.target.value)}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                  { !isMobile && (
-                    <DatePicker
-                      value={selectedStartDate}
-                      label="Date"
-                      onChange={(e: Date | null): void => handleDateChange(e?.toString())}
-                      sx={{ width: '100%' }}
-                    />
-                  )}
+                  <TextField
+                    id="start"
+                    label="Date"
+                    type="date"
+                    defaultValue={formatDate(selectedStartDate)}
+                    onChange={(e): void => handleNativeDateChange(e.target.value)}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    sx={{ width: '100%' }}
+                  />
                 </Grid>
                 <Grid item xs={6}>
-                  { isMobile && (
-                    <TextField
-                      id="startTime"
-                      label="Start Time"
-                      type="time"
-                      value={formatTime(roundToMinuteInterval(selectedStartDate, 15))}
-                      onChange={(e): void => handleNativeStartTimeChange(e.target.value)}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                  { !isMobile && (
-                    <TimePicker
-                      value={roundToMinuteInterval(selectedStartDate, 15)}
-                      label="Start Time"
-                      onChange={(e: Date | null): void => handleStartDateChange(e?.toString())}
-                      sx={{ width: '100%' }}
-                      minutesStep={15}
-                    />
-                  )}
+                  <TextField
+                    id="startTime"
+                    label="Start Time"
+                    type="time"
+                    value={formatTime(roundToMinuteInterval(selectedStartDate, 15))}
+                    onChange={(e): void => handleNativeStartTimeChange(e.target.value)}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    sx={{ width: '100%' }}
+                  />
                 </Grid>
                 <Grid item xs={6}>
-                  { isMobile && (
-                    <TextField
-                      id="endTime"
-                      label="End Time"
-                      type="time"
-                      value={formatTime(roundToMinuteInterval(selectedEndDate, 15))}
-                      onChange={(e): void => handleNativeEndTimeChange(e.target.value)}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                  { !isMobile && (
-                    <TimePicker
-                      value={roundToMinuteInterval(selectedEndDate, 15)}
-                      label="End Time"
-                      onChange={(e: Date | null): void => handleEndDateChange(e?.toString())}
-                      sx={{ width: '100%' }}
-                      minutesStep={15}
-                    />
-                  )}
+                  <TextField
+                    id="endTime"
+                    label="End Time"
+                    type="time"
+                    value={formatTime(roundToMinuteInterval(selectedEndDate, 15))}
+                    onChange={(e): void => handleNativeEndTimeChange(e.target.value)}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    sx={{ width: '100%' }}
+                  />
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
                     id="name1"
                     label="Resident 1"
                     style={{ width: '100%' }}
-                    value={name1}
+                    value={name1 || ''}
                     onChange={(e): void => setName1(e.target.value)}
                   />
                 </Grid>
@@ -492,7 +370,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                     id="name2"
                     label="Resident 2 (if applicable)"
                     style={{ width: '100%' }}
-                    value={name2}
+                    value={name2 || ''}
                     onChange={(e): void => setName2(e.target.value)}
                   />
                 </Grid>
@@ -501,7 +379,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                     id="phoneDay"
                     label="Daytime number"
                     style={{ width: '100%' }}
-                    value={phoneDay}
+                    value={phoneDay || ''}
                     onChange={(e): void => setPhoneDay(e.target.value)}
                   />
                 </Grid>
@@ -510,7 +388,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                     id="phoneNight"
                     label="Evening number"
                     style={{ width: '100%' }}
-                    value={phoneNight}
+                    value={phoneNight || ''}
                     onChange={(e): void => setPhoneNight(e.target.value)}
                   />
                 </Grid>
@@ -519,7 +397,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                     id="unit"
                     label="Unit"
                     style={{ width: '100%' }}
-                    value={unit}
+                    value={unit || ''}
                     onChange={(e): void => setUnit(Number(e.target.value))}
                   />
                 </Grid>
@@ -598,7 +476,11 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                     <Button
                       variant="contained"
                       type="submit"
-                      className={classes.registerButton}
+                      sx={{
+                        backgroundColor: '#f37f30',
+                        color: 'white',
+                        marginBottom: '20px',
+                      }}
                       endIcon={<Icon>add</Icon>}
                     >
                       Reserve Elevator

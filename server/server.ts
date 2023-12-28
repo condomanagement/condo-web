@@ -25,6 +25,7 @@ async function createServer(): Promise<Express> {
   );
   const allowedOrigins = [
     'http://localhost:8080',
+    'http://localhost:3000',
     'https://arrowlofts.org',
     'https://www.arrowlofts.org',
     'https://azure.arrowlofts.org',
@@ -61,7 +62,7 @@ async function createServer(): Promise<Express> {
   app.use('/logo192.png', cors(corsOptions), express.static('public/logo192.png'));
   app.use('/logo512.png', cors(corsOptions), express.static('public/logo512.png'));
   app.all('/api/*', cors(corsOptions), (req, res) => {
-    apiProxy.web(req, res, { target: 'https://api.arrowlofts.org', secure: true });
+    apiProxy.web(req, res, { target: 'http://localhost:3000', secure: false });
   });
 
   app.all('/healthcheck', (req, res) => {

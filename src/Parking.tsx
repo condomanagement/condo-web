@@ -36,11 +36,6 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
         width: '100%',
       },
     },
-    registerButton: {
-      backgroundColor: '#f37f30',
-      color: 'white',
-      marginBottom: '20px',
-    },
   }));
 
   const styleProps: StyleProps = { backgroundColor: '#f37f30' };
@@ -181,7 +176,11 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
                 <Button
                   variant="contained"
                   type="submit"
-                  className={classes.registerButton}
+                  sx={{
+                    backgroundColor: '#f37f30',
+                    color: 'white',
+                    marginBottom: '20px',
+                  }}
                   endIcon={<Icon>directions_car</Icon>}
                 >
                   Register

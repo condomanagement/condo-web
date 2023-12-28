@@ -143,14 +143,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
       width: '100%',
     },
   },
-  registerButton: {
-    backgroundColor: '#f37f30',
-    color: 'white',
-    marginBottom: '20px',
-  },
-  demo: {
-    backgroundColor: theme.palette.background.paper,
-  },
   title: {
     margin: theme.spacing(4, 0, 2),
   },
@@ -492,7 +484,11 @@ export default function UserAdmin(): JSX.Element {
       <Grid container spacing={1}>
         <Grid item xs={8}>
           <Button
-            className={classes.registerButton}
+            sx={{
+              backgroundColor: '#f37f30',
+              color: 'white',
+              marginBottom: '20px',
+            }}
             variant="contained"
             component="span"
             onClick={
@@ -529,14 +525,30 @@ export default function UserAdmin(): JSX.Element {
               />
               {!currentFile && (
                 <div>
-                  <Button className={classes.registerButton} variant="contained" component="span">
+                  <Button
+                    sx={{
+                      backgroundColor: '#f37f30',
+                      color: 'white',
+                      marginBottom: '20px',
+                    }}
+                    variant="contained"
+                    component="span"
+                  >
                     Choose JSON file
                   </Button>
                   {' '}
                 </div>
               )}
               {currentFile && (
-                <Button className={classes.registerButton} variant="contained" type="submit">
+                <Button
+                  sx={{
+                    backgroundColor: '#f37f30',
+                    color: 'white',
+                    marginBottom: '20px',
+                  }}
+                  variant="contained"
+                  type="submit"
+                >
                   Upload
                   {'  '}
                   {currentFile.name}
