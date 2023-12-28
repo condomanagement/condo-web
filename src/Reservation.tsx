@@ -15,7 +15,7 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
-  Theme, Typography,
+  Typography,
 } from '@mui/material';
 import { get as getCookie } from 'es-cookie';
 import { useNavigate } from 'react-router-dom';
@@ -336,7 +336,7 @@ export default function Resevation(): JSX.Element {
     setSelectedEndDateChange(roundToMinuteInterval(endDate, 15));
   };
 
-  const useStyles = makeStyles((theme: Theme) => createStyles({
+  const useStyles = makeStyles(() => createStyles({
     root: {
       '& .MuiTextField-root': {
         width: '100%',

@@ -63,7 +63,6 @@ const formatTime = (date: Date): string => {
 export default function ElevatorBooking({ userManager }: { userManager: UserManager }): JSX.Element {
   const [selectedStartDate, setSelectedStartDateChange] = useState<Date>(roundToMinuteInterval(new Date(), 15));
   const [selectedEndDate, setSelectedEndDateChange] = useState<Date>(addMinutes(selectedStartDate, 30));
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [thanks, setThanks] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [moveType, setMoveType] = useState(0);
