@@ -108,7 +108,9 @@ export default function Resevation(): JSX.Element {
   const userManager = new UserManager();
   const navigate = useNavigate();
   const currentDate = new Date();
-  const maxDate = new Date(currentDate.getTime() - (currentDate.getTimezoneOffset() * 60000))
+  const maxDate = new Date(
+    currentDate.getTime() - (currentDate.getTimezoneOffset() * 60000) + (7 * 24 * 60 * 60 * 1000),
+  )
     .toISOString()
     .split('T')[0]
     .toString();
