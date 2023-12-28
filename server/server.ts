@@ -13,7 +13,8 @@ async function createServer(): Promise<Express> {
 
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 100,
+    max: 10000,
+    limit: 10000,
     standardHeaders: true,
     legacyHeaders: false,
   });

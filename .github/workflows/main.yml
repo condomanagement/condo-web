@@ -6,7 +6,7 @@ name: Build and deploy Node.js app to Azure Web App - condo-web
 on:
   push:
     branches:
-      - mui5-react17
+      - main
   workflow_dispatch:
 
 jobs:
