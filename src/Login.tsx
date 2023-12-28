@@ -1,28 +1,12 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import Button from '@mui/material/Button';
+import Icon from '@mui/material/Icon';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import { Alert, AlertTitle } from '@mui/material';
 import { UserManager } from 'condo-brain';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  root: {
-    '& .MuiTextField-root': {
-      margin: theme.spacing(1),
-      width: '100%',
-    },
-  },
-  registerButton: {
-    backgroundColor: '#f37f30',
-    color: 'white',
-    marginBottom: '20px',
-  },
-}));
 
 export default function Login({ userManager }: { userManager: UserManager }): JSX.Element {
-  const classes = useStyles();
   const [processLogin, setProcessLogin] = React.useState<null | true>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [email, setEmail] = React.useState<null | string>(null);
@@ -42,7 +26,7 @@ export default function Login({ userManager }: { userManager: UserManager }): JS
   }
 
   const loginFrom = (
-    <form className={classes.root} noValidate autoComplete="off" onSubmit={(e): void => doLogin(e)}>
+    <form noValidate autoComplete="off" onSubmit={(e): void => doLogin(e)}>
       <Grid container spacing={5}>
         <Grid item xs={12}>
           <h4 className="center">Login</h4>
@@ -53,12 +37,19 @@ export default function Login({ userManager }: { userManager: UserManager }): JS
             label="Email address used with Condo Control Central"
             value={email || ''}
             onChange={(event): void => setEmail(event.target.value)}
+            sx={{
+              width: '100%',
+            }}
           />
         </Grid>
         <Grid item xs={12} className="center">
           <Button
             variant="contained"
-            className={classes.registerButton}
+            sx={{
+              backgroundColor: '#f37f30',
+              color: 'white',
+              marginBottom: '20px',
+            }}
             endIcon={<Icon>mail</Icon>}
             type="submit"
           >

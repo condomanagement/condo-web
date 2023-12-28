@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
+  AlertTitle,
   Button,
   Checkbox,
   FormControlLabel,
@@ -11,25 +13,22 @@ import {
   ListItem,
   ListItemText,
   Select,
+  SelectChangeEvent,
   TextField,
-  Theme,
   Typography,
-} from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
+} from '@mui/material';
 import { get as getCookie } from 'es-cookie';
 import { useNavigate } from 'react-router-dom';
-import MomentUtils from '@date-io/moment';
-import { isMobile } from 'react-device-detect';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { DatePicker, MuiPickersUtilsProvider, TimePicker } from '@material-ui/pickers';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   Amenity,
   Question,
   ReservationTime,
   UserManager,
 } from 'condo-brain';
-import Schedule from '@material-ui/icons/Schedule';
-import EventAvailable from '@material-ui/icons/EventAvailable';
+import Schedule from '@mui/icons-material/Schedule';
+import EventAvailable from '@mui/icons-material/EventAvailable';
 import moment from 'moment';
 import './styles/application.scss';
 import './styles/parking.scss';
@@ -93,22 +92,26 @@ const formatTime = (date: Date): string => {
 export default function Resevation(): JSX.Element {
   const [selectedStartDate, setSelectedStartDateChange] = useState<Date>(roundToMinuteInterval(new Date(), 15));
   const [selectedEndDate, setSelectedEndDateChange] = useState<Date>(addMinutes(selectedStartDate, 30));
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [amenity, setAmenity] = useState<string | unknown>(null);
+  const [amenity, setAmenity] = useState<string>('');
   const [amenities, setAmenities] = useState<Amenity[]>([]);
   const [displayAmenities, setDisplayAmenities] = useState<Amenity[]>([]);
   const [answers, setAnswers] = useState<boolean[]>([]);
   const [questions, setQuestions] = useState<{ [id: number]: Question[] } >([]);
   const [thanks, setThanks] = useState(false);
   const [amenityTime, setAmenityTime] = useState<number>(60);
-  const [errorMessage, setErrorMessage] = useState<string | unknown>(null);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [availability, setAvailability] = useState<JSX.Element | null>(null);
-  const [selectedAmenityName, setSelectedAmenityName] = useState<string | unknown>('');
+  const [selectedAmenityName, setSelectedAmenityName] = useState<string>('');
   const [auth, setAuth] = useState(false);
   const [vaccinated, setVaccinated] = useState(false);
 
   const userManager = new UserManager();
   const navigate = useNavigate();
+  const currentDate = new Date();
+  const maxDate = new Date(currentDate.getTime() - (currentDate.getTimezoneOffset() * 60000))
+    .toISOString()
+    .split('T')[0]
+    .toString();
 
   const reserve = (e: React.FormEvent): void => {
     e.preventDefault();
@@ -123,14 +126,14 @@ export default function Resevation(): JSX.Element {
           setThanks(true);
           setSelectedStartDateChange(new Date());
           setSelectedEndDateChange(new Date());
-          setAmenity(null);
+          setAmenity('');
           setAnswers([]);
-          setErrorMessage(null);
+          setErrorMessage('');
         } else if (response.error === 'Unprocessable Entity') {
           const err = 'Please make sure you have filled out the form correctly. '
             + 'If you could not check every box, then you cannot use this amenity.';
           setErrorMessage(err);
-        } else {
+        } else if (response.error) {
           setErrorMessage(response.error);
         }
       });
@@ -260,8 +263,8 @@ export default function Resevation(): JSX.Element {
     }, 1000);
   }, [auth]);
 
-  const handleAmenityChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>): void => {
-    const reserveAmenity = event.target.value;
+  const handleAmenityChange = (event: SelectChangeEvent<string>): void => {
+    const reserveAmenity = event.target.value as string;
     setAmenity(reserveAmenity);
     Object.keys(amenities).forEach((a) => {
       const loopAmenity = amenities[Number(a)];
@@ -307,33 +310,6 @@ export default function Resevation(): JSX.Element {
     setSelectedEndDateChange(endDate);
   };
 
-  const handleDateChange = (date: string | undefined): void => {
-    let setDate = new Date();
-    if (date) {
-      setDate = new Date(date);
-    }
-    setSelectedDate(setDate);
-
-    const startDate = new Date(
-      setDate.getFullYear(),
-      setDate.getMonth(),
-      setDate.getDate(),
-      selectedStartDate?.getHours(),
-      selectedStartDate?.getMinutes(),
-    );
-
-    setSelectedStartDateChange(startDate);
-
-    const endDate = new Date(
-      setDate.getFullYear(),
-      setDate.getMonth(),
-      setDate.getDate(),
-      selectedEndDate?.getHours() || new Date().getHours(),
-      selectedEndDate?.getMinutes() || new Date().getMinutes(),
-    );
-    setSelectedEndDateChange(endDate);
-  };
-
   const handleNativeStartTimeChange = (date: string): void => {
     const [hour, minute] = date.split(':');
     const startDate = new Date(
@@ -342,23 +318,6 @@ export default function Resevation(): JSX.Element {
       selectedStartDate?.getDate() || new Date().getDate(),
       Number(hour),
       Number(minute),
-    );
-
-    setSelectedStartDateChange(roundToMinuteInterval(startDate, 15));
-  };
-
-  const handleStartDateChange = (date: string | undefined): void => {
-    let setTime = new Date();
-    if (date) {
-      setTime = new Date(date);
-    }
-
-    const startDate = new Date(
-      selectedDate?.getFullYear() || new Date().getFullYear(),
-      selectedDate?.getMonth() || new Date().getMonth(),
-      selectedDate?.getDate() || new Date().getDate(),
-      setTime.getHours(),
-      setTime.getMinutes(),
     );
 
     setSelectedStartDateChange(roundToMinuteInterval(startDate, 15));
@@ -377,42 +336,11 @@ export default function Resevation(): JSX.Element {
     setSelectedEndDateChange(roundToMinuteInterval(endDate, 15));
   };
 
-  const handleEndDateChange = (date: string | undefined): void => {
-    let setTime = new Date();
-    if (date) {
-      setTime = new Date(date);
-    }
-
-    const endDate = new Date(
-      selectedDate?.getFullYear() || new Date().getFullYear(),
-      selectedDate?.getMonth() || new Date().getMonth(),
-      selectedDate?.getDate() || new Date().getDate(),
-      setTime.getHours(),
-      setTime.getMinutes(),
-    );
-
-    setSelectedEndDateChange(roundToMinuteInterval(endDate, 15));
-  };
-
-  const useStyles = makeStyles((theme: Theme) => createStyles({
+  const useStyles = makeStyles(() => createStyles({
     root: {
       '& .MuiTextField-root': {
-        margin: theme.spacing(1),
         width: '100%',
       },
-    },
-    registerButton: {
-      backgroundColor: '#f37f30',
-      color: 'white',
-      marginBottom: '20px',
-    },
-    paper: {
-      position: 'absolute',
-      width: 400,
-      backgroundColor: theme.palette.background.paper,
-      border: '2px solid #000',
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
     },
   }));
 
@@ -436,7 +364,11 @@ export default function Resevation(): JSX.Element {
             <Grid item xs={12} className="center">
               <Button
                 variant="contained"
-                className={classes.registerButton}
+                sx={{
+                  backgroundColor: '#f37f30',
+                  color: 'white',
+                  marginBottom: '20px',
+                }}
                 onClick={(): void => {
                   setAvailability(null);
                   setThanks(false);
@@ -453,7 +385,11 @@ export default function Resevation(): JSX.Element {
               <Button
                 variant="contained"
                 onClick={(): void => navigate('/myreservations')}
-                className={classes.registerButton}
+                sx={{
+                  backgroundColor: '#f37f30',
+                  color: 'white',
+                  marginBottom: '20px',
+                }}
                 startIcon={<Schedule />}
                 type="submit"
               >
@@ -469,7 +405,7 @@ export default function Resevation(): JSX.Element {
             <Grid container spacing={5}>
               <Grid item xs={12}>
                 <h4 className="center">Reserve an Amenity</h4>
-                { errorMessage && (
+                { errorMessage !== '' && (
                   <Alert severity="error">
                     <AlertTitle>Error</AlertTitle>
                     {errorMessage}
@@ -483,151 +419,121 @@ export default function Resevation(): JSX.Element {
                   </Alert>
                 )}
               </Grid>
-              <MuiPickersUtilsProvider utils={MomentUtils}>
-                <Grid item xs={6}>
-                  <InputLabel htmlFor="age-native-simple">Amenity</InputLabel>
-                  <Select
-                    native
-                    value={amenity}
-                    onChange={handleAmenityChange}
-                    inputProps={{
-                      name: 'amenity',
-                      id: 'amenity',
-                    }}
-                    style={{ width: '100%' }}
-                  >
-                    <option aria-label="None" value="" />
-                    {displayAmenities.map(
-                      (amenityOption: Amenity) => (
-                        <option key={amenityOption.id} value={String(amenityOption.id)}>{amenityOption.name}</option>
-                      ),
-                    )}
-                  </Select>
-                </Grid>
-                <Grid item xs={6}>
-                  { isMobile && (
-                    <TextField
-                      id="start"
-                      label="Date"
-                      type="date"
-                      defaultValue={formatDate(selectedStartDate)}
-                      onChange={(e): void => handleNativeDateChange(e.target.value)}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
+              <Grid item xs={6}>
+                <InputLabel htmlFor="age-native-simple">Amenity</InputLabel>
+                <Select
+                  native
+                  value={amenity}
+                  onChange={handleAmenityChange}
+                  inputProps={{
+                    name: 'amenity',
+                    id: 'amenity',
+                  }}
+                  style={{ width: '100%' }}
+                >
+                  <option aria-label="None" value="" />
+                  {displayAmenities.map(
+                    (amenityOption: Amenity) => (
+                      <option key={amenityOption.id} value={String(amenityOption.id)}>{amenityOption.name}</option>
+                    ),
                   )}
-                  { !isMobile && (
-                    <DatePicker
-                      id="start"
-                      value={selectedStartDate}
-                      label="Date"
-                      onChange={(e): void => handleDateChange(e?.toString())}
-                      style={{ width: '100%' }}
-                    />
-                  )}
-                </Grid>
-                <Grid item xs={6}>
-                  { isMobile && (
-                    <TextField
-                      id="startTime"
-                      label="Start Time"
-                      type="time"
-                      value={formatTime(roundToMinuteInterval(selectedStartDate, 15))}
-                      onChange={(e): void => handleNativeStartTimeChange(e.target.value)}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                  { !isMobile && (
-                    <TimePicker
-                      id="startTime"
-                      value={roundToMinuteInterval(selectedStartDate, 15)}
-                      label="Start Time"
-                      onChange={(e): void => handleStartDateChange(e?.toString())}
-                      style={{ width: '100%' }}
-                      minutesStep={15}
-                    />
-                  )}
-                </Grid>
-                <Grid item xs={6}>
-                  { isMobile && (
-                    <TextField
-                      id="endTime"
-                      label="End Time"
-                      type="time"
-                      value={formatTime(roundToMinuteInterval(selectedEndDate, 15))}
-                      onChange={(e): void => handleNativeEndTimeChange(e.target.value)}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
-                  { !isMobile && (
-                    <TimePicker
-                      id="endTime"
-                      value={roundToMinuteInterval(selectedEndDate, 15)}
-                      label="End Time"
-                      onChange={(e): void => handleEndDateChange(e?.toString())}
-                      style={{ width: '100%' }}
-                      minutesStep={15}
-                    />
-                  )}
-                </Grid>
-                { availability && (
-                  <Grid item xs={12}>
-                    <Alert severity="info">
-                      {availability}
-                    </Alert>
-                  </Grid>
-                )}
-                {amenity && questions[Number(amenity)].map(
-                  (questionOption) => (
-                    <Grid item xs={12} key={questionOption.id}>
-                      <FormControlLabel
-                        control={(
-                          <Checkbox
-                            checked={answers[questionOption.id]}
-                            onChange={handleAnswerChange}
-                            name={String(questionOption.id)}
-                            color="primary"
-                          />
-                        )}
-                        label={questionOption.question}
-                      />
-                    </Grid>
-                  ),
-                )}
+                </Select>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="start"
+                  label="Date"
+                  type="date"
+                  inputProps={{
+                    max: maxDate,
+                  }}
+                  defaultValue={formatDate(selectedStartDate)}
+                  onChange={(e): void => handleNativeDateChange(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="startTime"
+                  label="Start Time"
+                  type="time"
+                  value={formatTime(roundToMinuteInterval(selectedStartDate, 15))}
+                  onChange={(e): void => handleNativeStartTimeChange(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="endTime"
+                  label="End Time"
+                  type="time"
+                  value={formatTime(roundToMinuteInterval(selectedEndDate, 15))}
+                  onChange={(e): void => handleNativeEndTimeChange(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
+              { availability && (
                 <Grid item xs={12}>
-                  <Typography>
-                    Please ensure that you follow the posted instructions as well as complying with the
-                    {' '}
-                    <Link href="https://wscc556.frontsteps.com/folders/" target="_blank" rel="noopener">
-                      Arrow Lofts condo rules
-                    </Link>
-                    .
-                  </Typography>
+                  <Alert severity="info">
+                    {availability}
+                  </Alert>
                 </Grid>
-                {amenity && (
-                  <Grid item xs={12} className="center">
-                    <Button
-                      variant="contained"
-                      type="submit"
-                      className={classes.registerButton}
-                      endIcon={<Icon>add</Icon>}
-                    >
-                      Reserve
-                      {selectedAmenityName && (
-                        <>
-                          {'  '}
-                          {selectedAmenityName}
-                        </>
+              )}
+              {amenity !== '' && questions[Number(amenity)].map(
+                (questionOption) => (
+                  <Grid item xs={12} key={questionOption.id}>
+                    <FormControlLabel
+                      control={(
+                        <Checkbox
+                          checked={answers[questionOption.id]}
+                          onChange={handleAnswerChange}
+                          name={String(questionOption.id)}
+                          color="primary"
+                        />
                       )}
-                    </Button>
+                      label={questionOption.question}
+                    />
                   </Grid>
-                )}
-              </MuiPickersUtilsProvider>
+                ),
+              )}
+              <Grid item xs={12}>
+                <Typography>
+                  Please ensure that you follow the posted instructions as well as complying with the
+                  {' '}
+                  <Link href="https://wscc556.frontsteps.com/folders/" target="_blank" rel="noopener">
+                    Arrow Lofts condo rules
+                  </Link>
+                  .
+                </Typography>
+              </Grid>
+              {amenity && (
+                <Grid item xs={12} className="center">
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    sx={{
+                      backgroundColor: '#f37f30',
+                      color: 'white',
+                      marginBottom: '20px',
+                    }}
+                    endIcon={<Icon>add</Icon>}
+                  >
+                    Reserve
+                    {selectedAmenityName && (
+                      <>
+                        {'  '}
+                        {selectedAmenityName}
+                      </>
+                    )}
+                  </Button>
+                </Grid>
+              )}
             </Grid>
           </div>
         </form>

@@ -2,24 +2,14 @@ import React from 'react';
 import {
   Button,
   Grid,
-} from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import LocalParking from '@material-ui/icons/LocalParking';
-import HomeIcon from '@material-ui/icons/Home';
+import LocalParking from '@mui/icons-material/LocalParking';
+import HomeIcon from '@mui/icons-material/Home';
 import './styles/application.scss';
 import './styles/parking.scss';
 
 export default function Home(): JSX.Element {
-  const useStyles = makeStyles(() => createStyles({
-    registerButton: {
-      backgroundColor: '#f37f30',
-      color: 'white',
-      marginBottom: '20px',
-    },
-  }));
-
-  const classes = useStyles();
   const navigate = useNavigate();
 
   return (
@@ -28,7 +18,11 @@ export default function Home(): JSX.Element {
         <Grid item xs={12}>
           <Button
             variant="contained"
-            className={classes.registerButton}
+            sx={{
+              backgroundColor: '#f37f30',
+              color: 'white',
+              marginBottom: '20px',
+            }}
             onClick={(): void => navigate('/login')}
             startIcon={<HomeIcon />}
             type="submit"
@@ -40,7 +34,11 @@ export default function Home(): JSX.Element {
           <Button
             variant="contained"
             onClick={(): void => navigate('/parking')}
-            className={classes.registerButton}
+            sx={{
+              backgroundColor: '#f37f30',
+              color: 'white',
+              marginBottom: '20px',
+            }}
             startIcon={<LocalParking />}
             type="submit"
           >

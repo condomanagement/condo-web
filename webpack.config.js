@@ -1,14 +1,14 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
-const fs = require('fs');
+const webpack = require('webpack');
+// const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const appDirectory = fs.realpathSync(process.cwd());
-const resolveAppPath = relativePath => path.resolve(appDirectory, relativePath);
+const resolveAppPath = relativePath => path.resolve(path.resolve(__dirname), relativePath);
 // Host
-const host = process.env.HOST || 'localhost';
+// const host = process.env.HOST || 'localhost';
 
 // Required for babel-preset-react-app
-process.env.NODE_ENV = 'development';
+// process.env.NODE_ENV = 'development';
 
 module.exports = {
   entry: './src/index.tsx',
@@ -53,17 +53,23 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
     fallback: {
-      'os':  require.resolve('os-browserify/browser'),
-      'tty': require.resolve("tty-browserify"),
-      "http": require.resolve("stream-http"),
-       "https": require.resolve("https-browserify"),
-      'stream': require.resolve("stream-browserify"),
-      "zlib": require.resolve("browserify-zlib")
-    },
+      'zlib': require.resolve('browserify-zlib'),
+      'util': require.resolve('util/'),
+      'url': require.resolve('url/'),
+      'tty': require.resolve('tty-browserify'),
+      'stream': require.resolve('stream-browserify'),
+      'path': require.resolve('path-browserify'),
+      'os': require.resolve('os-browserify'),
+      'https': require.resolve('https-browserify'),
+      'http': require.resolve('stream-http'),
+      'assert': require.resolve('assert/'),
+      'buffer': require.resolve('buffer/'),
+      'process': require.resolve('process/browser'),
+    }
   },
   output: {
     publicPath: '/',
-    filename: '[name].[hash].js',
+    filename: '[name].[fullhash].js',
     path: path.resolve(__dirname, 'build'),
     library: 'CondoWeb',
   },
@@ -76,19 +82,21 @@ module.exports = {
       inject: 'body',
       template: resolveAppPath('public/index.html'),
     }),
+      new webpack.ProvidePlugin({
+             process: 'process/browser',
+      }),
   ],
   devServer: {
     // Serve index.html as the base
-    contentBase: resolveAppPath('public'),
+    static: resolveAppPath('public'),
     // Enable compression
     compress: true,
     historyApiFallback: true,
     // Enable hot reloading
     hot: true,
-    host,
+    host: 'localhost',
     port: 3001,
     // Public path is root of content base
-    publicPath: '/',
     proxy: {
       '/api': 'http://localhost:3000'
     },

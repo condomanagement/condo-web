@@ -1,29 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { AdminManager, Amenity } from 'condo-brain';
-import { Grid } from '@material-ui/core';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import TextField from '@material-ui/core/TextField';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogActions from '@material-ui/core/DialogActions';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-
-type AmenityProp = {
-  children: Amenity;
-}
+import { Grid } from '@mui/material';
+import { Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import List from '@mui/material/List';
+import TextField from '@mui/material/TextField';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+import AmenityLI from './AmenityLi';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -105,21 +98,6 @@ export default function AmenityAdmin(): JSX.Element {
       });
   }
 
-  function deleteAmenity(amenity: Amenity): void {
-    setAmenityToDelete(amenity.id);
-    setSelectedAmenity(amenity);
-    setDeleteOpen(true);
-  }
-
-  function editAmenity(amenity: Amenity): void {
-    setSelectedAmenity(amenity);
-    setTimeLimit(amenity.timeLimit);
-    setValue(amenity.name);
-    setVisible(amenity.visible);
-    setVaccine(amenity.vaccine);
-    setAmenityOpen(true);
-  }
-
   function updateAmenity(e: React.FormEvent, amenity?: Amenity): void {
     if (!amenity) {
       addAmenity(e);
@@ -156,33 +134,6 @@ export default function AmenityAdmin(): JSX.Element {
   useEffect(() => {
     fetchAmenities();
   }, [amenities.length]);
-
-  const AmenityLI = (prop: AmenityProp): JSX.Element => {
-    const { children } = prop;
-    const amenity = children;
-    const icon = amenity.vaccine ? '💉' : '🦠';
-    const primary = `${icon} ${amenity.name}`;
-    const secondary = minutesToReadable(amenity.timeLimit);
-
-    return (
-      <ListItem>
-        <ListItemText
-          primary={primary}
-          secondary={secondary}
-        />
-        <ListItemSecondaryAction>
-          <>
-            <IconButton edge="end" aria-label="edit" onClick={(): void => { editAmenity(amenity); }}>
-              <EditIcon />
-            </IconButton>
-            <IconButton edge="end" aria-label="delete" onClick={(): void => { deleteAmenity(amenity); }}>
-              <DeleteIcon />
-            </IconButton>
-          </>
-        </ListItemSecondaryAction>
-      </ListItem>
-    );
-  };
 
   const times = [];
   for (let t = 15; t <= 240; t += 15) {
@@ -232,7 +183,21 @@ export default function AmenityAdmin(): JSX.Element {
         <Grid container spacing={5}>
           <Grid item xs={12}>
             <List>
-              {amenities.map((amenity) => <AmenityLI key={amenity.id}>{amenity}</AmenityLI>)}
+              {amenities.map((amenity) => (
+                <AmenityLI
+                  key={amenity.id}
+                  setAmenityToDelete={setAmenityToDelete}
+                  setSelectedAmenity={setSelectedAmenity}
+                  setDeleteOpen={setDeleteOpen}
+                  setTimeLimit={setTimeLimit}
+                  setValue={setValue}
+                  setVisible={setVisible}
+                  setVaccine={setVaccine}
+                  setAmenityOpen={setAmenityOpen}
+                >
+                  {amenity}
+                </AmenityLI>
+              ))}
             </List>
           </Grid>
           <Grid item xs={12}>
@@ -264,7 +229,7 @@ export default function AmenityAdmin(): JSX.Element {
                   id="standard-multiline-flexible"
                   label="Enter new amenity"
                   multiline
-                  rowsMax={4}
+                  maxRows={4}
                   value={value}
                   onChange={handleChange}
                   style={{ width: '100%' }}
@@ -275,7 +240,7 @@ export default function AmenityAdmin(): JSX.Element {
                 <Select
                   native
                   value={timeLimit}
-                  onChange={handleTimeLimitChange}
+                  onChange={() => handleTimeLimitChange}
                   inputProps={{
                     name: 'timeLimit',
                     id: 'timeLimit',

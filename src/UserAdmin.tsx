@@ -1,31 +1,140 @@
 import React, { useEffect, useState } from 'react';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import { AdminManager, User, UserType } from 'condo-brain';
-import { Grid } from '@material-ui/core';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
+import { Grid } from '@mui/material';
+import { Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
 
 type UserProp = {
   user: User;
+  editUser: (user: User) => void;
 }
 
 type UsersProp = {
   localUsers: User[];
+  editUser: (user: User) => void;
 }
+
+function UserLI(prop: UserProp): JSX.Element {
+  const { user, editUser } = prop;
+  const vacState = user.vaccinated ? '💉' : '🦠';
+  const primary = `${vacState} ${user.name}`;
+
+  return (
+    <ListItem disabled={!user.active}>
+      <ListItemText
+        primary={primary}
+        secondary={(
+          <>
+            <Typography
+              component="span"
+              variant="body2"
+              style={{ display: 'inline' }}
+              color="textPrimary"
+            >
+              {`${user.unit}`}
+              {'  '}
+            </Typography>
+            <Typography
+              component="span"
+              variant="body2"
+              style={{ display: 'inline' }}
+              color="textPrimary"
+            >
+              ,
+              {'  '}
+              {`${user.email}`}
+
+            </Typography>
+            {user.active && (
+              <Typography
+                component="span"
+                variant="body2"
+                style={{ display: 'inline' }}
+                color="textPrimary"
+              >
+                ,
+                {'  '}
+                Active
+              </Typography>
+            )}
+            {!user.active && (
+              <Typography
+                component="span"
+                variant="body2"
+                style={{ display: 'inline' }}
+                color="textPrimary"
+              >
+                ,
+                {'  '}
+                Inactive
+              </Typography>
+            )}
+            {!user.admin && user.parkingAdmin && (
+              <Typography
+                component="span"
+                variant="body2"
+                style={{ display: 'inline' }}
+                color="textPrimary"
+              >
+                ,
+                {'  '}
+                Parking Administrator
+                {'  '}
+              </Typography>
+            )}
+            {user.admin && (
+              <Typography
+                component="span"
+                variant="body2"
+                style={{ display: 'inline' }}
+                color="textPrimary"
+              >
+                ,
+                {'  '}
+                Administrator
+                {'  '}
+              </Typography>
+            )}
+          </>
+        )}
+      />
+      <ListItemSecondaryAction>
+        <IconButton
+          edge="end"
+          aria-label="edit"
+          onClick={(): void => { editUser(user); }}
+          size="large"
+        >
+          <EditIcon />
+        </IconButton>
+      </ListItemSecondaryAction>
+    </ListItem>
+  );
+}
+
+const ListOfUsers = React.memo((prop: UsersProp) => {
+  const usersLI = prop.localUsers.map((user) => (
+    <UserLI key={user.id} user={user} editUser={prop.editUser} />
+  ));
+  return (<List>{usersLI}</List>);
+});
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -33,14 +142,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
       margin: theme.spacing(1),
       width: '100%',
     },
-  },
-  registerButton: {
-    backgroundColor: '#f37f30',
-    color: 'white',
-    marginBottom: '20px',
-  },
-  demo: {
-    backgroundColor: theme.palette.background.paper,
   },
   title: {
     margin: theme.spacing(4, 0, 2),
@@ -153,7 +254,7 @@ export default function UserAdmin(): JSX.Element {
       });
   }
 
-  function editUser(user: User): void {
+  const editUser = (user: User): void => {
     setSelectedUser(user);
     setSelectedUserId(user.id);
     setName(user.name);
@@ -170,7 +271,7 @@ export default function UserAdmin(): JSX.Element {
     }
     setUserOpen(true);
     setUserType(user.type);
-  }
+  };
 
   function updateUser(e: React.FormEvent): void {
     if (!selectedUserId) {
@@ -213,99 +314,6 @@ export default function UserAdmin(): JSX.Element {
     }
   }
 
-  const UserLI = (prop: UserProp): JSX.Element => {
-    const { user } = prop;
-    const vacState = user.vaccinated ? '💉' : '🦠';
-    const primary = `${vacState} ${user.name}`;
-
-    return (
-      <ListItem disabled={!user.active}>
-        <ListItemText
-          primary={primary}
-          secondary={(
-            <>
-              <Typography
-                component="span"
-                variant="body2"
-                style={{ display: 'inline' }}
-                color="textPrimary"
-              >
-                {`${user.unit}`}
-                {'  '}
-              </Typography>
-              <Typography
-                component="span"
-                variant="body2"
-                style={{ display: 'inline' }}
-                color="textPrimary"
-              >
-                ,
-                {'  '}
-                {`${user.email}`}
-
-              </Typography>
-              {user.active && (
-                <Typography
-                  component="span"
-                  variant="body2"
-                  style={{ display: 'inline' }}
-                  color="textPrimary"
-                >
-                  ,
-                  {'  '}
-                  Active
-                </Typography>
-              )}
-              {!user.active && (
-                <Typography
-                  component="span"
-                  variant="body2"
-                  style={{ display: 'inline' }}
-                  color="textPrimary"
-                >
-                  ,
-                  {'  '}
-                  Inactive
-                </Typography>
-              )}
-              {!user.admin && user.parkingAdmin && (
-                <Typography
-                  component="span"
-                  variant="body2"
-                  style={{ display: 'inline' }}
-                  color="textPrimary"
-                >
-                  ,
-                  {'  '}
-                  Parking Administrator
-                  {'  '}
-                </Typography>
-              )}
-              {user.admin && (
-                <Typography
-                  component="span"
-                  variant="body2"
-                  style={{ display: 'inline' }}
-                  color="textPrimary"
-                >
-                  ,
-                  {'  '}
-                  Administrator
-                  {'  '}
-                </Typography>
-              )}
-            </>
-          )}
-        />
-        <ListItemSecondaryAction>
-          <IconButton edge="end" aria-label="edit" onClick={(): void => { editUser(user); }}>
-            <EditIcon />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
-    );
-  };
-
   const userPopup = (
     <form className={classes.root} noValidate autoComplete="off" onSubmit={addUser}>
       <Dialog open={userOpen} aria-labelledby="form-dialog-title" fullWidth>
@@ -326,7 +334,7 @@ export default function UserAdmin(): JSX.Element {
                 id="standard-multiline-flexible"
                 label="Name"
                 multiline
-                rowsMax={1}
+                maxRows={1}
                 value={name}
                 onChange={handleNameChange}
                 style={{ width: '100%' }}
@@ -337,7 +345,7 @@ export default function UserAdmin(): JSX.Element {
                 id="standard-multiline-flexible"
                 label="Unit"
                 multiline
-                rowsMax={1}
+                maxRows={1}
                 value={unit}
                 onChange={handleUnitChange}
                 style={{ width: '100%' }}
@@ -348,7 +356,7 @@ export default function UserAdmin(): JSX.Element {
                 id="standard-multiline-flexible"
                 label="Email"
                 multiline
-                rowsMax={1}
+                maxRows={1}
                 value={email}
                 onChange={handleEmailChange}
                 style={{ width: '100%' }}
@@ -359,7 +367,7 @@ export default function UserAdmin(): JSX.Element {
                 id="standard-multiline-flexible"
                 label="Phone Number"
                 multiline
-                rowsMax={1}
+                maxRows={1}
                 value={phone}
                 onChange={handlePhoneChange}
                 style={{ width: '100%' }}
@@ -458,13 +466,6 @@ export default function UserAdmin(): JSX.Element {
     </form>
   );
 
-  const ListOfUsers = React.memo((prop: UsersProp) => {
-    const usersLI = prop.localUsers.map((user) => (
-      <UserLI key={user.id} user={user} />
-    ));
-    return (<List>{usersLI}</List>);
-  });
-
   useEffect(() => {
     fetchUsers();
   }, [users.length]);
@@ -474,7 +475,7 @@ export default function UserAdmin(): JSX.Element {
     if (hideInactive) {
       showUsers = showUsers.filter((user) => user.active);
     }
-    setUserList(<ListOfUsers localUsers={showUsers} />);
+    setUserList(<ListOfUsers localUsers={showUsers} editUser={editUser} />);
   }, [users, hideInactive]);
 
   return (
@@ -483,7 +484,11 @@ export default function UserAdmin(): JSX.Element {
       <Grid container spacing={1}>
         <Grid item xs={8}>
           <Button
-            className={classes.registerButton}
+            sx={{
+              backgroundColor: '#f37f30',
+              color: 'white',
+              marginBottom: '20px',
+            }}
             variant="contained"
             component="span"
             onClick={
@@ -520,14 +525,30 @@ export default function UserAdmin(): JSX.Element {
               />
               {!currentFile && (
                 <div>
-                  <Button className={classes.registerButton} variant="contained" component="span">
+                  <Button
+                    sx={{
+                      backgroundColor: '#f37f30',
+                      color: 'white',
+                      marginBottom: '20px',
+                    }}
+                    variant="contained"
+                    component="span"
+                  >
                     Choose JSON file
                   </Button>
                   {' '}
                 </div>
               )}
               {currentFile && (
-                <Button className={classes.registerButton} variant="contained" type="submit">
+                <Button
+                  sx={{
+                    backgroundColor: '#f37f30',
+                    color: 'white',
+                    marginBottom: '20px',
+                  }}
+                  variant="contained"
+                  type="submit"
+                >
                   Upload
                   {'  '}
                   {currentFile.name}

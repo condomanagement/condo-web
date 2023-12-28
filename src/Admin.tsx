@@ -1,12 +1,14 @@
 import React from 'react';
 import { AdminManager, UserManager } from 'condo-brain';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import { Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   Box,
   Paper,
   Tab,
   Tabs,
-} from '@material-ui/core';
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import UserAdmin from './UserAdmin';
 import QuestionAdmin from './QuestionAdmin';

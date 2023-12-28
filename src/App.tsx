@@ -1,14 +1,16 @@
 import React from 'react';
 import * as Parallax from 'react-parallax';
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import {
   Route,
   Routes,
   useLocation,
   useNavigate,
 } from 'react-router-dom';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import CssBaseline from '@mui/material/CssBaseline';
 import { get as getCookie } from 'es-cookie';
 import { UserManager } from 'condo-brain';
 import Parking from './Parking';
