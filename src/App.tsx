@@ -49,7 +49,7 @@ function App(): JSX.Element {
   const [rootState, setRootState] = React.useState<string | undefined>(undefined);
   const [toolbarState, setToolbarState] = React.useState<string | undefined>(undefined);
   const [contentState, setContentState] = React.useState<string | undefined>(undefined);
-  const classes = useStyles();
+  const classes = useStyles({});
   const navigate = useNavigate();
   const location = useLocation();
 
