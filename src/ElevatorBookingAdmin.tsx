@@ -1,4 +1,4 @@
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 import React, { useEffect, useState } from 'react';
 import { AdminManager, BookingStatus, ElevatorBooking } from 'condo-brain';
@@ -183,7 +183,7 @@ export default function ElevatorBookingAdmin(): React.ReactElement {
       </DialogTitle>
       <DialogContent>
         <Grid container spacing={5}>
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <TableContainer component={Paper}>
               <Table className={classes.table} aria-label="customized table">
                 <TableBody>
@@ -274,7 +274,7 @@ export default function ElevatorBookingAdmin(): React.ReactElement {
                 id="rejection"
                 label="Reason for Rejection"
                 multiline
-                style={{ width: '100%', marginTop: '20px' }}
+                fullWidth sx={{ mt: '20px' }}
                 value={rejection}
                 rows={50}
                 placeholder="Enter a reason for rejecting this booking."
@@ -305,7 +305,7 @@ export default function ElevatorBookingAdmin(): React.ReactElement {
   return (
     <div className="section flex-grow">
       <Grid container spacing={5}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           {bookingPopup}
           <h4 className="center">Elevator Bookings</h4>
           <TableContainer component={Paper}>

@@ -1,4 +1,4 @@
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -12,10 +12,10 @@ export default function Authenticate({ userManager }: { userManager: UserManager
 
   const proccessing = (
     <Grid container spacing={5}>
-      <Grid item xs={12}>
+      <Grid size={{ xs: 12 }}>
         <h4 className="center">Validating Account</h4>
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={{ xs: 12 }}>
         <p>Validating your account</p>
       </Grid>
     </Grid>
@@ -23,10 +23,10 @@ export default function Authenticate({ userManager }: { userManager: UserManager
 
   const loginError = (
     <Grid container spacing={5}>
-      <Grid item xs={12}>
+      <Grid size={{ xs: 12 }}>
         <h4 className="center">Error</h4>
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={{ xs: 12 }}>
         <p>
           There was an error processing this login. Either it has already been used or there is another problem.
         </p>

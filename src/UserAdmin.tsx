@@ -1,4 +1,4 @@
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
@@ -330,7 +330,7 @@ export default function UserAdmin(): React.ReactElement {
         )}
         <DialogContent>
           <Grid container spacing={5}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 id="standard-multiline-flexible"
                 label="Name"
@@ -338,10 +338,10 @@ export default function UserAdmin(): React.ReactElement {
                 maxRows={1}
                 value={name}
                 onChange={handleNameChange}
-                style={{ width: '100%' }}
+                fullWidth
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 id="standard-multiline-flexible"
                 label="Unit"
@@ -349,10 +349,10 @@ export default function UserAdmin(): React.ReactElement {
                 maxRows={1}
                 value={unit}
                 onChange={handleUnitChange}
-                style={{ width: '100%' }}
+                fullWidth
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 id="standard-multiline-flexible"
                 label="Email"
@@ -360,10 +360,10 @@ export default function UserAdmin(): React.ReactElement {
                 maxRows={1}
                 value={email}
                 onChange={handleEmailChange}
-                style={{ width: '100%' }}
+                fullWidth
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 id="standard-multiline-flexible"
                 label="Phone Number"
@@ -371,10 +371,10 @@ export default function UserAdmin(): React.ReactElement {
                 maxRows={1}
                 value={phone}
                 onChange={handlePhoneChange}
-                style={{ width: '100%' }}
+                fullWidth
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <ButtonGroup
                 disableElevation
                 variant="contained"
@@ -401,7 +401,7 @@ export default function UserAdmin(): React.ReactElement {
                 </Button>
               </ButtonGroup>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <FormControlLabel
                 control={(
                   <Switch
@@ -414,7 +414,7 @@ export default function UserAdmin(): React.ReactElement {
                 label="Administrator"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <FormControlLabel
                 control={(
                   <Switch
@@ -427,7 +427,7 @@ export default function UserAdmin(): React.ReactElement {
                 label="Parking Administrator"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <FormControlLabel
                 control={(
                   <Switch
@@ -440,7 +440,7 @@ export default function UserAdmin(): React.ReactElement {
                 label="Active"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <FormControlLabel
                 control={(
                   <Switch
@@ -483,7 +483,7 @@ export default function UserAdmin(): React.ReactElement {
     <div className="section flex-grow">
       <h4 className="center">Resident Admin</h4>
       <Grid container spacing={1}>
-        <Grid item xs={8}>
+        <Grid size={{ xs: 8 }}>
           <Button
             sx={{
               backgroundColor: '#f37f30',
@@ -499,7 +499,7 @@ export default function UserAdmin(): React.ReactElement {
             Add Resident
           </Button>
         </Grid>
-        <Grid item xs={4}>
+        <Grid size={{ xs: 4 }}>
           <FormControlLabel
             control={(
               <Switch
@@ -512,7 +512,7 @@ export default function UserAdmin(): React.ReactElement {
             label="Hide Inactive Residents"
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           {userList}
           {userPopup}
           <form encType="multipart/form-data" className={classes.root} noValidate autoComplete="off" onSubmit={upload}>

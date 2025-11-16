@@ -1,4 +1,4 @@
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 import React, { useEffect, useState } from 'react';
 import {
@@ -6,6 +6,7 @@ import {
   AlertTitle,
   Button,
   Checkbox,
+  FormControl,
   FormControlLabel,
   Icon,
   InputLabel,
@@ -354,7 +355,7 @@ export default function Resevation(): React.ReactElement {
       { thanks && (
         <div className="section flex-grow">
           <Grid container spacing={1}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <h4 className="center">Amenity reserved</h4>
               <p className="center">
                 Thank you!
@@ -364,7 +365,7 @@ export default function Resevation(): React.ReactElement {
                 {'  '}
               </p>
             </Grid>
-            <Grid item xs={12} className="center">
+            <Grid size={{ xs: 12 }} className="center">
               <Button
                 variant="contained"
                 sx={{
@@ -384,7 +385,7 @@ export default function Resevation(): React.ReactElement {
                 Make Another Reservation
               </Button>
             </Grid>
-            <Grid item xs={12} className="center">
+            <Grid size={{ xs: 12 }} className="center">
               <Button
                 variant="contained"
                 onClick={(): void => navigate('/myreservations')}
@@ -406,7 +407,7 @@ export default function Resevation(): React.ReactElement {
         <form className={classes.root} noValidate autoComplete="off" onSubmit={reserve}>
           <div className="section flex-grow">
             <Grid container spacing={5}>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <h4 className="center">Reserve an Amenity</h4>
                 { errorMessage !== '' && (
                   <Alert severity="error">
@@ -422,28 +423,31 @@ export default function Resevation(): React.ReactElement {
                   </Alert>
                 )}
               </Grid>
-              <Grid item xs={6}>
-                <InputLabel htmlFor="age-native-simple">Amenity</InputLabel>
-                <Select
-                  native
-                  value={amenity}
-                  onChange={handleAmenityChange}
-                  inputProps={{
-                    name: 'amenity',
-                    id: 'amenity',
-                  }}
-                  style={{ width: '100%' }}
-                >
-                  <option aria-label="None" value="" />
-                  {displayAmenities.map(
-                    (amenityOption: Amenity) => (
-                      <option key={amenityOption.id} value={String(amenityOption.id)}>{amenityOption.name}</option>
-                    ),
-                  )}
-                </Select>
+              <Grid size={{ xs: 6 }}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="amenity">Amenity</InputLabel>
+                  <Select
+                    native
+                    value={amenity}
+                    onChange={handleAmenityChange}
+                    inputProps={{
+                      name: 'amenity',
+                      id: 'amenity',
+                    }}
+                    label="Amenity"
+                  >
+                    <option aria-label="None" value="" />
+                    {displayAmenities.map(
+                      (amenityOption: Amenity) => (
+                        <option key={amenityOption.id} value={String(amenityOption.id)}>{amenityOption.name}</option>
+                      ),
+                    )}
+                  </Select>
+                </FormControl>
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
+                  fullWidth
                   id="start"
                   label="Date"
                   type="date"
@@ -457,8 +461,9 @@ export default function Resevation(): React.ReactElement {
                   }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
+                  fullWidth
                   id="startTime"
                   label="Start Time"
                   type="time"
@@ -469,8 +474,9 @@ export default function Resevation(): React.ReactElement {
                   }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
+                  fullWidth
                   id="endTime"
                   label="End Time"
                   type="time"
@@ -482,7 +488,7 @@ export default function Resevation(): React.ReactElement {
                 />
               </Grid>
               { availability && (
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Alert severity="info">
                     {availability}
                   </Alert>
@@ -490,7 +496,7 @@ export default function Resevation(): React.ReactElement {
               )}
               {amenity !== '' && questions[Number(amenity)].map(
                 (questionOption) => (
-                  <Grid item xs={12} key={questionOption.id}>
+                  <Grid size={{ xs: 12 }} key={questionOption.id}>
                     <FormControlLabel
                       control={(
                         <Checkbox
@@ -505,7 +511,7 @@ export default function Resevation(): React.ReactElement {
                   </Grid>
                 ),
               )}
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <Typography>
                   Please ensure that you follow the posted instructions as well as complying with the
                   {' '}
@@ -516,7 +522,7 @@ export default function Resevation(): React.ReactElement {
                 </Typography>
               </Grid>
               {amenity && (
-                <Grid item xs={12} className="center">
+                <Grid size={{ xs: 12 }} className="center">
                   <Button
                     variant="contained"
                     type="submit"

@@ -1,4 +1,4 @@
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 import React, { useState } from 'react';
 import {
@@ -77,7 +77,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
       { thanks && (
         <div className="section flex-grow">
           <Grid container spacing={5}>
-            <Grid item xs={12} className="center">
+            <Grid size={{ xs: 12 }} className="center">
               <h4 className="center">Thank you</h4>
               <p className="center">
                 Thank you!
@@ -95,7 +95,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
         <form className={classes.root} noValidate autoComplete="off" onSubmit={register}>
           <div className="section flex-grow">
             <Grid container spacing={5}>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <h4 className="center">Register a Vehicle</h4>
                 { errorMessage !== '' && (
                   <Alert severity="error">
@@ -104,7 +104,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
                   </Alert>
                 )}
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   id="start"
                   label="Start Date"
@@ -116,7 +116,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
                   }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   id="end"
                   label="End Date"
@@ -128,52 +128,52 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
                   }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   id="license"
                   label="License Plate"
-                  style={{ width: '100%' }}
+                  fullWidth
                   value={license}
                   onChange={(e): void => setLicense(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   id="unit"
                   label="Unit Number"
-                  style={{ width: '100%' }}
+                  fullWidth
                   value={unit}
                   onChange={(e): void => setUnit(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   id="make"
                   label="Vehicle Make"
-                  style={{ width: '100%' }}
+                  fullWidth
                   value={make}
                   onChange={(e): void => setMake(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   id="color"
                   label="Vehicle Colour"
-                  style={{ width: '100%' }}
+                  fullWidth
                   value={color}
                   onChange={(e): void => setColor(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   id="email"
                   label="Email or Phone Number"
-                  style={{ width: '100%' }}
+                  fullWidth
                   value={email}
                   onChange={(e): void => setEmail(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={12} className="center">
+              <Grid size={{ xs: 12 }} className="center">
                 <Button
                   variant="contained"
                   type="submit"

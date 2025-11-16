@@ -1,4 +1,4 @@
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 import React, { useEffect, useState } from 'react';
 import { MyReservation, UserManager } from 'condo-brain';
@@ -100,7 +100,7 @@ export default function MyReservations({ userManager }: { userManager: UserManag
   return (
     <div className="section flex-grow">
       <Grid container spacing={5}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           {vaccinated && (
             <Alert severity="info">
               <AlertTitle>💉 Thank you for getting vaccinated.</AlertTitle>
@@ -112,7 +112,7 @@ export default function MyReservations({ userManager }: { userManager: UserManag
             </Alert>
           )}
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <h4 className="center">Amenity Reservations</h4>
           <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="customized table">

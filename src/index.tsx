@@ -17,15 +17,17 @@ const theme = createTheme({
 const container = document.getElementById('root');
 const root = createRoot(container!);
 root.render(
-  <ThemeProvider theme={theme}>
-    <BrowserRouter
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-      }}
-    >
-      <App />
-    </BrowserRouter>
-  </ThemeProvider>,
+  <React.StrictMode>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
+        <App />
+      </BrowserRouter>
+    </ThemeProvider>
+  </React.StrictMode>,
 );
 

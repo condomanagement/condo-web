@@ -1,4 +1,4 @@
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 import React, { useEffect, useState } from 'react';
 import { AdminManager, ParkingRegistration } from 'condo-brain';
@@ -74,9 +74,9 @@ export default function ParkingAdmin(): React.ReactElement {
   return (
     <div className="section flex-grow">
       <Grid container spacing={5}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <h4 className="center">Parking Registration Admin</h4>
-          <Grid item xs={12} className="center">
+          <Grid size={{ xs: 12 }} className="center">
             <ToggleButtonGroup
               value={whenView}
               exclusive

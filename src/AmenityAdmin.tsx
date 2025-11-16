@@ -1,4 +1,4 @@
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
@@ -8,6 +8,7 @@ import { createStyles } from './makeStyles';
 import { makeStyles } from './makeStyles';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 import List from '@mui/material/List';
 import TextField from '@mui/material/TextField';
 import Switch from '@mui/material/Switch';
@@ -182,7 +183,7 @@ export default function AmenityAdmin(): React.ReactElement {
       <h4 className="center">Amenity Admin</h4>
       <div className="section flex-grow">
         <Grid container spacing={5}>
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <List>
               {amenities.map((amenity) => (
                 <AmenityLI
@@ -201,7 +202,7 @@ export default function AmenityAdmin(): React.ReactElement {
               ))}
             </List>
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Button
               className={classes.registerButton}
               variant="contained"
@@ -225,7 +226,7 @@ export default function AmenityAdmin(): React.ReactElement {
               {selectedAmenity?.name}
             </DialogContentText>
             <Grid container spacing={5}>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   id="standard-multiline-flexible"
                   label="Enter new amenity"
@@ -233,25 +234,27 @@ export default function AmenityAdmin(): React.ReactElement {
                   maxRows={4}
                   value={value}
                   onChange={handleChange}
-                  style={{ width: '100%' }}
+                  fullWidth
                 />
               </Grid>
-              <Grid item xs={12}>
-                <InputLabel htmlFor="time-limit">Time Limit</InputLabel>
-                <Select
-                  native
-                  value={timeLimit}
-                  onChange={() => handleTimeLimitChange}
-                  inputProps={{
-                    name: 'timeLimit',
-                    id: 'timeLimit',
-                  }}
-                  style={{ width: '100%' }}
-                >
-                  {times}
-                </Select>
+              <Grid size={{ xs: 12 }}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="timeLimit">Time Limit</InputLabel>
+                  <Select
+                    native
+                    value={timeLimit}
+                    onChange={() => handleTimeLimitChange}
+                    inputProps={{
+                      name: 'timeLimit',
+                      id: 'timeLimit',
+                    }}
+                    label="Time Limit"
+                  >
+                    {times}
+                  </Select>
+                </FormControl>
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <FormControlLabel
                   control={(
                     <Switch
@@ -264,7 +267,7 @@ export default function AmenityAdmin(): React.ReactElement {
                   label="Visible"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <FormControlLabel
                   control={(
                     <Switch

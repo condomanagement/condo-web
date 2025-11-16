@@ -1,4 +1,4 @@
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 import React from 'react';
 import * as Parallax from 'react-parallax';
@@ -57,12 +57,9 @@ function App(): React.ReactElement {
       userManager.validateToken(token).then((_result) => {
         if (userManager.loggedIn) {
           setAuth(true);
-          // @ts-ignore - tss-react type inference issue
-          setRootState(classes.root);
-          // @ts-ignore - tss-react type inference issue
-          setToolbarState(classes.toolbar);
-          // @ts-ignore - tss-react type inference issue
-          setContentState(classes.content);
+          setRootState(classes.root as string);
+          setToolbarState(classes.toolbar as string);
+          setContentState(classes.content as string);
           if (location.pathname === '/') {
             navigate('/reservation');
           }
@@ -128,7 +125,7 @@ function App(): React.ReactElement {
           >
             <div className="container section flex-grow">
               <Grid container spacing={5}>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <h5 className="white-text">Arrow Lofts</h5>
                   <p className="grey-text text-lighten-4">
                     112 Benton Street
@@ -137,7 +134,7 @@ function App(): React.ReactElement {
                   </p>
                   <p className="grey-text text-lighten-4">A beautiful home in a beautiful city.</p>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <h5 className="white-text">Additional Resources</h5>
                   <ul>
                     <li>

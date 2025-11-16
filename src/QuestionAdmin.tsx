@@ -1,4 +1,4 @@
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
@@ -186,7 +186,7 @@ export default function QuestionAdmin(): React.ReactElement {
             {selectedQuestion?.question}
           </DialogContentText>
           <Grid container spacing={5}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 id="standard-multiline-flexible"
                 label="Enter new question"
@@ -194,7 +194,7 @@ export default function QuestionAdmin(): React.ReactElement {
                 maxRows={4}
                 value={value}
                 onChange={handleChange}
-                style={{ width: '100%' }}
+                fullWidth
               />
             </Grid>
           </Grid>
@@ -214,9 +214,9 @@ export default function QuestionAdmin(): React.ReactElement {
   return (
     <div className="section flex-grow">
       <Grid container spacing={5}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <h4 className="center">Question Admin</h4>
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <List>
               {questions.map((question) => (
                 <QuestionLI
@@ -236,7 +236,7 @@ export default function QuestionAdmin(): React.ReactElement {
               ))}
             </List>
           </Grid>
-          <Grid item xs={12} className="center">
+          <Grid size={{ xs: 12 }} className="center">
             <Button className={classes.registerButton} variant="contained" onClick={(): void => setQuestionOpen(true)}>
               Add Question
             </Button>

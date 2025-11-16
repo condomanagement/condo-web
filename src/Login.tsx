@@ -1,4 +1,4 @@
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 import React from 'react';
 import Button from '@mui/material/Button';
@@ -29,10 +29,10 @@ export default function Login({ userManager }: { userManager: UserManager }): Re
   const loginFrom = (
     <form noValidate autoComplete="off" onSubmit={(e): void => doLogin(e)}>
       <Grid container spacing={5}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <h4 className="center">Login</h4>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             id="email"
             label="Email address used with Condo Control Central"
@@ -43,7 +43,7 @@ export default function Login({ userManager }: { userManager: UserManager }): Re
             }}
           />
         </Grid>
-        <Grid item xs={12} className="center">
+        <Grid size={{ xs: 12 }} className="center">
           <Button
             variant="contained"
             sx={{
@@ -63,13 +63,13 @@ export default function Login({ userManager }: { userManager: UserManager }): Re
 
   const loggingIn = (
     <Grid container spacing={5}>
-      <Grid item xs={12}>
+      <Grid size={{ xs: 12 }}>
         <h4 className="center">
           {error && (<>Error</>)}
           {!error && (<>Check your Email</>)}
         </h4>
       </Grid>
-      <Grid item xs={12} className="center">
+      <Grid size={{ xs: 12 }} className="center">
         {error && (
           <Alert severity="error">
             <AlertTitle>Error</AlertTitle>

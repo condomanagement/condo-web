@@ -1,4 +1,4 @@
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 import React, { useEffect, useState } from 'react';
 import { AdminManager, Reservation } from 'condo-brain';
@@ -65,7 +65,7 @@ export default function ReservationAdmin(): React.ReactElement {
   return (
     <div className="section flex-grow">
       <Grid container spacing={5}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <h4 className="center">Amenity Reservation Admin</h4>
           <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="customized table">
