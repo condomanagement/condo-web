@@ -1,7 +1,7 @@
 import Grid from "@mui/material/Grid";
 
 import React, { useEffect, useState } from 'react';
-import { AdminManager, ParkingRegistration } from 'condo-brain';
+import { AdminManager, ParkingRegistration } from '@condomanagement/condo-brain';
 import { Theme } from '@mui/material/styles';
 import { createStyles } from './makeStyles';
 import { makeStyles } from './makeStyles';
@@ -57,7 +57,7 @@ export default function ParkingAdmin(): React.ReactElement {
 
   const fetchRegistrations = async (): Promise<void> => {
     admin.getParkingRegistrations(whenView).then((response) => {
-      setRegistrations(response);
+      setRegistrations(Array.isArray(response) ? response : response.data);
     });
   };
 

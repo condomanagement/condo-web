@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { UserManager, UserType } from 'condo-brain';
+import { UserManager, UserType } from '@condomanagement/condo-brain';
 import moment from 'moment';
 import './styles/application.scss';
 import './styles/parking.scss';

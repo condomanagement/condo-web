@@ -1,7 +1,7 @@
 import Grid from "@mui/material/Grid";
 
 import React, { useEffect, useState } from 'react';
-import { AdminManager, BookingStatus, ElevatorBooking } from 'condo-brain';
+import { AdminManager, BookingStatus, ElevatorBooking } from '@condomanagement/condo-brain';
 import { TextField } from '@mui/material';
 import { Theme } from '@mui/material/styles';
 import { createStyles } from './makeStyles';
@@ -67,7 +67,7 @@ export default function ElevatorBookingAdmin(): React.ReactElement {
 
   const fetchBookings = async (): Promise<void> => {
     admin.getElevatorBookings().then((response) => {
-      setBookings(response);
+      setBookings(Array.isArray(response) ? response : response.data);
     });
   };
 

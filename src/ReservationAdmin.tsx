@@ -1,7 +1,7 @@
 import Grid from "@mui/material/Grid";
 
 import React, { useEffect, useState } from 'react';
-import { AdminManager, Reservation } from 'condo-brain';
+import { AdminManager, Reservation } from '@condomanagement/condo-brain';
 import { Theme } from '@mui/material/styles';
 import { createStyles } from './makeStyles';
 import { makeStyles } from './makeStyles';
@@ -54,7 +54,7 @@ export default function ReservationAdmin(): React.ReactElement {
 
   const fetchReservations = async (): Promise<void> => {
     admin.getReservations().then((response) => {
-      setReservations(response);
+      setReservations(Array.isArray(response) ? response : response.data);
     });
   };
 

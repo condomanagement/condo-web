@@ -18,7 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDolly } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { get as getCookie } from 'es-cookie';
-import { UserManager } from 'condo-brain';
+import { UserManager } from '@condomanagement/condo-brain';
 import Link from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
 import List from '@mui/material/List';

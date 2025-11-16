@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import { AdminManager, User, UserType } from 'condo-brain';
+import { AdminManager, User, UserType } from '@condomanagement/condo-brain';
 import { Theme } from '@mui/material/styles';
 import { createStyles } from './makeStyles';
 import { makeStyles } from './makeStyles';
@@ -189,7 +189,7 @@ export default function UserAdmin(): React.ReactElement {
   if (!admin) { return (<div />); }
   const fetchUsers = async (): Promise<void> => {
     admin.getUsers().then((response) => {
-      setUsers(response);
+      setUsers(Array.isArray(response) ? response : response.data);
     });
   };
 

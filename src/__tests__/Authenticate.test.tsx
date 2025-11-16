@@ -3,10 +3,10 @@ import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import Authenticate from '../Authenticate';
-import { UserManager } from 'condo-brain';
+import { UserManager } from '@condomanagement/condo-brain';
 
 // Mock dependencies
-jest.mock('condo-brain', () => ({
+jest.mock('@condomanagement/condo-brain', () => ({
   UserManager: jest.fn().mockImplementation(() => ({
     processLogin: jest.fn(),
     loggedIn: false,

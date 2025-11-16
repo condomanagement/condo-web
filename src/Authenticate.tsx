@@ -2,7 +2,7 @@ import Grid from "@mui/material/Grid";
 
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { UserManager } from 'condo-brain';
+import { UserManager } from '@condomanagement/condo-brain';
 
 export default function Authenticate({ userManager }: { userManager: UserManager }): React.ReactElement {
   const location = useLocation();

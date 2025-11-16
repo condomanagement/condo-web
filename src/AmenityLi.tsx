@@ -5,7 +5,7 @@ import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Amenity } from 'condo-brain';
+import { Amenity } from '@condomanagement/condo-brain';
 
 type AmenityProp = {
   children: Amenity;

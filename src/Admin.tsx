@@ -1,5 +1,5 @@
 import React from 'react';
-import { AdminManager, UserManager } from 'condo-brain';
+import { AdminManager, UserManager } from '@condomanagement/condo-brain';
 import { Theme } from '@mui/material/styles';
 import { createStyles } from './makeStyles';
 import { makeStyles } from './makeStyles';

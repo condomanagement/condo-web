@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { createStyles } from './makeStyles';
 import { makeStyles } from './makeStyles';
-import { UserManager } from 'condo-brain';
+import { UserManager } from '@condomanagement/condo-brain';
 import './styles/application.scss';
 import './styles/parking.scss';
 

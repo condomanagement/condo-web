@@ -2,7 +2,7 @@ import Grid from "@mui/material/Grid";
 
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
-import { AdminManager, Amenity, Question } from 'condo-brain';
+import { AdminManager, Amenity, Question } from '@condomanagement/condo-brain';
 import { Theme } from '@mui/material/styles';
 import { createStyles } from './makeStyles';
 import { makeStyles } from './makeStyles';

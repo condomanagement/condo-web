@@ -1,7 +1,7 @@
 import Grid from "@mui/material/Grid";
 
 import React, { useEffect, useState } from 'react';
-import { MyReservation, UserManager } from 'condo-brain';
+import { MyReservation, UserManager } from '@condomanagement/condo-brain';
 import { Alert, AlertTitle} from '@mui/material';
 import { Theme } from '@mui/material/styles';
 import { createStyles } from './makeStyles';

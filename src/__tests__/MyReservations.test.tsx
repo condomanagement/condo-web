@@ -3,10 +3,10 @@ import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
 import MyReservations from '../MyReservations';
-import { UserManager } from 'condo-brain';
+import { UserManager } from '@condomanagement/condo-brain';
 
 // Mock UserManager
-jest.mock('condo-brain', () => ({
+jest.mock('@condomanagement/condo-brain', () => ({
   UserManager: jest.fn().mockImplementation(() => ({
     getMyReservations: jest.fn(),
     deleteMyReservation: jest.fn(),

@@ -2,10 +2,10 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Login from '../Login';
-import { UserManager } from 'condo-brain';
+import { UserManager } from '@condomanagement/condo-brain';
 
 // Mock UserManager
-jest.mock('condo-brain', () => ({
+jest.mock('@condomanagement/condo-brain', () => ({
   UserManager: jest.fn().mockImplementation(() => ({
     login: jest.fn(),
   })),

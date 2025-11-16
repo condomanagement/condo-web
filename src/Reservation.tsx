@@ -28,7 +28,7 @@ import {
   Question,
   ReservationTime,
   UserManager,
-} from 'condo-brain';
+} from '@condomanagement/condo-brain';
 import Schedule from '@mui/icons-material/Schedule';
 import EventAvailable from '@mui/icons-material/EventAvailable';
 import moment from 'moment';

@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import { get as getCookie } from 'es-cookie';
-import { UserManager } from 'condo-brain';
+import { UserManager } from '@condomanagement/condo-brain';
 import { makeStyles } from './makeStyles';
 import Parking from './Parking';
 import Home from './Home';
