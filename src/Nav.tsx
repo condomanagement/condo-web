@@ -107,7 +107,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function NavBar({ userManager }: { userManager: UserManager }): JSX.Element {
+export default function NavBar({ userManager }: { userManager: UserManager }): React.ReactElement {
   const theme = useTheme();
   const [auth, setAuth] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

@@ -1,12 +1,13 @@
+import Grid2 from "@mui/material/Grid2";
+
 import React from 'react';
-import Grid from '@mui/material/Grid';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { UserManager } from 'condo-brain';
 
-export default function Authenticate({ userManager }: { userManager: UserManager }): JSX.Element {
+export default function Authenticate({ userManager }: { userManager: UserManager }): React.ReactElement {
   const location = useLocation();
   const emailKey = location.pathname.split('/')[2];
-  const [loginDisplay, setLoginDisplay] = React.useState<null | JSX.Element>(null);
+  const [loginDisplay, setLoginDisplay] = React.useState<null | React.ReactElement>(null);
   const navigate = useNavigate();
 
   const proccessing = (

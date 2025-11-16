@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Chip from '@mui/material/Chip';
-import makeStyles from '@mui/styles/makeStyles';
-import createStyles from '@mui/styles/createStyles';
+import { makeStyles } from './makeStyles';
+import { createStyles } from './makeStyles';
 import { Theme } from '@mui/material/styles';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -24,7 +24,7 @@ type QuestionProp = {
   setAmenityChecks: (checks: boolean[]) => void;
   amenities: Amenity[]
 }
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default function QuestionLI(prop: QuestionProp): JSX.Element {
+export default function QuestionLI(prop: QuestionProp): React.ReactElement {
   const {
     children,
     fetchQuestion,
@@ -65,7 +65,7 @@ export default function QuestionLI(prop: QuestionProp): JSX.Element {
     setAmenityChecks,
     amenities,
   } = prop;
-  const classes = useStyles();
+  const { classes } = useStyles();
   const question = children;
   const primary = question.question;
   const numberOfAmenities = question.amenities?.length;

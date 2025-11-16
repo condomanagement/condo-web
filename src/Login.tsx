@@ -1,12 +1,13 @@
+import Grid2 from "@mui/material/Grid2";
+
 import React from 'react';
 import Button from '@mui/material/Button';
 import Icon from '@mui/material/Icon';
-import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { Alert, AlertTitle } from '@mui/material';
 import { UserManager } from 'condo-brain';
 
-export default function Login({ userManager }: { userManager: UserManager }): JSX.Element {
+export default function Login({ userManager }: { userManager: UserManager }): React.ReactElement {
   const [processLogin, setProcessLogin] = React.useState<null | true>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [email, setEmail] = React.useState<null | string>(null);

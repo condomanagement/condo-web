@@ -1,7 +1,8 @@
+import Grid2 from "@mui/material/Grid2";
+
 import React from 'react';
 import {
   Button,
-  Grid,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import LocalParking from '@mui/icons-material/LocalParking';
@@ -9,7 +10,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import './styles/application.scss';
 import './styles/parking.scss';
 
-export default function Home(): JSX.Element {
+export default function Home(): React.ReactElement {
   const navigate = useNavigate();
 
   return (

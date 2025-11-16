@@ -1,10 +1,11 @@
+import Grid2 from "@mui/material/Grid2";
+
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import { AdminManager, Amenity, Question } from 'condo-brain';
-import { Grid } from '@mui/material';
 import { Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
+import { createStyles } from './makeStyles';
+import { makeStyles } from './makeStyles';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -16,7 +17,7 @@ import List from '@mui/material/List';
 import TextField from '@mui/material/TextField';
 import QuestionLI from './QuestionLi';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -44,8 +45,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default function QuestionAdmin(): JSX.Element {
-  const classes = useStyles();
+export default function QuestionAdmin(): React.ReactElement {
+  const { classes } = useStyles();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [value, setValue] = useState('');
   const [amenityOpen, setAmenityOpen] = useState(false);
@@ -250,7 +251,7 @@ export default function QuestionAdmin(): JSX.Element {
           <DialogContentText>
             {selectedQuestion?.question}
           </DialogContentText>
-          {amenities.map((amenity): JSX.Element => (
+          {amenities.map((amenity): React.ReactElement => (
             <>
               <FormControlLabel
                 control={(

@@ -1,10 +1,11 @@
+import Grid2 from "@mui/material/Grid2";
+
 import React, { useEffect, useState } from 'react';
 import { AdminManager, Reservation } from 'condo-brain';
-import { Grid } from '@mui/material';
 import { Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import withStyles from '@mui/styles/withStyles';
+import { createStyles } from './makeStyles';
+import { makeStyles } from './makeStyles';
+import { withStyles } from './makeStyles';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -32,7 +33,7 @@ const StyledTableRow = withStyles((theme: Theme) => createStyles({
   },
 }))(TableRow);
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -44,8 +45,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default function ReservationAdmin(): JSX.Element {
-  const classes = useStyles();
+export default function ReservationAdmin(): React.ReactElement {
+  const { classes } = useStyles();
   const [reservations, setReservations] = useState<Reservation[]>([]);
 
   const admin = new AdminManager();

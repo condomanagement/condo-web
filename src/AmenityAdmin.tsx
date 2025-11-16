@@ -1,10 +1,11 @@
+import Grid2 from "@mui/material/Grid2";
+
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import { AdminManager, Amenity } from 'condo-brain';
-import { Grid } from '@mui/material';
 import { Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
+import { createStyles } from './makeStyles';
+import { makeStyles } from './makeStyles';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import List from '@mui/material/List';
@@ -18,7 +19,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import AmenityLI from './AmenityLi';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -55,8 +56,8 @@ const minutesToReadable = (t: number): string => {
   return timeText;
 };
 
-export default function AmenityAdmin(): JSX.Element {
-  const classes = useStyles();
+export default function AmenityAdmin(): React.ReactElement {
+  const { classes } = useStyles();
   const [amenities, setAmenities] = useState<Amenity[]>([]);
   const [value, setValue] = useState('');
   const [visible, setVisible] = useState(true);

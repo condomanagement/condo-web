@@ -1,19 +1,20 @@
+import Grid2 from "@mui/material/Grid2";
+
 import React, { useState } from 'react';
 import {
   Alert,
   AlertTitle,
   Button,
-  Grid,
   Icon,
   TextField, Theme,
 } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
+import { createStyles } from './makeStyles';
+import { makeStyles } from './makeStyles';
 import { UserManager } from 'condo-brain';
 import './styles/application.scss';
 import './styles/parking.scss';
 
-export default function Parking({ userManager }: { userManager: UserManager }): JSX.Element {
+export default function Parking({ userManager }: { userManager: UserManager }): React.ReactElement {
   const [selectedStartDate, handleStartDateChange] = useState<Date | null>(new Date());
   const [selectedEndDate, handleEndDateChange] = useState<Date | null>(new Date());
   const [license, setLicense] = useState<string | unknown>('');
@@ -29,7 +30,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
   }
 
 
-  const useStyles = makeStyles((theme: Theme) => createStyles({
+  const useStyles = makeStyles()((theme) => ({
     root: {
       '& .MuiTextField-root': {
         margin: theme.spacing(1),
@@ -39,7 +40,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
   }));
 
   const styleProps: StyleProps = { backgroundColor: '#f37f30' };
-  const classes = useStyles(styleProps);
+  const { classes } = useStyles();
 
   const handleNativeStartDateChange = (date: string): void => {
     const startDate = new Date(`${date}T01:00:00-05:00`);

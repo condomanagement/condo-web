@@ -1,3 +1,5 @@
+import Grid2 from "@mui/material/Grid2";
+
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
@@ -5,7 +7,6 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
-  Grid,
   Icon,
   InputLabel,
   Link,
@@ -19,8 +20,8 @@ import {
 } from '@mui/material';
 import { get as getCookie } from 'es-cookie';
 import { useNavigate } from 'react-router-dom';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
+import { createStyles } from './makeStyles';
+import { makeStyles } from './makeStyles';
 import {
   Amenity,
   Question,
@@ -89,7 +90,7 @@ const formatTime = (date: Date): string => {
   return date.toLocaleTimeString([], options);
 };
 
-export default function Resevation(): JSX.Element {
+export default function Resevation(): React.ReactElement {
   const [selectedStartDate, setSelectedStartDateChange] = useState<Date>(roundToMinuteInterval(new Date(), 15));
   const [selectedEndDate, setSelectedEndDateChange] = useState<Date>(addMinutes(selectedStartDate, 30));
   const [amenity, setAmenity] = useState<string>('');
@@ -100,7 +101,7 @@ export default function Resevation(): JSX.Element {
   const [thanks, setThanks] = useState(false);
   const [amenityTime, setAmenityTime] = useState<number>(60);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [availability, setAvailability] = useState<JSX.Element | null>(null);
+  const [availability, setAvailability] = useState<React.ReactElement | null>(null);
   const [selectedAmenityName, setSelectedAmenityName] = useState<string>('');
   const [auth, setAuth] = useState(false);
   const [vaccinated, setVaccinated] = useState(false);
@@ -338,7 +339,7 @@ export default function Resevation(): JSX.Element {
     setSelectedEndDateChange(roundToMinuteInterval(endDate, 15));
   };
 
-  const useStyles = makeStyles(() => createStyles({
+  const useStyles = makeStyles()(() => createStyles({
     root: {
       '& .MuiTextField-root': {
         width: '100%',
@@ -346,7 +347,7 @@ export default function Resevation(): JSX.Element {
     },
   }));
 
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   return (
     <div>

@@ -1,8 +1,8 @@
 import React from 'react';
 import { AdminManager, UserManager } from 'condo-brain';
 import { Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
+import { createStyles } from './makeStyles';
+import { makeStyles } from './makeStyles';
 import {
   Box,
   Paper,
@@ -17,7 +17,7 @@ import ReservationAdmin from './ReservationAdmin';
 import ParkingAdmin from './ParkingAdmin';
 import ElevatorBookingAdmin from './ElevatorBookingAdmin';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -51,7 +51,7 @@ interface TabPanelProps {
   value: number;
 }
 
-function TabPanel(props: TabPanelProps): JSX.Element {
+function TabPanel(props: TabPanelProps): React.ReactElement {
   const { children, value, index } = props;
   const admin = new AdminManager();
   const navigate = useNavigate();
@@ -74,8 +74,8 @@ function TabPanel(props: TabPanelProps): JSX.Element {
   );
 }
 
-export default function Admin({ userManager }: { userManager: UserManager }): JSX.Element {
-  const classes = useStyles();
+export default function Admin({ userManager }: { userManager: UserManager }): React.ReactElement {
+  const { classes } = useStyles();
   const [value, setValue] = React.useState(1);
 
   const admin = new AdminManager();

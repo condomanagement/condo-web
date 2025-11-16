@@ -1,3 +1,5 @@
+import Grid2 from "@mui/material/Grid2";
+
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
@@ -5,7 +7,6 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
-  Grid,
   Icon,
   InputLabel,
   Link,
@@ -60,7 +61,7 @@ const formatTime = (date: Date): string => {
   return date.toLocaleTimeString([], options);
 };
 
-export default function ElevatorBooking({ userManager }: { userManager: UserManager }): JSX.Element {
+export default function ElevatorBooking({ userManager }: { userManager: UserManager }): React.ReactElement {
   const [selectedStartDate, setSelectedStartDateChange] = useState<Date>(roundToMinuteInterval(new Date(), 15));
   const [selectedEndDate, setSelectedEndDateChange] = useState<Date>(addMinutes(selectedStartDate, 30));
   const [thanks, setThanks] = useState(false);

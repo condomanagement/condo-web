@@ -36,7 +36,7 @@ const minutesToReadable = (t: number): string => {
   return timeText;
 };
 
-export default function AmenityLI(prop: AmenityProp): JSX.Element {
+export default function AmenityLI(prop: AmenityProp): React.ReactElement {
   const {
     setAmenityToDelete,
     setSelectedAmenity,

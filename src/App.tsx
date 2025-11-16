@@ -1,18 +1,17 @@
+import Grid2 from "@mui/material/Grid2";
+
 import React from 'react';
 import * as Parallax from 'react-parallax';
-import { Grid } from '@mui/material';
 import {
   Route,
   Routes,
   useLocation,
   useNavigate,
 } from 'react-router-dom';
-import { Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { get as getCookie } from 'es-cookie';
 import { UserManager } from 'condo-brain';
+import { makeStyles } from './makeStyles';
 import Parking from './Parking';
 import Home from './Home';
 import Admin from './Admin';
@@ -26,7 +25,7 @@ import './styles/application.scss';
 import ArrowLoftsWhite from './images/ArrowLofts-White.svg';
 import ArrowLoftsRendering from './images/Arrow-Lofts-Rendering.jpg';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     display: 'flex',
   },
@@ -35,21 +34,20 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
+    ...(theme.mixins.toolbar as any),
   },
   content: {
     flexGrow: 1,
   },
 }));
 
-function App(): JSX.Element {
+function App(): React.ReactElement {
   const [userManager] = React.useState(new UserManager());
   const [auth, setAuth] = React.useState(false);
   const [rootState, setRootState] = React.useState<string | undefined>(undefined);
   const [toolbarState, setToolbarState] = React.useState<string | undefined>(undefined);
   const [contentState, setContentState] = React.useState<string | undefined>(undefined);
-  const classes = useStyles({});
+  const { classes } = useStyles();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -59,8 +57,11 @@ function App(): JSX.Element {
       userManager.validateToken(token).then((_result) => {
         if (userManager.loggedIn) {
           setAuth(true);
+          // @ts-ignore - tss-react type inference issue
           setRootState(classes.root);
+          // @ts-ignore - tss-react type inference issue
           setToolbarState(classes.toolbar);
+          // @ts-ignore - tss-react type inference issue
           setContentState(classes.content);
           if (location.pathname === '/') {
             navigate('/reservation');

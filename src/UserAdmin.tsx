@@ -1,11 +1,12 @@
+import Grid2 from "@mui/material/Grid2";
+
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { AdminManager, User, UserType } from 'condo-brain';
-import { Grid } from '@mui/material';
 import { Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
+import { createStyles } from './makeStyles';
+import { makeStyles } from './makeStyles';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -31,13 +32,13 @@ type UsersProp = {
   editUser: (user: User) => void;
 }
 
-function UserLI(prop: UserProp): JSX.Element {
+function UserLI(prop: UserProp): React.ReactElement {
   const { user, editUser } = prop;
   const vacState = user.vaccinated ? '💉' : '🦠';
   const primary = `${vacState} ${user.name}`;
 
   return (
-    <ListItem disabled={!user.active}>
+    <ListItem sx={{ opacity: user.active ? 1 : 0.5 }}>
       <ListItemText
         primary={primary}
         secondary={(
@@ -136,7 +137,7 @@ const ListOfUsers = React.memo((prop: UsersProp) => {
   return (<List>{usersLI}</List>);
 });
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -164,8 +165,8 @@ const emptyUser = {
   type: UserType.None,
 };
 
-export default function UserAdmin(): JSX.Element {
-  const classes = useStyles();
+export default function UserAdmin(): React.ReactElement {
+  const { classes } = useStyles();
   const [users, setUsers] = useState<User[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<FileList | undefined>(undefined);
   const [currentFile, setCurrentFile] = useState<File | undefined>(undefined);
