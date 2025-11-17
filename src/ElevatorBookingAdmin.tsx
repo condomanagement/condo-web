@@ -1,28 +1,26 @@
-import Grid from "@mui/material/Grid";
 
-import React, { useEffect, useState } from 'react';
 import { AdminManager, BookingStatus, ElevatorBooking } from '@condomanagement/condo-brain';
+import EditIcon from '@mui/icons-material/Edit';
 import { TextField } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import { createStyles } from './makeStyles';
-import { makeStyles } from './makeStyles';
-import { withStyles } from './makeStyles';
-import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
+import Paper from '@mui/material/Paper';
+import { Theme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { createStyles, makeStyles, withStyles } from './makeStyles';
 
 const StyledTableCell = withStyles((theme: Theme) => createStyles({
   head: {
@@ -63,13 +61,19 @@ export default function ElevatorBookingAdmin(): React.ReactElement {
   const [rejection, setRejection] = useState('');
 
   const admin = new AdminManager();
-  if (!admin) { return (<div />); }
 
   const fetchBookings = async (): Promise<void> => {
     admin.getElevatorBookings().then((response) => {
       setBookings(Array.isArray(response) ? response : response.data);
     });
   };
+
+  useEffect(() => {
+    fetchBookings();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!admin) { return (<div />); }
 
   const showBooking = (booking: ElevatorBooking): void => {
     setSelectedBooking(booking);
@@ -150,11 +154,6 @@ export default function ElevatorBookingAdmin(): React.ReactElement {
       )}
     </>
   );
-
-  useEffect(() => {
-    fetchBookings();
-  }, [bookings.length]);
-
 
   const bookingPopup = (
     <Dialog open={bookingOpen} aria-labelledby="form-dialog-title" fullWidth>
@@ -274,7 +273,8 @@ export default function ElevatorBookingAdmin(): React.ReactElement {
                 id="rejection"
                 label="Reason for Rejection"
                 multiline
-                fullWidth sx={{ mt: '20px' }}
+                fullWidth
+                sx={{ mt: '20px' }}
                 value={rejection}
                 rows={50}
                 placeholder="Enter a reason for rejecting this booking."

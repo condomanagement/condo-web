@@ -25,6 +25,12 @@ module.exports = {
         },
       },
       {
+        test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false,
+        },
+      },
+      {
         test: /\.scss$/,
         use: [
           'style-loader',
@@ -63,7 +69,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.tsx', '.ts', '.js', '.mjs'],
     fallback: {
       'zlib': require.resolve('browserify-zlib'),
       'util': require.resolve('util/'),
@@ -77,7 +83,7 @@ module.exports = {
       'assert': require.resolve('assert/'),
       'buffer': require.resolve('buffer/'),
       'process': require.resolve('process/browser'),
-    }
+    },
   },
   output: {
     publicPath: '/',
@@ -109,8 +115,11 @@ module.exports = {
     host: 'localhost',
     port: 3001,
     // Public path is root of content base
-    proxy: {
-      '/api': 'http://localhost:3000'
-    },
+    proxy: [
+      {
+        context: ['/api'],
+        target: 'http://localhost:3000',
+      },
+    ],
   },
 };

@@ -1,5 +1,5 @@
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
 import Home from '../Home';
@@ -20,9 +20,9 @@ describe('Home Component', () => {
     render(
       <BrowserRouter>
         <Home />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
-    
+
     expect(screen.getByText('Resident Login')).toBeInTheDocument();
     expect(screen.getByText('Visitor Parking Registration')).toBeInTheDocument();
   });
@@ -31,12 +31,12 @@ describe('Home Component', () => {
     render(
       <BrowserRouter>
         <Home />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
-    
+
     const loginButton = screen.getByText('Resident Login');
     fireEvent.click(loginButton);
-    
+
     expect(mockNavigate).toHaveBeenCalledWith('/login');
   });
 
@@ -44,12 +44,12 @@ describe('Home Component', () => {
     render(
       <BrowserRouter>
         <Home />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
-    
+
     const parkingButton = screen.getByText('Visitor Parking Registration');
     fireEvent.click(parkingButton);
-    
+
     expect(mockNavigate).toHaveBeenCalledWith('/parking');
   });
 
@@ -57,9 +57,9 @@ describe('Home Component', () => {
     render(
       <BrowserRouter>
         <Home />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
-    
+
     const buttons = screen.getAllByRole('button');
     expect(buttons).toHaveLength(2);
   });

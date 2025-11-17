@@ -1,20 +1,18 @@
-import Grid from "@mui/material/Grid";
 
-import React, { useEffect, useState } from 'react';
-import Button from '@mui/material/Button';
 import { AdminManager, Amenity, Question } from '@condomanagement/condo-brain';
-import { Theme } from '@mui/material/styles';
-import { createStyles } from './makeStyles';
-import { makeStyles } from './makeStyles';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import TextField from '@mui/material/TextField';
+import React, { useEffect, useState } from 'react';
+import { makeStyles } from './makeStyles';
 import QuestionLI from './QuestionLi';
 
 const useStyles = makeStyles()((theme) => ({
@@ -58,12 +56,26 @@ export default function QuestionAdmin(): React.ReactElement {
   const [deleteOpen, setDeleteOpen] = React.useState(false);
 
   const admin = new AdminManager();
-  if (!admin) { return (<div />); }
+
   const fetchQuestion = async (): Promise<void> => {
     admin.getQuestions().then((response) => {
       setQuestions(response);
     });
   };
+
+  const fetchAmenities = async (): Promise<void> => {
+    admin.getAmenities().then((response) => {
+      setAmenities(response);
+    });
+  };
+
+  useEffect(() => {
+    fetchAmenities();
+    fetchQuestion();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!admin) { return (<div />); }
 
   function addQuestion(e: React.FormEvent): void {
     e.preventDefault();
@@ -109,17 +121,6 @@ export default function QuestionAdmin(): React.ReactElement {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setValue(event.target.value);
   };
-
-  const fetchAmenities = async (): Promise<void> => {
-    admin.getAmenities().then((response) => {
-      setAmenities(response);
-    });
-  };
-
-  useEffect(() => {
-    fetchQuestion();
-    fetchAmenities();
-  }, [questions.length]);
 
   const handleCheckChange = (
     event: React.ChangeEvent<{ name?: string; checked: unknown }>,

@@ -1,7 +1,7 @@
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import './styles/index.scss';
 import App from './App';
 
@@ -19,12 +19,7 @@ const root = createRoot(container!);
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <BrowserRouter
-        future={{
-          v7_startTransition: true,
-          v7_relativeSplatPath: true,
-        }}
-      >
+      <BrowserRouter>
         <App />
       </BrowserRouter>
     </ThemeProvider>

@@ -1,26 +1,23 @@
-import Grid from "@mui/material/Grid";
-
-import React, { useEffect, useState } from 'react';
+import { AdminManager, User, UserType } from '@condomanagement/condo-brain';
+import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import { AdminManager, User, UserType } from '@condomanagement/condo-brain';
-import { Theme } from '@mui/material/styles';
-import { createStyles } from './makeStyles';
-import { makeStyles } from './makeStyles';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
+import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import React, { useEffect, useState } from 'react';
+import { makeStyles } from './makeStyles';
 
 type UserProp = {
   user: User;
@@ -136,6 +133,7 @@ const ListOfUsers = React.memo((prop: UsersProp) => {
   ));
   return (<List>{usersLI}</List>);
 });
+ListOfUsers.displayName = 'ListOfUsers';
 
 const useStyles = makeStyles()((theme) => ({
   root: {
@@ -186,12 +184,29 @@ export default function UserAdmin(): React.ReactElement {
   const [userVaccinated, setUserVaccinated] = useState(false);
 
   const admin = new AdminManager();
-  if (!admin) { return (<div />); }
+
   const fetchUsers = async (): Promise<void> => {
     admin.getUsers().then((response) => {
       setUsers(Array.isArray(response) ? response : response.data);
     });
   };
+
+  useEffect(() => {
+    fetchUsers();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    let showUsers = users;
+    if (hideInactive) {
+      showUsers = showUsers.filter((user) => user.active);
+    }
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    setUserList(<ListOfUsers localUsers={showUsers} editUser={editUser} />);
+
+  }, [users, hideInactive]);
+
+  if (!admin) { return (<div />); }
 
   const handleChange = (selectorFiles: FileList | null): void => {
     if (selectorFiles) {
@@ -466,18 +481,6 @@ export default function UserAdmin(): React.ReactElement {
       </Dialog>
     </form>
   );
-
-  useEffect(() => {
-    fetchUsers();
-  }, [users.length]);
-
-  useEffect(() => {
-    let showUsers = users;
-    if (hideInactive) {
-      showUsers = showUsers.filter((user) => user.active);
-    }
-    setUserList(<ListOfUsers localUsers={showUsers} editUser={editUser} />);
-  }, [users, hideInactive]);
 
   return (
     <div className="section flex-grow">

@@ -1,5 +1,7 @@
-import Grid from "@mui/material/Grid";
-
+import { UserManager } from '@condomanagement/condo-brain';
+import CssBaseline from '@mui/material/CssBaseline';
+import Grid from '@mui/material/Grid';
+import { get as getCookie } from 'es-cookie';
 import React from 'react';
 import * as Parallax from 'react-parallax';
 import {
@@ -8,22 +10,19 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom';
-import CssBaseline from '@mui/material/CssBaseline';
-import { get as getCookie } from 'es-cookie';
-import { UserManager } from '@condomanagement/condo-brain';
-import { makeStyles } from './makeStyles';
-import Parking from './Parking';
-import Home from './Home';
 import Admin from './Admin';
 import Authenticate from './Authenticate';
-import Reservation from './Reservation';
 import ElevatorBooking from './ElevatorBooking';
-import Login from './Login';
-import Nav from './Nav';
-import MyReservations from './MyReservations';
-import './styles/application.scss';
-import ArrowLoftsWhite from './images/ArrowLofts-White.svg';
+import Home from './Home';
 import ArrowLoftsRendering from './images/Arrow-Lofts-Rendering.jpg';
+import ArrowLoftsWhite from './images/ArrowLofts-White.svg';
+import Login from './Login';
+import { makeStyles } from './makeStyles';
+import MyReservations from './MyReservations';
+import Nav from './Nav';
+import Parking from './Parking';
+import Reservation from './Reservation';
+import './styles/application.scss';
 
 const useStyles = makeStyles()((theme) => ({
   root: {
@@ -34,6 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: theme.spacing(0, 1),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...(theme.mixins.toolbar as any),
   },
   content: {
@@ -80,6 +80,7 @@ function App(): React.ReactElement {
       checkLogin();
       clearTimeout(timer);
     }, 1000);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
   return (

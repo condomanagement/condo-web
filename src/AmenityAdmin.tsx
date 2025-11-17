@@ -1,24 +1,22 @@
-import Grid from "@mui/material/Grid";
 
-import React, { useEffect, useState } from 'react';
-import Button from '@mui/material/Button';
 import { AdminManager, Amenity } from '@condomanagement/condo-brain';
-import { Theme } from '@mui/material/styles';
-import { createStyles } from './makeStyles';
-import { makeStyles } from './makeStyles';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import List from '@mui/material/List';
-import TextField from '@mui/material/TextField';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
+import InputLabel from '@mui/material/InputLabel';
+import List from '@mui/material/List';
+import Select from '@mui/material/Select';
+import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
+import React, { useEffect, useState } from 'react';
 import AmenityLI from './AmenityLi';
+import { makeStyles } from './makeStyles';
 
 const useStyles = makeStyles()((theme) => ({
   root: {
@@ -70,12 +68,19 @@ export default function AmenityAdmin(): React.ReactElement {
   const [deleteOpen, setDeleteOpen] = React.useState(false);
 
   const admin = new AdminManager();
-  if (!admin) { return (<div />); }
+
   const fetchAmenities = async (): Promise<void> => {
     admin.getAmenities().then((response) => {
       setAmenities(response);
     });
   };
+
+  useEffect(() => {
+    fetchAmenities();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!admin) { return (<div />); }
 
   function addAmenity(e: React.FormEvent): void {
     e.preventDefault();
@@ -132,10 +137,6 @@ export default function AmenityAdmin(): React.ReactElement {
   const handleVaccineChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setVaccine(event.target.checked);
   };
-
-  useEffect(() => {
-    fetchAmenities();
-  }, [amenities.length]);
 
   const times = [];
   for (let t = 15; t <= 240; t += 15) {

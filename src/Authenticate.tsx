@@ -1,8 +1,7 @@
-import Grid from "@mui/material/Grid";
-
+import { UserManager } from '@condomanagement/condo-brain';
+import Grid from '@mui/material/Grid';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { UserManager } from '@condomanagement/condo-brain';
 
 export default function Authenticate({ userManager }: { userManager: UserManager }): React.ReactElement {
   const location = useLocation();
@@ -49,6 +48,7 @@ export default function Authenticate({ userManager }: { userManager: UserManager
   React.useEffect(() => {
     setLoginDisplay(proccessing);
     checkToken();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emailKey]);
 
   return (

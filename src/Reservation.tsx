@@ -1,6 +1,11 @@
-import Grid from "@mui/material/Grid";
-
-import React, { useEffect, useState } from 'react';
+import {
+  Amenity,
+  Question,
+  ReservationTime,
+  UserManager,
+} from '@condomanagement/condo-brain';
+import EventAvailable from '@mui/icons-material/EventAvailable';
+import Schedule from '@mui/icons-material/Schedule';
 import {
   Alert,
   AlertTitle,
@@ -19,19 +24,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { get as getCookie } from 'es-cookie';
-import { useNavigate } from 'react-router-dom';
-import { createStyles } from './makeStyles';
-import { makeStyles } from './makeStyles';
-import {
-  Amenity,
-  Question,
-  ReservationTime,
-  UserManager,
-} from '@condomanagement/condo-brain';
-import Schedule from '@mui/icons-material/Schedule';
-import EventAvailable from '@mui/icons-material/EventAvailable';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createStyles, makeStyles } from './makeStyles';
 import './styles/application.scss';
 import './styles/parking.scss';
 
@@ -177,7 +175,7 @@ export default function Resevation(): React.ReactElement {
           </>,
         );
       } else {
-        // eslint-disable-next-line
+
         result.sort((r1: ReservationTime, r2: ReservationTime) => r1.startTime < r2.startTime ? -1 : 1);
         const times: string[] = [];
         const dateToShow = moment(selectedStartDate).local().format('YYYY-MM-DD');
@@ -207,7 +205,7 @@ export default function Resevation(): React.ReactElement {
             </AlertTitle>
             <List>
               {times.map((time) => (
-                <ListItem style={{ paddingTop: 0, paddingBottom: 0 }}>
+                <ListItem key={time} style={{ paddingTop: 0, paddingBottom: 0 }}>
                   <ListItemText
                     style={{ marginBottom: 0, marginTop: 0 }}
                     primary={time}
@@ -248,14 +246,17 @@ export default function Resevation(): React.ReactElement {
 
   useEffect(() => {
     fetchAmenities();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amenities.length]);
 
   useEffect(() => {
     filterVaccinatedAmenities();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amenities.length, auth]);
 
   useEffect(() => {
     findReservations();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amenity, selectedStartDate]);
 
   useEffect(() => {
@@ -265,6 +266,7 @@ export default function Resevation(): React.ReactElement {
       checkLogin();
       clearTimeout(timer);
     }, 1000);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
   const handleAmenityChange = (event: SelectChangeEvent<string>): void => {
@@ -388,7 +390,7 @@ export default function Resevation(): React.ReactElement {
             <Grid size={{ xs: 12 }} className="center">
               <Button
                 variant="contained"
-                onClick={(): void => navigate('/myreservations')}
+                onClick={(): void => { navigate('/myreservations'); }}
                 sx={{
                   backgroundColor: '#f37f30',
                   color: 'white',

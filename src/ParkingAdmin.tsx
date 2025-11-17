@@ -1,12 +1,8 @@
-import Grid from "@mui/material/Grid";
 
-import React, { useEffect, useState } from 'react';
 import { AdminManager, ParkingRegistration } from '@condomanagement/condo-brain';
-import { Theme } from '@mui/material/styles';
-import { createStyles } from './makeStyles';
-import { makeStyles } from './makeStyles';
-import { withStyles } from './makeStyles';
+import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import { Theme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -16,6 +12,8 @@ import TableRow from '@mui/material/TableRow';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { createStyles, makeStyles, withStyles } from './makeStyles';
 
 const StyledTableCell = withStyles((theme: Theme) => createStyles({
   head: {
@@ -53,7 +51,6 @@ export default function ParkingAdmin(): React.ReactElement {
   const [whenView, setWhenView] = useState<string>('today');
 
   const admin = new AdminManager();
-  if (!admin) { return (<div />); }
 
   const fetchRegistrations = async (): Promise<void> => {
     admin.getParkingRegistrations(whenView).then((response) => {
@@ -61,15 +58,18 @@ export default function ParkingAdmin(): React.ReactElement {
     });
   };
 
+  useEffect(() => {
+    fetchRegistrations();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [whenView]);
+
+  if (!admin) { return (<div />); }
+
   const handleWhen = (_event: React.MouseEvent<HTMLElement>, newAlignment: string | null): void => {
     if (newAlignment !== null) {
       setWhenView(newAlignment);
     }
   };
-
-  useEffect(() => {
-    fetchRegistrations();
-  }, [whenView]);
 
   return (
     <div className="section flex-grow">

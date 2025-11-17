@@ -1,12 +1,11 @@
-import Grid from "@mui/material/Grid";
-
-import React from 'react';
+import HomeIcon from '@mui/icons-material/Home';
+import LocalParking from '@mui/icons-material/LocalParking';
 import {
   Button,
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import LocalParking from '@mui/icons-material/LocalParking';
-import HomeIcon from '@mui/icons-material/Home';
 import './styles/application.scss';
 import './styles/parking.scss';
 
@@ -24,7 +23,7 @@ export default function Home(): React.ReactElement {
               color: 'white',
               marginBottom: '20px',
             }}
-            onClick={(): void => navigate('/login')}
+            onClick={(): void => { navigate('/login'); }}
             startIcon={<HomeIcon />}
             type="submit"
           >
@@ -34,7 +33,7 @@ export default function Home(): React.ReactElement {
         <Grid size={{ xs: 12 }}>
           <Button
             variant="contained"
-            onClick={(): void => navigate('/parking')}
+            onClick={(): void => { navigate('/parking'); }}
             sx={{
               backgroundColor: '#f37f30',
               color: 'white',

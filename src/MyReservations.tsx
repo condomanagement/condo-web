@@ -1,23 +1,21 @@
-import Grid from "@mui/material/Grid";
 
-import React, { useEffect, useState } from 'react';
 import { MyReservation, UserManager } from '@condomanagement/condo-brain';
-import { Alert, AlertTitle} from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import { createStyles } from './makeStyles';
-import { makeStyles } from './makeStyles';
-import { withStyles } from './makeStyles';
-import { get as getCookie } from 'es-cookie';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Alert, AlertTitle } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
+import { Theme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { get as getCookie } from 'es-cookie';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { createStyles, makeStyles, withStyles } from './makeStyles';
 
 const StyledTableCell = withStyles((theme: Theme) => createStyles({
   head: {
@@ -90,11 +88,13 @@ export default function MyReservations({ userManager }: { userManager: UserManag
       checkLogin();
       clearTimeout(timer);
     }, 1000);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
 
   useEffect(() => {
     fetchReservations();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reservations.length]);
 
   return (

@@ -1,16 +1,14 @@
-import Grid from "@mui/material/Grid";
-
-import React, { useState } from 'react';
+import { UserManager } from '@condomanagement/condo-brain';
 import {
   Alert,
   AlertTitle,
   Button,
   Icon,
-  TextField, Theme,
+  TextField,
 } from '@mui/material';
-import { createStyles } from './makeStyles';
+import Grid from '@mui/material/Grid';
+import React, { useState } from 'react';
 import { makeStyles } from './makeStyles';
-import { UserManager } from '@condomanagement/condo-brain';
 import './styles/application.scss';
 import './styles/parking.scss';
 
@@ -25,11 +23,6 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
   const [thanks, setThanks] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  interface StyleProps {
-    backgroundColor: string;
-  }
-
-
   const useStyles = makeStyles()((theme) => ({
     root: {
       '& .MuiTextField-root': {
@@ -39,7 +32,6 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
     },
   }));
 
-  const styleProps: StyleProps = { backgroundColor: '#f37f30' };
   const { classes } = useStyles();
 
   const handleNativeStartDateChange = (date: string): void => {

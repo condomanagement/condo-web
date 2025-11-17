@@ -20,12 +20,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
+          cache: 'npm'
 
-      - name: npm install, build, and test
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
         run: |
-          npm install
-          npm run build --if-present
-          npm run build-server --if-present
+          npm run build
+          npm run build-server
 
       - name: Zip artifact for deployment
         run: zip -r release.zip . --exclude '*node_modules*'

@@ -1,6 +1,4 @@
-import Grid from "@mui/material/Grid";
-
-import React, { useEffect, useState } from 'react';
+import { UserManager, UserType } from '@condomanagement/condo-brain';
 import {
   Alert,
   AlertTitle,
@@ -16,10 +14,11 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { UserManager, UserType } from '@condomanagement/condo-brain';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
 import './styles/application.scss';
 import './styles/parking.scss';
 
@@ -235,6 +234,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
 
   useEffect(() => {
     if (userManager.userType !== UserType.Owner) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setMoveType(1);
     }
   }, [userManager]);
