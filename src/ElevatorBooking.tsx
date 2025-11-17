@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { UserManager, UserType } from '@condomanagement/condo-brain';
 import {
   Alert,
   AlertTitle,
   Button,
   Checkbox,
+  FormControl,
   FormControlLabel,
-  Grid,
   Icon,
   InputLabel,
   Link,
@@ -14,10 +14,11 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { UserManager, UserType } from 'condo-brain';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
 import './styles/application.scss';
 import './styles/parking.scss';
 
@@ -60,7 +61,7 @@ const formatTime = (date: Date): string => {
   return date.toLocaleTimeString([], options);
 };
 
-export default function ElevatorBooking({ userManager }: { userManager: UserManager }): JSX.Element {
+export default function ElevatorBooking({ userManager }: { userManager: UserManager }): React.ReactElement {
   const [selectedStartDate, setSelectedStartDateChange] = useState<Date>(roundToMinuteInterval(new Date(), 15));
   const [selectedEndDate, setSelectedEndDateChange] = useState<Date>(addMinutes(selectedStartDate, 30));
   const [thanks, setThanks] = useState(false);
@@ -233,6 +234,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
 
   useEffect(() => {
     if (userManager.userType !== UserType.Owner) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setMoveType(1);
     }
   }, [userManager]);
@@ -242,7 +244,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
       { thanks && (
         <div className="section flex-grow">
           <Grid container spacing={1}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <h4 className="center">Elevator Reservation Submitted</h4>
               <p className="center">
                 Thank you!
@@ -259,7 +261,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
         <form noValidate autoComplete="off" onSubmit={reserve}>
           <div className="section flex-grow">
             <Grid container spacing={5}>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <h4 className="center">Reserve Elevator</h4>
                 <Alert severity="info">
                   <AlertTitle>Available hours</AlertTitle>
@@ -297,26 +299,28 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                 )}
               </Grid>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Grid item xs={6}>
-                  <InputLabel htmlFor="age-native-simple">Type</InputLabel>
-                  <Select
-                    native
-                    value={String(moveType)}
-                    onChange={handleTypeChange}
-                    inputProps={{
-                      name: 'moveType',
-                      id: 'moveType',
-                    }}
-                    style={{ width: '100%' }}
-                  >
-                    <option aria-label="None" value="" />
-                    <option key="delivery" value="1">Delivery / Disposal</option>
-                    {userManager.userType === UserType.Owner && (
-                      <option key="move" value="2">Move</option>
-                    )}
-                  </Select>
+                <Grid size={{ xs: 6 }}>
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor="moveType">Type</InputLabel>
+                    <Select
+                      native
+                      value={String(moveType)}
+                      onChange={handleTypeChange}
+                      inputProps={{
+                        name: 'moveType',
+                        id: 'moveType',
+                      }}
+                      label="Type"
+                    >
+                      <option aria-label="None" value="" />
+                      <option key="delivery" value="1">Delivery / Disposal</option>
+                      {userManager.userType === UserType.Owner && (
+                        <option key="move" value="2">Move</option>
+                      )}
+                    </Select>
+                  </FormControl>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <TextField
                     id="start"
                     label="Date"
@@ -326,10 +330,10 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                     InputLabelProps={{
                       shrink: true,
                     }}
-                    sx={{ width: '100%' }}
+                    fullWidth
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <TextField
                     id="startTime"
                     label="Start Time"
@@ -339,10 +343,10 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                     InputLabelProps={{
                       shrink: true,
                     }}
-                    sx={{ width: '100%' }}
+                    fullWidth
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <TextField
                     id="endTime"
                     label="End Time"
@@ -352,55 +356,55 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                     InputLabelProps={{
                       shrink: true,
                     }}
-                    sx={{ width: '100%' }}
+                    fullWidth
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <TextField
                     id="name1"
                     label="Resident 1"
-                    style={{ width: '100%' }}
+                    fullWidth
                     value={name1 || ''}
                     onChange={(e): void => setName1(e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <TextField
                     id="name2"
                     label="Resident 2 (if applicable)"
-                    style={{ width: '100%' }}
+                    fullWidth
                     value={name2 || ''}
                     onChange={(e): void => setName2(e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <TextField
                     id="phoneDay"
                     label="Daytime number"
-                    style={{ width: '100%' }}
+                    fullWidth
                     value={phoneDay || ''}
                     onChange={(e): void => setPhoneDay(e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <TextField
                     id="phoneNight"
                     label="Evening number"
-                    style={{ width: '100%' }}
+                    fullWidth
                     value={phoneNight || ''}
                     onChange={(e): void => setPhoneNight(e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <TextField
                     id="unit"
                     label="Unit"
-                    style={{ width: '100%' }}
+                    fullWidth
                     value={unit || ''}
                     onChange={(e): void => setUnit(Number(e.target.value))}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   {moveType !== 0 && (
                     <div>
                       <FormControlLabel
@@ -429,7 +433,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                   )}
                 </Grid>
                 {moveType === 2 && (
-                  <Grid item xs={12}>
+                  <Grid size={{ xs: 12 }}>
                     <Alert severity="warning">
                       <AlertTitle>
                         You will be contacted for the below moving fee
@@ -460,7 +464,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                     </Alert>
                   </Grid>
                 )}
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Typography>
                     Please ensure that you follow the posted instructions as well as complying with the
                     {' '}
@@ -471,7 +475,7 @@ export default function ElevatorBooking({ userManager }: { userManager: UserMana
                   </Typography>
                 </Grid>
                 {moveType !== 0 && (
-                  <Grid item xs={12} className="center">
+                  <Grid size={{ xs: 12 }} className="center">
                     <Button
                       variant="contained"
                       type="submit"

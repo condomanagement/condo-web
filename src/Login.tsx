@@ -1,12 +1,12 @@
-import React from 'react';
-import Button from '@mui/material/Button';
-import Icon from '@mui/material/Icon';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
+import { UserManager } from '@condomanagement/condo-brain';
 import { Alert, AlertTitle } from '@mui/material';
-import { UserManager } from 'condo-brain';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Icon from '@mui/material/Icon';
+import TextField from '@mui/material/TextField';
+import React from 'react';
 
-export default function Login({ userManager }: { userManager: UserManager }): JSX.Element {
+export default function Login({ userManager }: { userManager: UserManager }): React.ReactElement {
   const [processLogin, setProcessLogin] = React.useState<null | true>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [email, setEmail] = React.useState<null | string>(null);
@@ -28,10 +28,10 @@ export default function Login({ userManager }: { userManager: UserManager }): JS
   const loginFrom = (
     <form noValidate autoComplete="off" onSubmit={(e): void => doLogin(e)}>
       <Grid container spacing={5}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <h4 className="center">Login</h4>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             id="email"
             label="Email address used with Condo Control Central"
@@ -42,7 +42,7 @@ export default function Login({ userManager }: { userManager: UserManager }): JS
             }}
           />
         </Grid>
-        <Grid item xs={12} className="center">
+        <Grid size={{ xs: 12 }} className="center">
           <Button
             variant="contained"
             sx={{
@@ -62,13 +62,13 @@ export default function Login({ userManager }: { userManager: UserManager }): JS
 
   const loggingIn = (
     <Grid container spacing={5}>
-      <Grid item xs={12}>
+      <Grid size={{ xs: 12 }}>
         <h4 className="center">
           {error && (<>Error</>)}
           {!error && (<>Check your Email</>)}
         </h4>
       </Grid>
-      <Grid item xs={12} className="center">
+      <Grid size={{ xs: 12 }} className="center">
         {error && (
           <Alert severity="error">
             <AlertTitle>Error</AlertTitle>

@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
-import Chip from '@mui/material/Chip';
-import makeStyles from '@mui/styles/makeStyles';
-import createStyles from '@mui/styles/createStyles';
-import { Theme } from '@mui/material/styles';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Amenity, Question } from '@condomanagement/condo-brain';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Amenity, Question } from 'condo-brain';
+import Chip from '@mui/material/Chip';
+import IconButton from '@mui/material/IconButton';
+import ListItem from '@mui/material/ListItem';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
+import React, { useState } from 'react';
+import { makeStyles } from './makeStyles';
 
 type QuestionProp = {
   children: Question;
@@ -24,7 +22,7 @@ type QuestionProp = {
   setAmenityChecks: (checks: boolean[]) => void;
   amenities: Amenity[]
 }
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -52,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default function QuestionLI(prop: QuestionProp): JSX.Element {
+export default function QuestionLI(prop: QuestionProp): React.ReactElement {
   const {
     children,
     fetchQuestion,
@@ -65,7 +63,7 @@ export default function QuestionLI(prop: QuestionProp): JSX.Element {
     setAmenityChecks,
     amenities,
   } = prop;
-  const classes = useStyles();
+  const { classes } = useStyles();
   const question = children;
   const primary = question.question;
   const numberOfAmenities = question.amenities?.length;
@@ -73,7 +71,7 @@ export default function QuestionLI(prop: QuestionProp): JSX.Element {
   const [expandedAmenities, setExpandedAmenities] = useState<boolean[]>([]);
 
   const expandQuestion = (id: number): void => {
-    const existing = expandedAmenities;
+    const existing = { ...expandedAmenities };
     existing[id] = true;
     setExpandedAmenities(existing);
     fetchQuestion();
@@ -120,6 +118,7 @@ export default function QuestionLI(prop: QuestionProp): JSX.Element {
       {question.amenities && question.amenities.map((amenity, index) => (
         (index < 3 || expandedAmenities[question.id]) && (
           <Chip
+            key={amenity.id}
             label={amenity.name}
             classes={{ colorPrimary: classes.chip }}
             color="primary"

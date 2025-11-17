@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { AdminManager, ParkingRegistration } from 'condo-brain';
-import { Grid } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import withStyles from '@mui/styles/withStyles';
+
+import { AdminManager, ParkingRegistration } from '@condomanagement/condo-brain';
+import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import { Theme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -15,6 +12,8 @@ import TableRow from '@mui/material/TableRow';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { createStyles, makeStyles, withStyles } from './makeStyles';
 
 const StyledTableCell = withStyles((theme: Theme) => createStyles({
   head: {
@@ -34,7 +33,7 @@ const StyledTableRow = withStyles((theme: Theme) => createStyles({
   },
 }))(TableRow);
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -46,19 +45,25 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default function ParkingAdmin(): JSX.Element {
-  const classes = useStyles();
+export default function ParkingAdmin(): React.ReactElement {
+  const { classes } = useStyles();
   const [registration, setRegistrations] = useState<ParkingRegistration[]>([]);
   const [whenView, setWhenView] = useState<string>('today');
 
   const admin = new AdminManager();
-  if (!admin) { return (<div />); }
 
   const fetchRegistrations = async (): Promise<void> => {
     admin.getParkingRegistrations(whenView).then((response) => {
-      setRegistrations(response);
+      setRegistrations(Array.isArray(response) ? response : response.data);
     });
   };
+
+  useEffect(() => {
+    fetchRegistrations();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [whenView]);
+
+  if (!admin) { return (<div />); }
 
   const handleWhen = (_event: React.MouseEvent<HTMLElement>, newAlignment: string | null): void => {
     if (newAlignment !== null) {
@@ -66,16 +71,12 @@ export default function ParkingAdmin(): JSX.Element {
     }
   };
 
-  useEffect(() => {
-    fetchRegistrations();
-  }, [whenView]);
-
   return (
     <div className="section flex-grow">
       <Grid container spacing={5}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <h4 className="center">Parking Registration Admin</h4>
-          <Grid item xs={12} className="center">
+          <Grid size={{ xs: 12 }} className="center">
             <ToggleButtonGroup
               value={whenView}
               exclusive

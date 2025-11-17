@@ -1,19 +1,18 @@
-import React, { useState } from 'react';
+import { UserManager } from '@condomanagement/condo-brain';
 import {
   Alert,
   AlertTitle,
   Button,
-  Grid,
   Icon,
-  TextField, Theme,
+  TextField,
 } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import { UserManager } from 'condo-brain';
+import Grid from '@mui/material/Grid';
+import React, { useState } from 'react';
+import { makeStyles } from './makeStyles';
 import './styles/application.scss';
 import './styles/parking.scss';
 
-export default function Parking({ userManager }: { userManager: UserManager }): JSX.Element {
+export default function Parking({ userManager }: { userManager: UserManager }): React.ReactElement {
   const [selectedStartDate, handleStartDateChange] = useState<Date | null>(new Date());
   const [selectedEndDate, handleEndDateChange] = useState<Date | null>(new Date());
   const [license, setLicense] = useState<string | unknown>('');
@@ -24,12 +23,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
   const [thanks, setThanks] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  interface StyleProps {
-    backgroundColor: string;
-  }
-
-
-  const useStyles = makeStyles((theme: Theme) => createStyles({
+  const useStyles = makeStyles()((theme) => ({
     root: {
       '& .MuiTextField-root': {
         margin: theme.spacing(1),
@@ -38,8 +32,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
     },
   }));
 
-  const styleProps: StyleProps = { backgroundColor: '#f37f30' };
-  const classes = useStyles(styleProps);
+  const { classes } = useStyles();
 
   const handleNativeStartDateChange = (date: string): void => {
     const startDate = new Date(`${date}T01:00:00-05:00`);
@@ -76,7 +69,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
       { thanks && (
         <div className="section flex-grow">
           <Grid container spacing={5}>
-            <Grid item xs={12} className="center">
+            <Grid size={{ xs: 12 }} className="center">
               <h4 className="center">Thank you</h4>
               <p className="center">
                 Thank you!
@@ -94,7 +87,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
         <form className={classes.root} noValidate autoComplete="off" onSubmit={register}>
           <div className="section flex-grow">
             <Grid container spacing={5}>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <h4 className="center">Register a Vehicle</h4>
                 { errorMessage !== '' && (
                   <Alert severity="error">
@@ -103,7 +96,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
                   </Alert>
                 )}
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   id="start"
                   label="Start Date"
@@ -115,7 +108,7 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
                   }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   id="end"
                   label="End Date"
@@ -127,52 +120,52 @@ export default function Parking({ userManager }: { userManager: UserManager }): 
                   }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   id="license"
                   label="License Plate"
-                  style={{ width: '100%' }}
+                  fullWidth
                   value={license}
                   onChange={(e): void => setLicense(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   id="unit"
                   label="Unit Number"
-                  style={{ width: '100%' }}
+                  fullWidth
                   value={unit}
                   onChange={(e): void => setUnit(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   id="make"
                   label="Vehicle Make"
-                  style={{ width: '100%' }}
+                  fullWidth
                   value={make}
                   onChange={(e): void => setMake(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   id="color"
                   label="Vehicle Colour"
-                  style={{ width: '100%' }}
+                  fullWidth
                   value={color}
                   onChange={(e): void => setColor(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   id="email"
                   label="Email or Phone Number"
-                  style={{ width: '100%' }}
+                  fullWidth
                   value={email}
                   onChange={(e): void => setEmail(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={12} className="center">
+              <Grid size={{ xs: 12 }} className="center">
                 <Button
                   variant="contained"
                   type="submit"

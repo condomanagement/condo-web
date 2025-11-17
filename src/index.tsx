@@ -1,13 +1,22 @@
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider, createTheme } from '@mui/material';
 import './styles/index.scss';
 import App from './App';
 
-const themeOptions = {};
-const theme = createTheme(themeOptions);
-ReactDOM.render(
+const theme = createTheme({
+  spacing: 8,
+  mixins: {
+    toolbar: {
+      minHeight: 56,
+    },
+  },
+});
+
+const container = document.getElementById('root');
+const root = createRoot(container!);
+root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <BrowserRouter>
@@ -15,6 +24,5 @@ ReactDOM.render(
       </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>,
-  document.getElementById('root'),
 );
 

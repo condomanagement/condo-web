@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react';
+
+import { AdminManager, Amenity } from '@condomanagement/condo-brain';
 import Button from '@mui/material/Button';
-import { AdminManager, Amenity } from 'condo-brain';
-import { Grid } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import Select from '@mui/material/Select';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
 import InputLabel from '@mui/material/InputLabel';
 import List from '@mui/material/List';
-import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
+import TextField from '@mui/material/TextField';
+import React, { useEffect, useState } from 'react';
 import AmenityLI from './AmenityLi';
+import { makeStyles } from './makeStyles';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -55,8 +55,8 @@ const minutesToReadable = (t: number): string => {
   return timeText;
 };
 
-export default function AmenityAdmin(): JSX.Element {
-  const classes = useStyles();
+export default function AmenityAdmin(): React.ReactElement {
+  const { classes } = useStyles();
   const [amenities, setAmenities] = useState<Amenity[]>([]);
   const [value, setValue] = useState('');
   const [visible, setVisible] = useState(true);
@@ -68,12 +68,19 @@ export default function AmenityAdmin(): JSX.Element {
   const [deleteOpen, setDeleteOpen] = React.useState(false);
 
   const admin = new AdminManager();
-  if (!admin) { return (<div />); }
+
   const fetchAmenities = async (): Promise<void> => {
     admin.getAmenities().then((response) => {
       setAmenities(response);
     });
   };
+
+  useEffect(() => {
+    fetchAmenities();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!admin) { return (<div />); }
 
   function addAmenity(e: React.FormEvent): void {
     e.preventDefault();
@@ -131,10 +138,6 @@ export default function AmenityAdmin(): JSX.Element {
     setVaccine(event.target.checked);
   };
 
-  useEffect(() => {
-    fetchAmenities();
-  }, [amenities.length]);
-
   const times = [];
   for (let t = 15; t <= 240; t += 15) {
     const timeText = minutesToReadable(t);
@@ -181,7 +184,7 @@ export default function AmenityAdmin(): JSX.Element {
       <h4 className="center">Amenity Admin</h4>
       <div className="section flex-grow">
         <Grid container spacing={5}>
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <List>
               {amenities.map((amenity) => (
                 <AmenityLI
@@ -200,7 +203,7 @@ export default function AmenityAdmin(): JSX.Element {
               ))}
             </List>
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Button
               className={classes.registerButton}
               variant="contained"
@@ -224,7 +227,7 @@ export default function AmenityAdmin(): JSX.Element {
               {selectedAmenity?.name}
             </DialogContentText>
             <Grid container spacing={5}>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   id="standard-multiline-flexible"
                   label="Enter new amenity"
@@ -232,25 +235,27 @@ export default function AmenityAdmin(): JSX.Element {
                   maxRows={4}
                   value={value}
                   onChange={handleChange}
-                  style={{ width: '100%' }}
+                  fullWidth
                 />
               </Grid>
-              <Grid item xs={12}>
-                <InputLabel htmlFor="time-limit">Time Limit</InputLabel>
-                <Select
-                  native
-                  value={timeLimit}
-                  onChange={() => handleTimeLimitChange}
-                  inputProps={{
-                    name: 'timeLimit',
-                    id: 'timeLimit',
-                  }}
-                  style={{ width: '100%' }}
-                >
-                  {times}
-                </Select>
+              <Grid size={{ xs: 12 }}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="timeLimit">Time Limit</InputLabel>
+                  <Select
+                    native
+                    value={timeLimit}
+                    onChange={() => handleTimeLimitChange}
+                    inputProps={{
+                      name: 'timeLimit',
+                      id: 'timeLimit',
+                    }}
+                    label="Time Limit"
+                  >
+                    {times}
+                  </Select>
+                </FormControl>
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <FormControlLabel
                   control={(
                     <Switch
@@ -263,7 +268,7 @@ export default function AmenityAdmin(): JSX.Element {
                   label="Visible"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <FormControlLabel
                   control={(
                     <Switch

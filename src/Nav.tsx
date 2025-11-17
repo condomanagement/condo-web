@@ -1,40 +1,40 @@
-import React from 'react';
+import { UserManager } from '@condomanagement/condo-brain';
+import { faDolly } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import EventAvailable from '@mui/icons-material/EventAvailable';
+import LocalParking from '@mui/icons-material/LocalParking';
+import MenuIcon from '@mui/icons-material/Menu';
+import Schedule from '@mui/icons-material/Schedule';
+import Settings from '@mui/icons-material/Settings';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import MuiDrawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import {
   CSSObject,
   Theme,
   styled,
   useTheme,
 } from '@mui/material/styles';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDolly } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
-import { get as getCookie } from 'es-cookie';
-import { UserManager } from 'condo-brain';
-import Link from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import LocalParking from '@mui/icons-material/LocalParking';
-import Settings from '@mui/icons-material/Settings';
-import Schedule from '@mui/icons-material/Schedule';
-import EventAvailable from '@mui/icons-material/EventAvailable';
+import Typography from '@mui/material/Typography';
+import { get as getCookie } from 'es-cookie';
+import React from 'react';
 import Avatar from 'react-avatar';
+import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -107,7 +107,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function NavBar({ userManager }: { userManager: UserManager }): JSX.Element {
+export default function NavBar({ userManager }: { userManager: UserManager }): React.ReactElement {
   const theme = useTheme();
   const [auth, setAuth] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -146,6 +146,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
       checkLogin();
       clearTimeout(timer);
     }, 1000);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>): void => {
@@ -219,7 +220,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): J
               open={avatarOpen}
               onClose={handleClose}
             >
-              <MenuItem onClick={(): void => navigate('myreservations')}>My Reservations</MenuItem>
+              <MenuItem onClick={(): void => { navigate('myreservations'); }}>My Reservations</MenuItem>
               <MenuItem onClick={logout}>Logout</MenuItem>
             </Menu>
           </Toolbar>

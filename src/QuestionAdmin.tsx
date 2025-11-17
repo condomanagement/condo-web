@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from 'react';
+
+import { AdminManager, Amenity, Question } from '@condomanagement/condo-brain';
 import Button from '@mui/material/Button';
-import { AdminManager, Amenity, Question } from 'condo-brain';
-import { Grid } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import TextField from '@mui/material/TextField';
+import React, { useEffect, useState } from 'react';
+import { makeStyles } from './makeStyles';
 import QuestionLI from './QuestionLi';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -44,8 +43,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default function QuestionAdmin(): JSX.Element {
-  const classes = useStyles();
+export default function QuestionAdmin(): React.ReactElement {
+  const { classes } = useStyles();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [value, setValue] = useState('');
   const [amenityOpen, setAmenityOpen] = useState(false);
@@ -57,12 +56,26 @@ export default function QuestionAdmin(): JSX.Element {
   const [deleteOpen, setDeleteOpen] = React.useState(false);
 
   const admin = new AdminManager();
-  if (!admin) { return (<div />); }
+
   const fetchQuestion = async (): Promise<void> => {
     admin.getQuestions().then((response) => {
       setQuestions(response);
     });
   };
+
+  const fetchAmenities = async (): Promise<void> => {
+    admin.getAmenities().then((response) => {
+      setAmenities(response);
+    });
+  };
+
+  useEffect(() => {
+    fetchAmenities();
+    fetchQuestion();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!admin) { return (<div />); }
 
   function addQuestion(e: React.FormEvent): void {
     e.preventDefault();
@@ -108,17 +121,6 @@ export default function QuestionAdmin(): JSX.Element {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setValue(event.target.value);
   };
-
-  const fetchAmenities = async (): Promise<void> => {
-    admin.getAmenities().then((response) => {
-      setAmenities(response);
-    });
-  };
-
-  useEffect(() => {
-    fetchQuestion();
-    fetchAmenities();
-  }, [questions.length]);
 
   const handleCheckChange = (
     event: React.ChangeEvent<{ name?: string; checked: unknown }>,
@@ -185,7 +187,7 @@ export default function QuestionAdmin(): JSX.Element {
             {selectedQuestion?.question}
           </DialogContentText>
           <Grid container spacing={5}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 id="standard-multiline-flexible"
                 label="Enter new question"
@@ -193,7 +195,7 @@ export default function QuestionAdmin(): JSX.Element {
                 maxRows={4}
                 value={value}
                 onChange={handleChange}
-                style={{ width: '100%' }}
+                fullWidth
               />
             </Grid>
           </Grid>
@@ -213,9 +215,9 @@ export default function QuestionAdmin(): JSX.Element {
   return (
     <div className="section flex-grow">
       <Grid container spacing={5}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <h4 className="center">Question Admin</h4>
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <List>
               {questions.map((question) => (
                 <QuestionLI
@@ -235,7 +237,7 @@ export default function QuestionAdmin(): JSX.Element {
               ))}
             </List>
           </Grid>
-          <Grid item xs={12} className="center">
+          <Grid size={{ xs: 12 }} className="center">
             <Button className={classes.registerButton} variant="contained" onClick={(): void => setQuestionOpen(true)}>
               Add Question
             </Button>
@@ -250,7 +252,7 @@ export default function QuestionAdmin(): JSX.Element {
           <DialogContentText>
             {selectedQuestion?.question}
           </DialogContentText>
-          {amenities.map((amenity): JSX.Element => (
+          {amenities.map((amenity): React.ReactElement => (
             <>
               <FormControlLabel
                 control={(

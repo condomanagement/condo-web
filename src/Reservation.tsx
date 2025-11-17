@@ -1,11 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import {
+  Amenity,
+  Question,
+  ReservationTime,
+  UserManager,
+} from '@condomanagement/condo-brain';
+import EventAvailable from '@mui/icons-material/EventAvailable';
+import Schedule from '@mui/icons-material/Schedule';
 import {
   Alert,
   AlertTitle,
   Button,
   Checkbox,
+  FormControl,
   FormControlLabel,
-  Grid,
   Icon,
   InputLabel,
   Link,
@@ -17,19 +24,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { get as getCookie } from 'es-cookie';
-import { useNavigate } from 'react-router-dom';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import {
-  Amenity,
-  Question,
-  ReservationTime,
-  UserManager,
-} from 'condo-brain';
-import Schedule from '@mui/icons-material/Schedule';
-import EventAvailable from '@mui/icons-material/EventAvailable';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createStyles, makeStyles } from './makeStyles';
 import './styles/application.scss';
 import './styles/parking.scss';
 
@@ -89,7 +89,7 @@ const formatTime = (date: Date): string => {
   return date.toLocaleTimeString([], options);
 };
 
-export default function Resevation(): JSX.Element {
+export default function Resevation(): React.ReactElement {
   const [selectedStartDate, setSelectedStartDateChange] = useState<Date>(roundToMinuteInterval(new Date(), 15));
   const [selectedEndDate, setSelectedEndDateChange] = useState<Date>(addMinutes(selectedStartDate, 30));
   const [amenity, setAmenity] = useState<string>('');
@@ -100,7 +100,7 @@ export default function Resevation(): JSX.Element {
   const [thanks, setThanks] = useState(false);
   const [amenityTime, setAmenityTime] = useState<number>(60);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [availability, setAvailability] = useState<JSX.Element | null>(null);
+  const [availability, setAvailability] = useState<React.ReactElement | null>(null);
   const [selectedAmenityName, setSelectedAmenityName] = useState<string>('');
   const [auth, setAuth] = useState(false);
   const [vaccinated, setVaccinated] = useState(false);
@@ -175,7 +175,7 @@ export default function Resevation(): JSX.Element {
           </>,
         );
       } else {
-        // eslint-disable-next-line
+
         result.sort((r1: ReservationTime, r2: ReservationTime) => r1.startTime < r2.startTime ? -1 : 1);
         const times: string[] = [];
         const dateToShow = moment(selectedStartDate).local().format('YYYY-MM-DD');
@@ -205,7 +205,7 @@ export default function Resevation(): JSX.Element {
             </AlertTitle>
             <List>
               {times.map((time) => (
-                <ListItem style={{ paddingTop: 0, paddingBottom: 0 }}>
+                <ListItem key={time} style={{ paddingTop: 0, paddingBottom: 0 }}>
                   <ListItemText
                     style={{ marginBottom: 0, marginTop: 0 }}
                     primary={time}
@@ -246,14 +246,17 @@ export default function Resevation(): JSX.Element {
 
   useEffect(() => {
     fetchAmenities();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amenities.length]);
 
   useEffect(() => {
     filterVaccinatedAmenities();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amenities.length, auth]);
 
   useEffect(() => {
     findReservations();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amenity, selectedStartDate]);
 
   useEffect(() => {
@@ -263,6 +266,7 @@ export default function Resevation(): JSX.Element {
       checkLogin();
       clearTimeout(timer);
     }, 1000);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
   const handleAmenityChange = (event: SelectChangeEvent<string>): void => {
@@ -338,7 +342,7 @@ export default function Resevation(): JSX.Element {
     setSelectedEndDateChange(roundToMinuteInterval(endDate, 15));
   };
 
-  const useStyles = makeStyles(() => createStyles({
+  const useStyles = makeStyles()(() => createStyles({
     root: {
       '& .MuiTextField-root': {
         width: '100%',
@@ -346,14 +350,14 @@ export default function Resevation(): JSX.Element {
     },
   }));
 
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   return (
     <div>
       { thanks && (
         <div className="section flex-grow">
           <Grid container spacing={1}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <h4 className="center">Amenity reserved</h4>
               <p className="center">
                 Thank you!
@@ -363,7 +367,7 @@ export default function Resevation(): JSX.Element {
                 {'  '}
               </p>
             </Grid>
-            <Grid item xs={12} className="center">
+            <Grid size={{ xs: 12 }} className="center">
               <Button
                 variant="contained"
                 sx={{
@@ -383,10 +387,10 @@ export default function Resevation(): JSX.Element {
                 Make Another Reservation
               </Button>
             </Grid>
-            <Grid item xs={12} className="center">
+            <Grid size={{ xs: 12 }} className="center">
               <Button
                 variant="contained"
-                onClick={(): void => navigate('/myreservations')}
+                onClick={(): void => { navigate('/myreservations'); }}
                 sx={{
                   backgroundColor: '#f37f30',
                   color: 'white',
@@ -405,7 +409,7 @@ export default function Resevation(): JSX.Element {
         <form className={classes.root} noValidate autoComplete="off" onSubmit={reserve}>
           <div className="section flex-grow">
             <Grid container spacing={5}>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <h4 className="center">Reserve an Amenity</h4>
                 { errorMessage !== '' && (
                   <Alert severity="error">
@@ -421,28 +425,31 @@ export default function Resevation(): JSX.Element {
                   </Alert>
                 )}
               </Grid>
-              <Grid item xs={6}>
-                <InputLabel htmlFor="age-native-simple">Amenity</InputLabel>
-                <Select
-                  native
-                  value={amenity}
-                  onChange={handleAmenityChange}
-                  inputProps={{
-                    name: 'amenity',
-                    id: 'amenity',
-                  }}
-                  style={{ width: '100%' }}
-                >
-                  <option aria-label="None" value="" />
-                  {displayAmenities.map(
-                    (amenityOption: Amenity) => (
-                      <option key={amenityOption.id} value={String(amenityOption.id)}>{amenityOption.name}</option>
-                    ),
-                  )}
-                </Select>
+              <Grid size={{ xs: 6 }}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="amenity">Amenity</InputLabel>
+                  <Select
+                    native
+                    value={amenity}
+                    onChange={handleAmenityChange}
+                    inputProps={{
+                      name: 'amenity',
+                      id: 'amenity',
+                    }}
+                    label="Amenity"
+                  >
+                    <option aria-label="None" value="" />
+                    {displayAmenities.map(
+                      (amenityOption: Amenity) => (
+                        <option key={amenityOption.id} value={String(amenityOption.id)}>{amenityOption.name}</option>
+                      ),
+                    )}
+                  </Select>
+                </FormControl>
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
+                  fullWidth
                   id="start"
                   label="Date"
                   type="date"
@@ -456,8 +463,9 @@ export default function Resevation(): JSX.Element {
                   }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
+                  fullWidth
                   id="startTime"
                   label="Start Time"
                   type="time"
@@ -468,8 +476,9 @@ export default function Resevation(): JSX.Element {
                   }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
+                  fullWidth
                   id="endTime"
                   label="End Time"
                   type="time"
@@ -481,7 +490,7 @@ export default function Resevation(): JSX.Element {
                 />
               </Grid>
               { availability && (
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Alert severity="info">
                     {availability}
                   </Alert>
@@ -489,7 +498,7 @@ export default function Resevation(): JSX.Element {
               )}
               {amenity !== '' && questions[Number(amenity)].map(
                 (questionOption) => (
-                  <Grid item xs={12} key={questionOption.id}>
+                  <Grid size={{ xs: 12 }} key={questionOption.id}>
                     <FormControlLabel
                       control={(
                         <Checkbox
@@ -504,7 +513,7 @@ export default function Resevation(): JSX.Element {
                   </Grid>
                 ),
               )}
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <Typography>
                   Please ensure that you follow the posted instructions as well as complying with the
                   {' '}
@@ -515,7 +524,7 @@ export default function Resevation(): JSX.Element {
                 </Typography>
               </Grid>
               {amenity && (
-                <Grid item xs={12} className="center">
+                <Grid size={{ xs: 12 }} className="center">
                   <Button
                     variant="contained"
                     type="submit"

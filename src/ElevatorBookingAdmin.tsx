@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { AdminManager, BookingStatus, ElevatorBooking } from 'condo-brain';
-import { Grid, TextField } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import withStyles from '@mui/styles/withStyles';
-import Paper from '@mui/material/Paper';
+
+import { AdminManager, BookingStatus, ElevatorBooking } from '@condomanagement/condo-brain';
+import EditIcon from '@mui/icons-material/Edit';
+import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
+import Paper from '@mui/material/Paper';
+import { Theme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { createStyles, makeStyles, withStyles } from './makeStyles';
 
 const StyledTableCell = withStyles((theme: Theme) => createStyles({
   head: {
@@ -40,7 +40,7 @@ const StyledTableRow = withStyles((theme: Theme) => createStyles({
   },
 }))(TableRow);
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -52,8 +52,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default function ElevatorBookingAdmin(): JSX.Element {
-  const classes = useStyles();
+export default function ElevatorBookingAdmin(): React.ReactElement {
+  const { classes } = useStyles();
   const [bookings, setBookings] = useState<ElevatorBooking[]>([]);
   const [bookingOpen, setBookingOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<ElevatorBooking | undefined>(undefined);
@@ -61,13 +61,19 @@ export default function ElevatorBookingAdmin(): JSX.Element {
   const [rejection, setRejection] = useState('');
 
   const admin = new AdminManager();
-  if (!admin) { return (<div />); }
 
   const fetchBookings = async (): Promise<void> => {
     admin.getElevatorBookings().then((response) => {
-      setBookings(response);
+      setBookings(Array.isArray(response) ? response : response.data);
     });
   };
+
+  useEffect(() => {
+    fetchBookings();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!admin) { return (<div />); }
 
   const showBooking = (booking: ElevatorBooking): void => {
     setSelectedBooking(booking);
@@ -149,11 +155,6 @@ export default function ElevatorBookingAdmin(): JSX.Element {
     </>
   );
 
-  useEffect(() => {
-    fetchBookings();
-  }, [bookings.length]);
-
-
   const bookingPopup = (
     <Dialog open={bookingOpen} aria-labelledby="form-dialog-title" fullWidth>
       <DialogTitle id="form-dialog-title">
@@ -181,7 +182,7 @@ export default function ElevatorBookingAdmin(): JSX.Element {
       </DialogTitle>
       <DialogContent>
         <Grid container spacing={5}>
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <TableContainer component={Paper}>
               <Table className={classes.table} aria-label="customized table">
                 <TableBody>
@@ -272,7 +273,8 @@ export default function ElevatorBookingAdmin(): JSX.Element {
                 id="rejection"
                 label="Reason for Rejection"
                 multiline
-                style={{ width: '100%', marginTop: '20px' }}
+                fullWidth
+                sx={{ mt: '20px' }}
                 value={rejection}
                 rows={50}
                 placeholder="Enter a reason for rejecting this booking."
@@ -303,7 +305,7 @@ export default function ElevatorBookingAdmin(): JSX.Element {
   return (
     <div className="section flex-grow">
       <Grid container spacing={5}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           {bookingPopup}
           <h4 className="center">Elevator Bookings</h4>
           <TableContainer component={Paper}>

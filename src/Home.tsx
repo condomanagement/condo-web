@@ -1,21 +1,21 @@
-import React from 'react';
+import HomeIcon from '@mui/icons-material/Home';
+import LocalParking from '@mui/icons-material/LocalParking';
 import {
   Button,
-  Grid,
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import LocalParking from '@mui/icons-material/LocalParking';
-import HomeIcon from '@mui/icons-material/Home';
 import './styles/application.scss';
 import './styles/parking.scss';
 
-export default function Home(): JSX.Element {
+export default function Home(): React.ReactElement {
   const navigate = useNavigate();
 
   return (
     <div className="section flex-grow center">
       <Grid container spacing={5}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Button
             variant="contained"
             sx={{
@@ -23,17 +23,17 @@ export default function Home(): JSX.Element {
               color: 'white',
               marginBottom: '20px',
             }}
-            onClick={(): void => navigate('/login')}
+            onClick={(): void => { navigate('/login'); }}
             startIcon={<HomeIcon />}
             type="submit"
           >
             Resident Login
           </Button>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Button
             variant="contained"
-            onClick={(): void => navigate('/parking')}
+            onClick={(): void => { navigate('/parking'); }}
             sx={{
               backgroundColor: '#f37f30',
               color: 'white',

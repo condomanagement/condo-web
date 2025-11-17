@@ -1,32 +1,30 @@
+import { UserManager } from '@condomanagement/condo-brain';
+import CssBaseline from '@mui/material/CssBaseline';
+import Grid from '@mui/material/Grid';
+import { get as getCookie } from 'es-cookie';
 import React from 'react';
 import * as Parallax from 'react-parallax';
-import { Grid } from '@mui/material';
 import {
   Route,
   Routes,
   useLocation,
   useNavigate,
 } from 'react-router-dom';
-import { Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { get as getCookie } from 'es-cookie';
-import { UserManager } from 'condo-brain';
-import Parking from './Parking';
-import Home from './Home';
 import Admin from './Admin';
 import Authenticate from './Authenticate';
-import Reservation from './Reservation';
 import ElevatorBooking from './ElevatorBooking';
-import Login from './Login';
-import Nav from './Nav';
-import MyReservations from './MyReservations';
-import './styles/application.scss';
-import ArrowLoftsWhite from './images/ArrowLofts-White.svg';
+import Home from './Home';
 import ArrowLoftsRendering from './images/Arrow-Lofts-Rendering.jpg';
+import ArrowLoftsWhite from './images/ArrowLofts-White.svg';
+import Login from './Login';
+import { makeStyles } from './makeStyles';
+import MyReservations from './MyReservations';
+import Nav from './Nav';
+import Parking from './Parking';
+import Reservation from './Reservation';
+import './styles/application.scss';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     display: 'flex',
   },
@@ -35,21 +33,21 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ...(theme.mixins.toolbar as any),
   },
   content: {
     flexGrow: 1,
   },
 }));
 
-function App(): JSX.Element {
+function App(): React.ReactElement {
   const [userManager] = React.useState(new UserManager());
   const [auth, setAuth] = React.useState(false);
   const [rootState, setRootState] = React.useState<string | undefined>(undefined);
   const [toolbarState, setToolbarState] = React.useState<string | undefined>(undefined);
   const [contentState, setContentState] = React.useState<string | undefined>(undefined);
-  const classes = useStyles();
+  const { classes } = useStyles();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -59,9 +57,9 @@ function App(): JSX.Element {
       userManager.validateToken(token).then((_result) => {
         if (userManager.loggedIn) {
           setAuth(true);
-          setRootState(classes.root);
-          setToolbarState(classes.toolbar);
-          setContentState(classes.content);
+          setRootState(classes.root as string);
+          setToolbarState(classes.toolbar as string);
+          setContentState(classes.content as string);
           if (location.pathname === '/') {
             navigate('/reservation');
           }
@@ -82,6 +80,7 @@ function App(): JSX.Element {
       checkLogin();
       clearTimeout(timer);
     }, 1000);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
   return (
@@ -127,7 +126,7 @@ function App(): JSX.Element {
           >
             <div className="container section flex-grow">
               <Grid container spacing={5}>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <h5 className="white-text">Arrow Lofts</h5>
                   <p className="grey-text text-lighten-4">
                     112 Benton Street
@@ -136,7 +135,7 @@ function App(): JSX.Element {
                   </p>
                   <p className="grey-text text-lighten-4">A beautiful home in a beautiful city.</p>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <h5 className="white-text">Additional Resources</h5>
                   <ul>
                     <li>

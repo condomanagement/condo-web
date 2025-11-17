@@ -1,11 +1,11 @@
-import React from 'react';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
-import IconButton from '@mui/material/IconButton';
+import { Amenity } from '@condomanagement/condo-brain';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Amenity } from 'condo-brain';
+import IconButton from '@mui/material/IconButton';
+import ListItem from '@mui/material/ListItem';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
+import React from 'react';
 
 type AmenityProp = {
   children: Amenity;
@@ -36,7 +36,7 @@ const minutesToReadable = (t: number): string => {
   return timeText;
 };
 
-export default function AmenityLI(prop: AmenityProp): JSX.Element {
+export default function AmenityLI(prop: AmenityProp): React.ReactElement {
   const {
     setAmenityToDelete,
     setSelectedAmenity,

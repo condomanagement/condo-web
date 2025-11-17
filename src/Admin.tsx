@@ -1,23 +1,21 @@
-import React from 'react';
-import { AdminManager, UserManager } from 'condo-brain';
-import { Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
+import { AdminManager, UserManager } from '@condomanagement/condo-brain';
 import {
   Box,
   Paper,
   Tab,
   Tabs,
 } from '@mui/material';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import UserAdmin from './UserAdmin';
-import QuestionAdmin from './QuestionAdmin';
 import AmenityAdmin from './AmenityAdmin';
-import ReservationAdmin from './ReservationAdmin';
-import ParkingAdmin from './ParkingAdmin';
 import ElevatorBookingAdmin from './ElevatorBookingAdmin';
+import { makeStyles } from './makeStyles';
+import ParkingAdmin from './ParkingAdmin';
+import QuestionAdmin from './QuestionAdmin';
+import ReservationAdmin from './ReservationAdmin';
+import UserAdmin from './UserAdmin';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -51,7 +49,7 @@ interface TabPanelProps {
   value: number;
 }
 
-function TabPanel(props: TabPanelProps): JSX.Element {
+function TabPanel(props: TabPanelProps): React.ReactElement {
   const { children, value, index } = props;
   const admin = new AdminManager();
   const navigate = useNavigate();
@@ -74,8 +72,8 @@ function TabPanel(props: TabPanelProps): JSX.Element {
   );
 }
 
-export default function Admin({ userManager }: { userManager: UserManager }): JSX.Element {
-  const classes = useStyles();
+export default function Admin({ userManager }: { userManager: UserManager }): React.ReactElement {
+  const { classes } = useStyles();
   const [value, setValue] = React.useState(1);
 
   const admin = new AdminManager();

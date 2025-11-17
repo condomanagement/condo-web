@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { MyReservation, UserManager } from 'condo-brain';
-import { Alert, AlertTitle, Grid } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import withStyles from '@mui/styles/withStyles';
-import { get as getCookie } from 'es-cookie';
+
+import { MyReservation, UserManager } from '@condomanagement/condo-brain';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Alert, AlertTitle } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
+import { Theme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { get as getCookie } from 'es-cookie';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { createStyles, makeStyles, withStyles } from './makeStyles';
 
 const StyledTableCell = withStyles((theme: Theme) => createStyles({
   head: {
@@ -35,7 +35,7 @@ const StyledTableRow = withStyles((theme: Theme) => createStyles({
   },
 }))(TableRow);
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -47,8 +47,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default function MyReservations({ userManager }: { userManager: UserManager }): JSX.Element {
-  const classes = useStyles();
+export default function MyReservations({ userManager }: { userManager: UserManager }): React.ReactElement {
+  const { classes } = useStyles();
   const [reservations, setReservations] = useState<MyReservation[]>([]);
   const [auth, setAuth] = useState(false);
   const [vaccinated, setVaccinated] = useState(false);
@@ -88,17 +88,19 @@ export default function MyReservations({ userManager }: { userManager: UserManag
       checkLogin();
       clearTimeout(timer);
     }, 1000);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
 
   useEffect(() => {
     fetchReservations();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reservations.length]);
 
   return (
     <div className="section flex-grow">
       <Grid container spacing={5}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           {vaccinated && (
             <Alert severity="info">
               <AlertTitle>💉 Thank you for getting vaccinated.</AlertTitle>
@@ -110,7 +112,7 @@ export default function MyReservations({ userManager }: { userManager: UserManag
             </Alert>
           )}
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <h4 className="center">Amenity Reservations</h4>
           <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="customized table">

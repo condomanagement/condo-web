@@ -1,3 +1,6 @@
+@use "sass:map";
+@use "sass:math";
+
 $small-screen-up: 601px !default;
 $medium-screen-up: 993px !default;
 $large-screen-up: 1201px !default;
@@ -18,7 +21,7 @@ $materialize-red: (
   "darken-4":   #8b1014,
 );
 
-$primary-color: color("materialize-red", "lighten-2") !default;
+$primary-color: map.get($materialize-red, "lighten-2") !default;
 
 $medium-and-up: "only screen and (min-width : #{$small-screen-up})" !default;
 $large-and-up: "only screen and (min-width : #{$medium-screen-up})" !default;
@@ -105,12 +108,12 @@ $h4-fontsize: 2.28rem !default;
 $h5-fontsize: 1.64rem !default;
 $h6-fontsize: 1.15rem !default;
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { font-weight: inherit; text-decoration: none; color: inherit; }
-h1 { font-size: $h1-fontsize; line-height: 110%; margin: ($h1-fontsize / 1.5) 0 ($h1-fontsize / 2.5) 0;}
-h2 { font-size: $h2-fontsize; line-height: 110%; margin: ($h2-fontsize / 1.5) 0 ($h2-fontsize / 2.5) 0;}
-h3 { font-size: $h3-fontsize; line-height: 110%; margin: ($h3-fontsize / 1.5) 0 ($h3-fontsize / 2.5) 0;}
-h4 { font-size: $h4-fontsize; line-height: 110%; margin: ($h4-fontsize / 1.5) 0 ($h4-fontsize / 2.5) 0;}
-h5 { font-size: $h5-fontsize; line-height: 110%; margin: ($h5-fontsize / 1.5) 0 ($h5-fontsize / 2.5) 0;}
-h6 { font-size: $h6-fontsize; line-height: 110%; margin: ($h6-fontsize / 1.5) 0 ($h6-fontsize / 2.5) 0;}
+h1 { font-size: $h1-fontsize; line-height: 110%; margin: math.div($h1-fontsize, 1.5) 0 math.div($h1-fontsize, 2.5) 0;}
+h2 { font-size: $h2-fontsize; line-height: 110%; margin: math.div($h2-fontsize, 1.5) 0 math.div($h2-fontsize, 2.5) 0;}
+h3 { font-size: $h3-fontsize; line-height: 110%; margin: math.div($h3-fontsize, 1.5) 0 math.div($h3-fontsize, 2.5) 0;}
+h4 { font-size: $h4-fontsize; line-height: 110%; margin: math.div($h4-fontsize, 1.5) 0 math.div($h4-fontsize, 2.5) 0;}
+h5 { font-size: $h5-fontsize; line-height: 110%; margin: math.div($h5-fontsize, 1.5) 0 math.div($h5-fontsize, 2.5) 0;}
+h6 { font-size: $h6-fontsize; line-height: 110%; margin: math.div($h6-fontsize, 1.5) 0 math.div($h6-fontsize, 2.5) 0;}
 
 
 .center, .center-align {

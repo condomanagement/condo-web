@@ -1,25 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import { AdminManager, User, UserType } from '@condomanagement/condo-brain';
+import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import { AdminManager, User, UserType } from 'condo-brain';
-import { Grid } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
+import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import React, { useEffect, useState } from 'react';
+import { makeStyles } from './makeStyles';
 
 type UserProp = {
   user: User;
@@ -31,13 +29,13 @@ type UsersProp = {
   editUser: (user: User) => void;
 }
 
-function UserLI(prop: UserProp): JSX.Element {
+function UserLI(prop: UserProp): React.ReactElement {
   const { user, editUser } = prop;
   const vacState = user.vaccinated ? '💉' : '🦠';
   const primary = `${vacState} ${user.name}`;
 
   return (
-    <ListItem disabled={!user.active}>
+    <ListItem sx={{ opacity: user.active ? 1 : 0.5 }}>
       <ListItemText
         primary={primary}
         secondary={(
@@ -135,8 +133,9 @@ const ListOfUsers = React.memo((prop: UsersProp) => {
   ));
   return (<List>{usersLI}</List>);
 });
+ListOfUsers.displayName = 'ListOfUsers';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles()((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
@@ -164,8 +163,8 @@ const emptyUser = {
   type: UserType.None,
 };
 
-export default function UserAdmin(): JSX.Element {
-  const classes = useStyles();
+export default function UserAdmin(): React.ReactElement {
+  const { classes } = useStyles();
   const [users, setUsers] = useState<User[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<FileList | undefined>(undefined);
   const [currentFile, setCurrentFile] = useState<File | undefined>(undefined);
@@ -185,12 +184,29 @@ export default function UserAdmin(): JSX.Element {
   const [userVaccinated, setUserVaccinated] = useState(false);
 
   const admin = new AdminManager();
-  if (!admin) { return (<div />); }
+
   const fetchUsers = async (): Promise<void> => {
     admin.getUsers().then((response) => {
-      setUsers(response);
+      setUsers(Array.isArray(response) ? response : response.data);
     });
   };
+
+  useEffect(() => {
+    fetchUsers();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    let showUsers = users;
+    if (hideInactive) {
+      showUsers = showUsers.filter((user) => user.active);
+    }
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    setUserList(<ListOfUsers localUsers={showUsers} editUser={editUser} />);
+
+  }, [users, hideInactive]);
+
+  if (!admin) { return (<div />); }
 
   const handleChange = (selectorFiles: FileList | null): void => {
     if (selectorFiles) {
@@ -329,7 +345,7 @@ export default function UserAdmin(): JSX.Element {
         )}
         <DialogContent>
           <Grid container spacing={5}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 id="standard-multiline-flexible"
                 label="Name"
@@ -337,10 +353,10 @@ export default function UserAdmin(): JSX.Element {
                 maxRows={1}
                 value={name}
                 onChange={handleNameChange}
-                style={{ width: '100%' }}
+                fullWidth
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 id="standard-multiline-flexible"
                 label="Unit"
@@ -348,10 +364,10 @@ export default function UserAdmin(): JSX.Element {
                 maxRows={1}
                 value={unit}
                 onChange={handleUnitChange}
-                style={{ width: '100%' }}
+                fullWidth
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 id="standard-multiline-flexible"
                 label="Email"
@@ -359,10 +375,10 @@ export default function UserAdmin(): JSX.Element {
                 maxRows={1}
                 value={email}
                 onChange={handleEmailChange}
-                style={{ width: '100%' }}
+                fullWidth
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 id="standard-multiline-flexible"
                 label="Phone Number"
@@ -370,10 +386,10 @@ export default function UserAdmin(): JSX.Element {
                 maxRows={1}
                 value={phone}
                 onChange={handlePhoneChange}
-                style={{ width: '100%' }}
+                fullWidth
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <ButtonGroup
                 disableElevation
                 variant="contained"
@@ -400,7 +416,7 @@ export default function UserAdmin(): JSX.Element {
                 </Button>
               </ButtonGroup>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <FormControlLabel
                 control={(
                   <Switch
@@ -413,7 +429,7 @@ export default function UserAdmin(): JSX.Element {
                 label="Administrator"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <FormControlLabel
                 control={(
                   <Switch
@@ -426,7 +442,7 @@ export default function UserAdmin(): JSX.Element {
                 label="Parking Administrator"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <FormControlLabel
                 control={(
                   <Switch
@@ -439,7 +455,7 @@ export default function UserAdmin(): JSX.Element {
                 label="Active"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <FormControlLabel
                 control={(
                   <Switch
@@ -466,23 +482,11 @@ export default function UserAdmin(): JSX.Element {
     </form>
   );
 
-  useEffect(() => {
-    fetchUsers();
-  }, [users.length]);
-
-  useEffect(() => {
-    let showUsers = users;
-    if (hideInactive) {
-      showUsers = showUsers.filter((user) => user.active);
-    }
-    setUserList(<ListOfUsers localUsers={showUsers} editUser={editUser} />);
-  }, [users, hideInactive]);
-
   return (
     <div className="section flex-grow">
       <h4 className="center">Resident Admin</h4>
       <Grid container spacing={1}>
-        <Grid item xs={8}>
+        <Grid size={{ xs: 8 }}>
           <Button
             sx={{
               backgroundColor: '#f37f30',
@@ -498,7 +502,7 @@ export default function UserAdmin(): JSX.Element {
             Add Resident
           </Button>
         </Grid>
-        <Grid item xs={4}>
+        <Grid size={{ xs: 4 }}>
           <FormControlLabel
             control={(
               <Switch
@@ -511,7 +515,7 @@ export default function UserAdmin(): JSX.Element {
             label="Hide Inactive Residents"
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           {userList}
           {userPopup}
           <form encType="multipart/form-data" className={classes.root} noValidate autoComplete="off" onSubmit={upload}>

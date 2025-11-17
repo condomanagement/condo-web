@@ -1,8 +1,8 @@
+import cors, { CorsOptions } from 'cors';
 import express, { Express } from 'express';
 import rateLimit from 'express-rate-limit';
-import nocache from 'nocache';
-import cors, { CorsOptions } from 'cors';
 import httpProxy from 'http-proxy';
+import nocache from 'nocache';
 import notFoundHandler from './middleware/not-found.middleware';
 
 const port = process.env.PORT || 8080;
