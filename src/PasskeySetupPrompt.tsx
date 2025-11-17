@@ -50,7 +50,17 @@ export default function PasskeySetupPrompt({
       }
     } catch (err) {
       console.error('Passkey registration failed:', err);
-      setError('Failed to set up passkey. Please try again.');
+      if (err instanceof Error) {
+        console.error('Error message:', err.message);
+        console.error('Error stack:', err.stack);
+      }
+      if (typeof err === 'object' && err !== null) {
+        console.error('Error details:', JSON.stringify(err, null, 2));
+      }
+      setError(
+        'Failed to set up passkey. Check the browser console for details. ' +
+        (err instanceof Error ? err.message : 'Unknown error')
+      );
     } finally {
       setIsRegistering(false);
     }

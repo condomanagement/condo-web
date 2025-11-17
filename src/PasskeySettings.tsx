@@ -68,7 +68,16 @@ export default function PasskeySettings(): React.ReactElement {
       }
     } catch (err) {
       console.error('Failed to add passkey:', err);
-      setError('Failed to add passkey. Please try again.');
+      if (err instanceof Error) {
+        console.error('Error details:', err.message, err.stack);
+      }
+      if (typeof err === 'object' && err !== null) {
+        console.error('Full error:', JSON.stringify(err, null, 2));
+      }
+      setError(
+        'Failed to add passkey. Check console for details. ' +
+        (err instanceof Error ? err.message : 'Unknown error')
+      );
     } finally {
       setIsAdding(false);
     }
