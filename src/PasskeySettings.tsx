@@ -229,7 +229,6 @@ export default function PasskeySettings(): React.ReactElement {
           <DialogTitle>Rename Passkey</DialogTitle>
           <DialogContent>
             <TextField
-              autoFocus
               margin="dense"
               label="Nickname"
               type="text"

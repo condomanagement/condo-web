@@ -171,7 +171,7 @@ export default function QuestionAdmin(): React.ReactElement {
         <Button onClick={(): void => { setSelectedQuestion(undefined); setDeleteOpen(false); }} color="primary">
           Cancel
         </Button>
-        <Button onClick={(): void => doDeleteQuestion()} color="primary" autoFocus>
+        <Button onClick={(): void => doDeleteQuestion()} color="primary">
           Save
         </Button>
       </DialogActions>
