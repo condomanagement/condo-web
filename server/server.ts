@@ -54,7 +54,7 @@ async function createServer(): Promise<Express> {
   app.use('/parking', cors(corsOptions), express.static('build'));
   app.use('/admin', cors(corsOptions), express.static('build'));
   app.use('/authenticate', cors(corsOptions), express.static('build'));
-  app.use('/authenticate*', cors(corsOptions), express.static('build'));
+  app.use('/authenticate/*', cors(corsOptions), express.static('build'));
   app.use('/reservation', cors(corsOptions), express.static('build'));
   app.use('/elevator-booking', cors(corsOptions), express.static('build'));
   app.use('/myreservations', cors(corsOptions), express.static('build'));
