@@ -3,12 +3,16 @@ import {
   fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
 import React from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import Login from '../Login';
 
 // Mock UserManager
 jest.mock('@condomanagement/condo-brain', () => ({
   UserManager: jest.fn().mockImplementation(() => ({
     login: jest.fn(),
+  })),
+  PasskeyManager: jest.fn().mockImplementation(() => ({
+    isSupported: jest.fn().mockResolvedValue(false),
   })),
 }));
 
@@ -25,14 +29,22 @@ describe('Login Component', () => {
   });
 
   test('renders login form', () => {
-    render(<Login userManager={mockUserManager} />);
+    render(
+      <MemoryRouter>
+        <Login userManager={mockUserManager} />
+      </MemoryRouter>,
+    );
 
     expect(screen.getByText('Login')).toBeInTheDocument();
     expect(screen.getByLabelText(/Email address/i)).toBeInTheDocument();
   });
 
   test('handles email input change', () => {
-    render(<Login userManager={mockUserManager} />);
+    render(
+      <MemoryRouter>
+        <Login userManager={mockUserManager} />
+      </MemoryRouter>,
+    );
 
     const emailInput = screen.getByLabelText(/Email address/i) as HTMLInputElement;
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
@@ -43,7 +55,11 @@ describe('Login Component', () => {
   test('calls userManager.login when form is submitted', async () => {
     mockUserManager.login.mockResolvedValue(true);
 
-    render(<Login userManager={mockUserManager} />);
+    render(
+      <MemoryRouter>
+        <Login userManager={mockUserManager} />
+      </MemoryRouter>,
+    );
 
     const emailInput = screen.getByLabelText(/Email address/i);
     const loginButton = screen.getByRole('button', { name: /Send Login Link/i });
@@ -59,7 +75,11 @@ describe('Login Component', () => {
   test('shows error when login fails', async () => {
     mockUserManager.login.mockResolvedValue(false);
 
-    render(<Login userManager={mockUserManager} />);
+    render(
+      <MemoryRouter>
+        <Login userManager={mockUserManager} />
+      </MemoryRouter>,
+    );
 
     const emailInput = screen.getByLabelText(/Email address/i);
     const loginButton = screen.getByRole('button', { name: /Send Login Link/i });
@@ -75,7 +95,11 @@ describe('Login Component', () => {
   test('shows success message after login submission', async () => {
     mockUserManager.login.mockResolvedValue(true);
 
-    render(<Login userManager={mockUserManager} />);
+    render(
+      <MemoryRouter>
+        <Login userManager={mockUserManager} />
+      </MemoryRouter>,
+    );
 
     const emailInput = screen.getByLabelText(/Email address/i);
     const loginButton = screen.getByRole('button', { name: /Send Login Link/i });

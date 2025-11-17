@@ -1,15 +1,28 @@
-import { UserManager } from '@condomanagement/condo-brain';
+import { PasskeyManager, UserManager } from '@condomanagement/condo-brain';
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import { Alert, AlertTitle } from '@mui/material';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Icon from '@mui/material/Icon';
 import TextField from '@mui/material/TextField';
+import { set as setCookie } from 'es-cookie';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { isPlatformAuthenticatorAvailable } from './utils/passkey';
 
 export default function Login({ userManager }: { userManager: UserManager }): React.ReactElement {
   const [processLogin, setProcessLogin] = React.useState<null | true>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [email, setEmail] = React.useState<null | string>(null);
+  const [passkeySupported, setPasskeySupported] = React.useState(false);
+  const [isAuthenticating, setIsAuthenticating] = React.useState(false);
+  const navigate = useNavigate();
+  const passkeyManager = new PasskeyManager();
+
+  React.useEffect(() => {
+    isPlatformAuthenticatorAvailable().then(setPasskeySupported);
+  }, []);
 
   function doLogin(e: React.FormEvent): void {
     e.preventDefault();
@@ -25,12 +38,58 @@ export default function Login({ userManager }: { userManager: UserManager }): Re
     }
   }
 
+  async function doPasskeyLogin(): Promise<void> {
+    setIsAuthenticating(true);
+    setError(null);
+
+    try {
+      const result = await passkeyManager.authenticate();
+
+      if (result.success && result.token) {
+        setCookie('token', result.token);
+        navigate('/');
+        window.location.reload(); // Force reload to update Nav state
+      } else {
+        setError(result.error || 'Passkey authentication failed. Please try email login.');
+      }
+    } catch (err) {
+      console.error('Passkey authentication failed:', err);
+      setError('Passkey authentication failed. Please try email login.');
+    } finally {
+      setIsAuthenticating(false);
+    }
+  }
+
   const loginFrom = (
     <form noValidate autoComplete="off" onSubmit={(e): void => doLogin(e)}>
       <Grid container spacing={5}>
         <Grid size={{ xs: 12 }}>
           <h4 className="center">Login</h4>
         </Grid>
+
+        {passkeySupported && (
+          <>
+            <Grid size={{ xs: 12 }} className="center">
+              <Button
+                variant="contained"
+                onClick={doPasskeyLogin}
+                disabled={isAuthenticating}
+                startIcon={<FingerprintIcon />}
+                sx={{
+                  backgroundColor: '#f37f30',
+                  color: 'white',
+                  marginBottom: '20px',
+                }}
+              >
+                {isAuthenticating ? 'Authenticating...' : 'Sign in with Passkey'}
+              </Button>
+            </Grid>
+            <Grid size={{ xs: 12 }}>
+              <Divider>OR</Divider>
+            </Grid>
+          </>
+        )}
+
         <Grid size={{ xs: 12 }}>
           <TextField
             id="email"
@@ -50,7 +109,7 @@ export default function Login({ userManager }: { userManager: UserManager }): Re
               color: 'white',
               marginBottom: '20px',
             }}
-            endIcon={<Icon>mail</Icon>}
+            startIcon={<Icon>mail</Icon>}
             type="submit"
           >
             Send Login Link

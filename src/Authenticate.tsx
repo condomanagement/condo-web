@@ -1,13 +1,12 @@
 import { UserManager } from '@condomanagement/condo-brain';
 import Grid from '@mui/material/Grid';
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 export default function Authenticate({ userManager }: { userManager: UserManager }): React.ReactElement {
   const location = useLocation();
   const emailKey = location.pathname.split('/')[2];
   const [loginDisplay, setLoginDisplay] = React.useState<null | React.ReactElement>(null);
-  const navigate = useNavigate();
 
   const proccessing = (
     <Grid container spacing={5}>
@@ -40,7 +39,8 @@ export default function Authenticate({ userManager }: { userManager: UserManager
       if (!result) {
         setLoginDisplay(loginError);
       } else {
-        navigate('/');
+        // Force a full page reload to trigger auth state update
+        window.location.href = '/';
       }
     });
   };

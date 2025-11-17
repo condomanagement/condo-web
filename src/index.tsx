@@ -1,9 +1,13 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import axios from 'axios';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import './styles/index.scss';
 import App from './App';
+
+// Configure axios to send cookies for WebAuthn authentication
+axios.defaults.withCredentials = true;
 
 const theme = createTheme({
   spacing: 8,

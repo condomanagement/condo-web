@@ -1,4 +1,4 @@
-import { UserManager } from '@condomanagement/condo-brain';
+import { PasskeyManager, UserManager } from '@condomanagement/condo-brain';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import { get as getCookie } from 'es-cookie';
@@ -21,7 +21,10 @@ import { makeStyles } from './makeStyles';
 import MyReservations from './MyReservations';
 import Nav from './Nav';
 import Parking from './Parking';
+import PasskeySetupPrompt from './PasskeySetupPrompt';
 import Reservation from './Reservation';
+import Settings from './Settings';
+import { isPlatformAuthenticatorAvailable } from './utils/passkey';
 import './styles/application.scss';
 
 const useStyles = makeStyles()((theme) => ({
@@ -45,11 +48,25 @@ function App(): React.ReactElement {
   const [userManager] = React.useState(new UserManager());
   const [auth, setAuth] = React.useState(false);
   const [rootState, setRootState] = React.useState<string | undefined>(undefined);
+  const [showPasskeyPrompt, setShowPasskeyPrompt] = React.useState(false);
   const [toolbarState, setToolbarState] = React.useState<string | undefined>(undefined);
   const [contentState, setContentState] = React.useState<string | undefined>(undefined);
   const { classes } = useStyles();
   const navigate = useNavigate();
   const location = useLocation();
+  const passkeyManager = React.useMemo(() => new PasskeyManager(), []);
+
+  React.useEffect(() => {
+    if (auth) {
+      passkeyManager.list().then((credentials) => {
+        setShowPasskeyPrompt(credentials.length === 0);
+      }).catch(() => {
+        setShowPasskeyPrompt(false);
+      });
+    } else {
+      setShowPasskeyPrompt(false);
+    }
+  }, [auth, passkeyManager]);
 
   const checkLogin = (): void => {
     const token = getCookie('token');
@@ -83,6 +100,33 @@ function App(): React.ReactElement {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
+  // Check if we should show passkey setup prompt
+  React.useEffect(() => {
+    const checkPasskeySetup = async (): Promise<void> => {
+      if (auth && userManager.loggedIn) {
+        const isSupported = await isPlatformAuthenticatorAvailable();
+        if (!isSupported) return;
+
+        try {
+          const token = getCookie('token');
+          if (!token) {
+            return;
+          }
+
+          const passkeys = await passkeyManager.listCredentials(token);
+          if (passkeys.length === 0) {
+            setShowPasskeyPrompt(true);
+          }
+        } catch (error) {
+          console.error('Error checking passkey status:', error);
+        }
+      }
+    };
+
+    checkPasskeySetup();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth, userManager.loggedIn]);
+
   return (
     <div className="App">
       <div className={rootState}>
@@ -110,6 +154,7 @@ function App(): React.ReactElement {
             </div>
           </Parallax.Parallax>
           <div className="container">
+            {showPasskeyPrompt && auth && <PasskeySetupPrompt onSetupComplete={() => setShowPasskeyPrompt(false)} />}
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/parking" element={<Parking userManager={userManager} />} />
@@ -119,6 +164,7 @@ function App(): React.ReactElement {
               <Route path="reservation" element={<Reservation />} />
               <Route path="elevator-booking" element={<ElevatorBooking userManager={userManager} />} />
               <Route path="myreservations" element={<MyReservations userManager={userManager} />} />
+              <Route path="settings" element={<Settings />} />
             </Routes>
           </div>
           <footer

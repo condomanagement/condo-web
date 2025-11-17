@@ -164,8 +164,8 @@ export default function NavBar({ userManager }: { userManager: UserManager }): R
       if (result === false) {
         return;
       }
-      setAuth(false);
-      navigate('/');
+      // Force a full page reload to reset auth state
+      window.location.href = '/';
     });
     handleClose();
   };
@@ -221,6 +221,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): R
               onClose={handleClose}
             >
               <MenuItem onClick={(): void => { navigate('myreservations'); }}>My Reservations</MenuItem>
+              <MenuItem onClick={(): void => { navigate('settings'); }}>Settings</MenuItem>
               <MenuItem onClick={logout}>Logout</MenuItem>
             </Menu>
           </Toolbar>
