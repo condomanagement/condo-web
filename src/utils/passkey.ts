@@ -23,27 +23,11 @@ export async function isPlatformAuthenticatorAvailable(): Promise<boolean> {
 }
 
 export async function registerPasskey(options: unknown): Promise<unknown> {
-  console.log('[Passkey Debug] Registration options received:', options);
-  try {
-    const result = await create(options as CredentialCreationOptionsJSON);
-    console.log('[Passkey Debug] Registration successful:', result);
-    return result;
-  } catch (err) {
-    console.error('[Passkey Debug] Registration failed:', err);
-    throw err;
-  }
+  return await create(options as CredentialCreationOptionsJSON);
 }
 
 export async function authenticateWithPasskey(options: unknown): Promise<unknown> {
-  console.log('[Passkey Debug] Authentication options received:', options);
-  try {
-    const result = await get(options as CredentialRequestOptionsJSON);
-    console.log('[Passkey Debug] Authentication successful:', result);
-    return result;
-  } catch (err) {
-    console.error('[Passkey Debug] Authentication failed:', err);
-    throw err;
-  }
+  return await get(options as CredentialRequestOptionsJSON);
 }
 
 export function getDeviceName(): string {

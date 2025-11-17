@@ -54,7 +54,7 @@ function App(): React.ReactElement {
   const { classes } = useStyles();
   const navigate = useNavigate();
   const location = useLocation();
-  const passkeyManager = new PasskeyManager();
+  const passkeyManager = React.useMemo(() => new PasskeyManager(), []);
 
   React.useEffect(() => {
     if (auth) {
@@ -66,7 +66,7 @@ function App(): React.ReactElement {
     } else {
       setShowPasskeyPrompt(false);
     }
-  }, [auth]);
+  }, [auth, passkeyManager]);
 
   const checkLogin = (): void => {
     const token = getCookie('token');
@@ -103,23 +103,18 @@ function App(): React.ReactElement {
   // Check if we should show passkey setup prompt
   React.useEffect(() => {
     const checkPasskeySetup = async (): Promise<void> => {
-      console.log('Checking passkey setup, auth:', auth, 'logged in:', userManager.loggedIn);
       if (auth && userManager.loggedIn) {
         const isSupported = await isPlatformAuthenticatorAvailable();
-        console.log('Passkey supported:', isSupported);
         if (!isSupported) return;
 
         try {
           const token = getCookie('token');
           if (!token) {
-            console.log('No token found');
             return;
           }
 
           const passkeys = await passkeyManager.listCredentials(token);
-          console.log('User has', passkeys.length, 'passkeys');
           if (passkeys.length === 0) {
-            console.log('Showing passkey prompt');
             setShowPasskeyPrompt(true);
           }
         } catch (error) {

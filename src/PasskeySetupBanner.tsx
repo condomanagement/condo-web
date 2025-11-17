@@ -1,9 +1,9 @@
+import { PasskeyManager } from '@condomanagement/condo-brain';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import { get as getCookie } from 'es-cookie';
 import React, { useEffect, useState } from 'react';
-import { PasskeyManager } from '@condomanagement/condo-brain';
 
 interface PasskeySetupBannerProps {
   passkeyManager: PasskeyManager;
@@ -14,7 +14,7 @@ export default function PasskeySetupBanner({
   passkeyManager,
   onSetupComplete
 }: PasskeySetupBannerProps): React.ReactElement | null {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
   const [hasPasskey, setHasPasskey] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
 
@@ -36,9 +36,7 @@ export default function PasskeySetupBanner({
     checkPasskeyStatus();
   }, [passkeyManager]);
 
-  useEffect(() => {
-    setShow(isSupported && !hasPasskey);
-  }, [isSupported, hasPasskey]);
+  const shouldShow = isSupported && !hasPasskey;
 
   const handleSetupPasskey = async (): Promise<void> => {
     try {
@@ -60,7 +58,7 @@ export default function PasskeySetupBanner({
     setShow(false);
   };
 
-  if (!show) {
+  if (!shouldShow || !show) {
     return null;
   }
 

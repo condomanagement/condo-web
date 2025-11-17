@@ -1,4 +1,4 @@
-import { UserManager, PasskeyManager } from '@condomanagement/condo-brain';
+import { PasskeyManager, UserManager } from '@condomanagement/condo-brain';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import { Alert, AlertTitle } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -16,7 +16,6 @@ export default function Login({ userManager }: { userManager: UserManager }): Re
   const [error, setError] = React.useState<string | null>(null);
   const [email, setEmail] = React.useState<null | string>(null);
   const [passkeySupported, setPasskeySupported] = React.useState(false);
-  const [passkeyAvailable, setPasskeyAvailable] = React.useState(false);
   const [isAuthenticating, setIsAuthenticating] = React.useState(false);
   const navigate = useNavigate();
   const passkeyManager = new PasskeyManager();
@@ -24,15 +23,6 @@ export default function Login({ userManager }: { userManager: UserManager }): Re
   React.useEffect(() => {
     isPlatformAuthenticatorAvailable().then(setPasskeySupported);
   }, []);
-
-  React.useEffect(() => {
-    if (email && passkeySupported) {
-      passkeyManager.checkAvailability(email).then((result: { passkeys_available: boolean }) => {
-        setPasskeyAvailable(result.passkeys_available);
-      });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [email, passkeySupported]);
 
   function doLogin(e: React.FormEvent): void {
     e.preventDefault();
