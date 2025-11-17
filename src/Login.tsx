@@ -49,20 +49,16 @@ export default function Login({ userManager }: { userManager: UserManager }): Re
   }
 
   async function doPasskeyLogin(): Promise<void> {
-    if (!email) {
-      setError('Please enter your email address');
-      return;
-    }
-
     setIsAuthenticating(true);
     setError(null);
 
     try {
-      const result = await passkeyManager.authenticate(email);
+      const result = await passkeyManager.authenticate();
 
       if (result.success && result.token) {
         setCookie('token', result.token);
         navigate('/');
+        window.location.reload(); // Force reload to update Nav state
       } else {
         setError(result.error || 'Passkey authentication failed. Please try email login.');
       }
@@ -81,19 +77,18 @@ export default function Login({ userManager }: { userManager: UserManager }): Re
           <h4 className="center">Login</h4>
         </Grid>
 
-        {passkeySupported && passkeyAvailable && (
+        {passkeySupported && (
           <>
             <Grid size={{ xs: 12 }} className="center">
               <Button
                 variant="contained"
                 onClick={doPasskeyLogin}
-                disabled={isAuthenticating || !email}
+                disabled={isAuthenticating}
                 startIcon={<FingerprintIcon />}
                 sx={{
-                  backgroundColor: '#2196f3',
+                  backgroundColor: '#f37f30',
                   color: 'white',
                   marginBottom: '20px',
-                  width: '100%',
                 }}
               >
                 {isAuthenticating ? 'Authenticating...' : 'Sign in with Passkey'}
@@ -124,7 +119,7 @@ export default function Login({ userManager }: { userManager: UserManager }): Re
               color: 'white',
               marginBottom: '20px',
             }}
-            endIcon={<Icon>mail</Icon>}
+            startIcon={<Icon>mail</Icon>}
             type="submit"
           >
             Send Login Link

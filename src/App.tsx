@@ -48,13 +48,25 @@ function App(): React.ReactElement {
   const [userManager] = React.useState(new UserManager());
   const [auth, setAuth] = React.useState(false);
   const [rootState, setRootState] = React.useState<string | undefined>(undefined);
+  const [showPasskeyPrompt, setShowPasskeyPrompt] = React.useState(false);
   const [toolbarState, setToolbarState] = React.useState<string | undefined>(undefined);
   const [contentState, setContentState] = React.useState<string | undefined>(undefined);
-  const [showPasskeyPrompt, setShowPasskeyPrompt] = React.useState(false);
   const { classes } = useStyles();
   const navigate = useNavigate();
   const location = useLocation();
   const passkeyManager = new PasskeyManager();
+
+  React.useEffect(() => {
+    if (auth) {
+      passkeyManager.list().then((credentials) => {
+        setShowPasskeyPrompt(credentials.length === 0);
+      }).catch(() => {
+        setShowPasskeyPrompt(false);
+      });
+    } else {
+      setShowPasskeyPrompt(false);
+    }
+  }, [auth]);
 
   const checkLogin = (): void => {
     const token = getCookie('token');
@@ -91,23 +103,27 @@ function App(): React.ReactElement {
   // Check if we should show passkey setup prompt
   React.useEffect(() => {
     const checkPasskeySetup = async (): Promise<void> => {
+      console.log('Checking passkey setup, auth:', auth, 'logged in:', userManager.loggedIn);
       if (auth && userManager.loggedIn) {
-        const dismissed = localStorage.getItem('passkey-prompt-dismissed');
-        if (dismissed) return;
-
         const isSupported = await isPlatformAuthenticatorAvailable();
+        console.log('Passkey supported:', isSupported);
         if (!isSupported) return;
 
         try {
           const token = getCookie('token');
-          if (!token) return;
+          if (!token) {
+            console.log('No token found');
+            return;
+          }
 
           const passkeys = await passkeyManager.listCredentials(token);
+          console.log('User has', passkeys.length, 'passkeys');
           if (passkeys.length === 0) {
+            console.log('Showing passkey prompt');
             setShowPasskeyPrompt(true);
           }
-        } catch {
-          // Could not check passkey status
+        } catch (error) {
+          console.error('Error checking passkey status:', error);
         }
       }
     };
@@ -123,16 +139,6 @@ function App(): React.ReactElement {
         <Nav userManager={userManager} />
         <main className={contentState}>
           <div className={toolbarState} />
-          <PasskeySetupPrompt
-            open={showPasskeyPrompt}
-            onClose={() => {
-              localStorage.setItem('passkey-prompt-dismissed', 'true');
-              setShowPasskeyPrompt(false);
-            }}
-            onSetupComplete={() => {
-              setShowPasskeyPrompt(false);
-            }}
-          />
           <Parallax.Parallax
             bgImage={ArrowLoftsRendering}
             className="index-banner"
@@ -153,6 +159,7 @@ function App(): React.ReactElement {
             </div>
           </Parallax.Parallax>
           <div className="container">
+            {showPasskeyPrompt && auth && <PasskeySetupPrompt onSetupComplete={() => setShowPasskeyPrompt(false)} />}
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/parking" element={<Parking userManager={userManager} />} />

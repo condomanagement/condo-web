@@ -35,6 +35,7 @@ import { get as getCookie } from 'es-cookie';
 import React from 'react';
 import Avatar from 'react-avatar';
 import { useNavigate } from 'react-router-dom';
+import PasskeySetupPrompt from './PasskeySetupPrompt';
 
 const drawerWidth = 240;
 
@@ -113,6 +114,7 @@ export default function NavBar({ userManager }: { userManager: UserManager }): R
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [pageTitle, setPageTitle] = React.useState('Amenity Reservation');
   const [open, setOpen] = React.useState(false);
+  const [showPasskeyPrompt, setShowPasskeyPrompt] = React.useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -164,8 +166,8 @@ export default function NavBar({ userManager }: { userManager: UserManager }): R
       if (result === false) {
         return;
       }
-      setAuth(false);
-      navigate('/');
+      // Force a full page reload to reset auth state
+      window.location.href = '/';
     });
     handleClose();
   };

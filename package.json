@@ -8,7 +8,6 @@
   "main": "src/App.tsx",
   "dependencies": {
     "@babel/preset-env": "^7.23.3",
-    "@condomanagement/condo-brain": "^0.3.2",
     "@date-io/date-fns": "^3.2.1",
     "@date-io/moment": "^3.2.0",
     "@emotion/react": "^11.11.1",
@@ -25,6 +24,7 @@
     "@types/express-http-proxy": "^1.6.6",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
+    "axios": "^1.13.2",
     "babel-loader": "^10.0.0",
     "clsx": "^2.0.0",
     "cors": "^2.8.5",

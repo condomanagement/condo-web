@@ -40,7 +40,8 @@ export default function Authenticate({ userManager }: { userManager: UserManager
       if (!result) {
         setLoginDisplay(loginError);
       } else {
-        navigate('/');
+        // Force a full page reload to trigger auth state update
+        window.location.href = '/';
       }
     });
   };

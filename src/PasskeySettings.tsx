@@ -1,6 +1,7 @@
 import { PasskeyManager } from '@condomanagement/condo-brain';
 import type { PasskeyCredential } from '@condomanagement/condo-brain';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -8,10 +9,15 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CircularProgress from '@mui/material/CircularProgress';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { get as getCookie } from 'es-cookie';
 import React, { useEffect, useState } from 'react';
@@ -22,6 +28,9 @@ export default function PasskeySettings(): React.ReactElement {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [renameDialogOpen, setRenameDialogOpen] = useState(false);
+  const [renamingPasskey, setRenamingPasskey] = useState<PasskeyCredential | null>(null);
+  const [newNickname, setNewNickname] = useState('');
   const passkeyManager = new PasskeyManager();
 
   const loadPasskeys = async (): Promise<void> => {
@@ -100,6 +109,33 @@ export default function PasskeySettings(): React.ReactElement {
     }
   };
 
+  const handleRenameClick = (passkey: PasskeyCredential): void => {
+    setRenamingPasskey(passkey);
+    setNewNickname(passkey.nickname);
+    setRenameDialogOpen(true);
+  };
+
+  const handleRenameSubmit = async (): Promise<void> => {
+    if (!renamingPasskey || !newNickname.trim()) return;
+
+    try {
+      await passkeyManager.updateNickname(renamingPasskey.id, newNickname.trim());
+      await loadPasskeys();
+      setRenameDialogOpen(false);
+      setRenamingPasskey(null);
+      setNewNickname('');
+    } catch (err) {
+      console.error('Failed to rename passkey:', err);
+      setError('Failed to rename passkey');
+    }
+  };
+
+  const handleRenameCancel = (): void => {
+    setRenameDialogOpen(false);
+    setRenamingPasskey(null);
+    setNewNickname('');
+  };
+
   const formatDate = (dateStr?: string | null): string => {
     if (!dateStr) return 'Never used';
     const date = new Date(dateStr);
@@ -160,13 +196,23 @@ export default function PasskeySettings(): React.ReactElement {
               <ListItem
                 key={passkey.id}
                 secondaryAction={
-                  <IconButton
-                    edge="end"
-                    aria-label="delete"
-                    onClick={() => handleDelete(passkey.id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
+                  <Box>
+                    <IconButton
+                      edge="end"
+                      aria-label="edit"
+                      onClick={() => handleRenameClick(passkey)}
+                      sx={{ mr: 1 }}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() => handleDelete(passkey.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Box>
                 }
                 sx={{ border: 1, borderColor: 'divider', borderRadius: 1, mb: 1 }}
               >
@@ -178,6 +224,32 @@ export default function PasskeySettings(): React.ReactElement {
             ))}
           </List>
         )}
+
+        <Dialog open={renameDialogOpen} onClose={handleRenameCancel}>
+          <DialogTitle>Rename Passkey</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Nickname"
+              type="text"
+              fullWidth
+              value={newNickname}
+              onChange={(e) => setNewNickname(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  handleRenameSubmit();
+                }
+              }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleRenameCancel}>Cancel</Button>
+            <Button onClick={handleRenameSubmit} variant="contained" disabled={!newNickname.trim()}>
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
       </CardContent>
     </Card>
   );

@@ -1,24 +1,18 @@
 import { PasskeyManager } from '@condomanagement/condo-brain';
+import CloseIcon from '@mui/icons-material/Close';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
 import { get as getCookie } from 'es-cookie';
 import React, { useEffect, useState } from 'react';
 import { getDeviceName, isPlatformAuthenticatorAvailable } from './utils/passkey';
 
 interface PasskeySetupPromptProps {
-  open: boolean;
-  onClose: () => void;
   onSetupComplete: () => void;
 }
 
 export default function PasskeySetupPrompt({
-  open,
-  onClose,
   onSetupComplete,
 }: PasskeySetupPromptProps): React.ReactElement {
   const [isSupported, setIsSupported] = useState(false);
@@ -50,16 +44,8 @@ export default function PasskeySetupPrompt({
       }
     } catch (err) {
       console.error('Passkey registration failed:', err);
-      if (err instanceof Error) {
-        console.error('Error message:', err.message);
-        console.error('Error stack:', err.stack);
-      }
-      if (typeof err === 'object' && err !== null) {
-        console.error('Error details:', JSON.stringify(err, null, 2));
-      }
       setError(
-        'Failed to set up passkey. Check the browser console for details. ' +
-        (err instanceof Error ? err.message : 'Unknown error')
+        err instanceof Error ? err.message : 'Failed to set up passkey'
       );
     } finally {
       setIsRegistering(false);
@@ -71,38 +57,34 @@ export default function PasskeySetupPrompt({
   }
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>
-        <FingerprintIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-        Set Up Passkey
-      </DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          Make signing in faster and more secure with a passkey.
-          You&apos;ll use your fingerprint, face, or device PIN instead of your password.
-        </DialogContentText>
-        <DialogContentText sx={{ mt: 2, fontSize: '0.875rem', color: 'text.secondary' }}>
-          This passkey will be saved to: <strong>{getDeviceName()}</strong>
-        </DialogContentText>
-        {error && (
-          <DialogContentText sx={{ mt: 2, color: 'error.main' }}>
-            {error}
-          </DialogContentText>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} disabled={isRegistering}>
-          Not Now
-        </Button>
-        <Button
-          onClick={handleSetup}
-          variant="contained"
-          disabled={isRegistering}
-          startIcon={<FingerprintIcon />}
-        >
-          {isRegistering ? 'Setting Up...' : 'Set Up Passkey'}
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <Alert
+      severity="info"
+      icon={<FingerprintIcon />}
+      sx={{ mb: 2 }}
+      action={
+        <>
+          <Button
+            color="inherit"
+            size="small"
+            onClick={handleSetup}
+            disabled={isRegistering}
+            startIcon={<FingerprintIcon />}
+          >
+            {isRegistering ? 'Setting Up...' : 'Set Up'}
+          </Button>
+          <IconButton
+            size="small"
+            color="inherit"
+            onClick={onSetupComplete}
+            disabled={isRegistering}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        </>
+      }
+    >
+      <strong>Make login easier!</strong> Set up a passkey to sign in with your fingerprint, face, or device PIN.
+      {error && <div style={{ marginTop: 8, color: 'error.main' }}>{error}</div>}
+    </Alert>
   );
 }
