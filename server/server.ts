@@ -61,7 +61,7 @@ async function createServer(): Promise<Express> {
   app.use('/manifest.json', cors(corsOptions), express.static('public/manifest.json'));
   app.use('/logo192.png', cors(corsOptions), express.static('public/logo192.png'));
   app.use('/logo512.png', cors(corsOptions), express.static('public/logo512.png'));
-  app.all('/api/(.*)', cors(corsOptions), (req, res) => {
+  app.use('/api', cors(corsOptions), (req, res) => {
     apiProxy.web(req, res, { target: 'https://api.arrowlofts.org', secure: true });
   });
 
