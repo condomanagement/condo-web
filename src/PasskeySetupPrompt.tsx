@@ -1,4 +1,4 @@
-import { PasskeyManagerWrapper } from './managers/PasskeyManagerWrapper';
+import { PasskeyManager } from '@condomanagement/condo-brain';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -24,7 +24,7 @@ export default function PasskeySetupPrompt({
   const [isSupported, setIsSupported] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const passkeyManager = new PasskeyManagerWrapper();
+  const passkeyManager = new PasskeyManager();
 
   useEffect(() => {
     isPlatformAuthenticatorAvailable().then(setIsSupported);
@@ -41,7 +41,7 @@ export default function PasskeySetupPrompt({
         return;
       }
 
-      const result = await passkeyManager.register(token, getDeviceName());
+      const result = await passkeyManager.register(getDeviceName());
 
       if (result.success) {
         onSetupComplete();

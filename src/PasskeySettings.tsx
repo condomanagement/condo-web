@@ -1,5 +1,5 @@
-import { PasskeyManagerWrapper } from './managers/PasskeyManagerWrapper';
-import type { PasskeyCredential } from './managers/PasskeyManagerWrapper';
+import { PasskeyManager } from '@condomanagement/condo-brain';
+import type { PasskeyCredential } from '@condomanagement/condo-brain';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import Alert from '@mui/material/Alert';
@@ -22,12 +22,12 @@ export default function PasskeySettings(): React.ReactElement {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
-  const passkeyManager = new PasskeyManagerWrapper();
+  const passkeyManager = new PasskeyManager();
 
   const loadPasskeys = async (): Promise<void> => {
     try {
       setLoading(true);
-      const list = await passkeyManager.listCredentials();
+      const list = await passkeyManager.list();
       setPasskeys(list);
       setError(null);
     } catch (err) {
@@ -54,7 +54,7 @@ export default function PasskeySettings(): React.ReactElement {
         return;
       }
 
-      const result = await passkeyManager.register(token, getDeviceName());
+      const result = await passkeyManager.register(getDeviceName());
 
       if (result.success) {
         await loadPasskeys();
@@ -92,7 +92,7 @@ export default function PasskeySettings(): React.ReactElement {
         return;
       }
 
-      await passkeyManager.deleteCredential(id);
+      await passkeyManager.delete(id);
       await loadPasskeys();
     } catch (err) {
       console.error('Failed to delete passkey:', err);
