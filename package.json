@@ -54,7 +54,7 @@
     "webpack-dev-middleware": "^7.4.5"
   },
   "scripts": {
-    "build": "NODE_OPTIONS='--no-experimental-webstorage' webpack --node-env=production --mode=production",
+    "build": "NODE_OPTIONS='--no-experimental-webstorage' webpack --node-env=production --mode=production && npm run build-server",
     "watch": "NODE_OPTIONS='--no-experimental-webstorage' webpack --watch",
     "start": "NODE_OPTIONS='--no-experimental-webstorage' webpack serve --open",
     "test": "jest test --coverage",
