@@ -69,13 +69,6 @@ async function createServer(): Promise<Express> {
     apiProxy.web(req, res, { target: 'https://api.arrowlofts.org', secure: true });
   });
 
-  // SPA fallback - serve index.html for all remaining routes
-  app.get('/*', (req, res) => {
-    res.sendFile('index.html', { root: 'build' });
-  });
-
-  app.use(notFoundHandler);
-
   return app;
 }
 
