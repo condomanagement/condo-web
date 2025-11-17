@@ -1,3 +1,4 @@
+import path from 'path';
 import cors, { CorsOptions } from 'cors';
 import express, { Express } from 'express';
 import rateLimit from 'express-rate-limit';
@@ -66,6 +67,11 @@ async function createServer(): Promise<Express> {
 
   app.all('/healthcheck', (req, res) => {
     apiProxy.web(req, res, { target: 'https://api.arrowlofts.org', secure: true });
+  });
+
+  // Serve index.html for all other routes (client-side routing)
+  app.use((_req, res) => {
+    res.sendFile(path.join(__dirname, '../build/index.html'));
   });
 
   return app;
