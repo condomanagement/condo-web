@@ -1,4 +1,5 @@
-import { PasskeyManager } from '@condomanagement/condo-brain';
+import { PasskeyManagerWrapper } from './managers/PasskeyManagerWrapper';
+import type { PasskeyCredential } from './managers/PasskeyManagerWrapper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import Alert from '@mui/material/Alert';
@@ -15,24 +16,18 @@ import Typography from '@mui/material/Typography';
 import { get as getCookie } from 'es-cookie';
 import React, { useEffect, useState } from 'react';
 import { getDeviceName } from './utils/passkey';
-import type { PasskeyCredential } from './utils/passkey';
 
 export default function PasskeySettings(): React.ReactElement {
   const [passkeys, setPasskeys] = useState<PasskeyCredential[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
-  const passkeyManager = new PasskeyManager();
+  const passkeyManager = new PasskeyManagerWrapper();
 
   const loadPasskeys = async (): Promise<void> => {
     try {
       setLoading(true);
-      const token = getCookie('token');
-      if (!token) {
-        setError('Not logged in');
-        return;
-      }
-      const list = await passkeyManager.listCredentials(token);
+      const list = await passkeyManager.listCredentials();
       setPasskeys(list);
       setError(null);
     } catch (err) {
@@ -97,7 +92,7 @@ export default function PasskeySettings(): React.ReactElement {
         return;
       }
 
-      await passkeyManager.deleteCredential(token, id);
+      await passkeyManager.deleteCredential(id);
       await loadPasskeys();
     } catch (err) {
       console.error('Failed to delete passkey:', err);
@@ -105,7 +100,7 @@ export default function PasskeySettings(): React.ReactElement {
     }
   };
 
-  const formatDate = (dateStr?: string): string => {
+  const formatDate = (dateStr?: string | null): string => {
     if (!dateStr) return 'Never used';
     const date = new Date(dateStr);
     const now = new Date();

@@ -1,4 +1,5 @@
-import { PasskeyManager, UserManager } from '@condomanagement/condo-brain';
+import { UserManager } from '@condomanagement/condo-brain';
+import { PasskeyManagerWrapper } from './managers/PasskeyManagerWrapper';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import { Alert, AlertTitle } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -19,7 +20,7 @@ export default function Login({ userManager }: { userManager: UserManager }): Re
   const [passkeyAvailable, setPasskeyAvailable] = React.useState(false);
   const [isAuthenticating, setIsAuthenticating] = React.useState(false);
   const navigate = useNavigate();
-  const passkeyManager = new PasskeyManager();
+  const passkeyManager = new PasskeyManagerWrapper();
 
   React.useEffect(() => {
     isPlatformAuthenticatorAvailable().then(setPasskeySupported);
