@@ -27,6 +27,7 @@ jobs:
 
       - name: Build application
         run: |
+          rm -rf server-dist build
           npm run build
           npm run build-server
 
