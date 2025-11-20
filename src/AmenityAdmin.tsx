@@ -172,7 +172,7 @@ export default function AmenityAdmin(): React.ReactElement {
         <Button onClick={(): void => setDeleteOpen(false)} color="primary">
           Cancel
         </Button>
-        <Button onClick={(): void => doDeleteAmenity()} color="primary" autoFocus>
+        <Button onClick={(): void => doDeleteAmenity()} color="primary">
           Save
         </Button>
       </DialogActions>
