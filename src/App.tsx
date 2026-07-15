@@ -157,7 +157,7 @@ function App(): React.ReactElement {
             {showPasskeyPrompt && auth && <PasskeySetupPrompt onSetupComplete={() => setShowPasskeyPrompt(false)} />}
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/parking" element={<Parking userManager={userManager} />} />
+              <Route path="/parking" element={<Parking />} />
               <Route path="admin" element={<Admin userManager={userManager} />} />
               <Route path="login" element={<Login userManager={userManager} />} />
               <Route path="authenticate/:emailtoken" element={<Authenticate userManager={userManager} />} />

@@ -1,188 +1,28 @@
-import { UserManager } from '@condomanagement/condo-brain';
-import {
-  Alert,
-  AlertTitle,
-  Button,
-  Icon,
-  TextField,
-} from '@mui/material';
 import Grid from '@mui/material/Grid';
-import React, { useState } from 'react';
-import { makeStyles } from './makeStyles';
+import React from 'react';
 import './styles/application.scss';
-import './styles/parking.scss';
 
-export default function Parking({ userManager }: { userManager: UserManager }): React.ReactElement {
-  const [selectedStartDate, handleStartDateChange] = useState<Date | null>(new Date());
-  const [selectedEndDate, handleEndDateChange] = useState<Date | null>(new Date());
-  const [license, setLicense] = useState<string | unknown>('');
-  const [unit, setUnit] = useState<string | unknown>(userManager.unit);
-  const [make, setMake] = useState<string | unknown>('');
-  const [color, setColor] = useState<string | unknown>('');
-  const [email, setEmail] = useState<string | unknown>(userManager.email);
-  const [thanks, setThanks] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+const PARKING_REDIRECT_URL = 'https://app.condocontrol.com/visitor/my-visit';
 
-  const useStyles = makeStyles()((theme) => ({
-    root: {
-      '& .MuiTextField-root': {
-        margin: theme.spacing(1),
-        width: '100%',
-      },
-    },
-  }));
-
-  const { classes } = useStyles();
-
-  const handleNativeStartDateChange = (date: string): void => {
-    const startDate = new Date(`${date}T01:00:00-05:00`);
-    handleStartDateChange(startDate);
-  };
-
-  const handleNativeEndDateChange = (date: string): void => {
-    const endDate = new Date(`${date}T01:00:00-05:00`);
-    handleEndDateChange(endDate);
-  };
-
-  const register = (e: React.FormEvent): void => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('parking[start_date]', String(selectedStartDate));
-    formData.append('parking[end_date]', String(selectedEndDate));
-    formData.append('parking[license]', String(license));
-    formData.append('parking[unit]', String(unit));
-    formData.append('parking[make]', String(make));
-    formData.append('parking[color]', String(color));
-    formData.append('parking[contact]', String(email));
-    userManager.visitorParking(formData)
-      .then((response) => {
-        if (response.success === true) {
-          setThanks(true);
-        } else if (response.error) {
-          setErrorMessage(response.error);
-        }
-      });
-  };
+export default function Parking(): React.ReactElement {
+  React.useEffect(() => {
+    window.location.replace(PARKING_REDIRECT_URL);
+  }, []);
 
   return (
-    <div>
-      { thanks && (
-        <div className="section flex-grow">
-          <Grid container spacing={5}>
-            <Grid size={{ xs: 12 }} className="center">
-              <h4 className="center">Thank you</h4>
-              <p className="center">
-                Thank you!
-                {'  '}
-                <span role="img" aria-label="">🚙</span>
-                The vehicle has been registered.
-                If you receive a ticket in error please contact the property manager.
-                {'  '}
-              </p>
-            </Grid>
-          </Grid>
-        </div>
-      )}
-      { !thanks && (
-        <form className={classes.root} noValidate autoComplete="off" onSubmit={register}>
-          <div className="section flex-grow">
-            <Grid container spacing={5}>
-              <Grid size={{ xs: 12 }}>
-                <h4 className="center">Register a Vehicle</h4>
-                { errorMessage !== '' && (
-                  <Alert severity="error">
-                    <AlertTitle>Error</AlertTitle>
-                    {errorMessage}
-                  </Alert>
-                )}
-              </Grid>
-              <Grid size={{ xs: 6 }}>
-                <TextField
-                  id="start"
-                  label="Start Date"
-                  type="date"
-                  defaultValue={selectedStartDate}
-                  onChange={(e): void => handleNativeStartDateChange(e.target.value)}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </Grid>
-              <Grid size={{ xs: 6 }}>
-                <TextField
-                  id="end"
-                  label="End Date"
-                  type="date"
-                  defaultValue={selectedEndDate}
-                  onChange={(e): void => handleNativeEndDateChange(e.target.value)}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </Grid>
-              <Grid size={{ xs: 6 }}>
-                <TextField
-                  id="license"
-                  label="License Plate"
-                  fullWidth
-                  value={license}
-                  onChange={(e): void => setLicense(e.target.value)}
-                />
-              </Grid>
-              <Grid size={{ xs: 6 }}>
-                <TextField
-                  id="unit"
-                  label="Unit Number"
-                  fullWidth
-                  value={unit}
-                  onChange={(e): void => setUnit(e.target.value)}
-                />
-              </Grid>
-              <Grid size={{ xs: 6 }}>
-                <TextField
-                  id="make"
-                  label="Vehicle Make"
-                  fullWidth
-                  value={make}
-                  onChange={(e): void => setMake(e.target.value)}
-                />
-              </Grid>
-              <Grid size={{ xs: 6 }}>
-                <TextField
-                  id="color"
-                  label="Vehicle Colour"
-                  fullWidth
-                  value={color}
-                  onChange={(e): void => setColor(e.target.value)}
-                />
-              </Grid>
-              <Grid size={{ xs: 12 }}>
-                <TextField
-                  id="email"
-                  label="Email or Phone Number"
-                  fullWidth
-                  value={email}
-                  onChange={(e): void => setEmail(e.target.value)}
-                />
-              </Grid>
-              <Grid size={{ xs: 12 }} className="center">
-                <Button
-                  variant="contained"
-                  type="submit"
-                  sx={{
-                    backgroundColor: '#f37f30',
-                    color: 'white',
-                    marginBottom: '20px',
-                  }}
-                  endIcon={<Icon>directions_car</Icon>}
-                >
-                  Register
-                </Button>
-              </Grid>
-            </Grid>
-          </div>
-        </form>
-      )}
+    <div className="section flex-grow">
+      <Grid container spacing={5}>
+        <Grid size={{ xs: 12 }} className="center">
+          <p className="center">
+            Redirecting to visitor parking registration…
+            {' '}
+            If you are not redirected automatically,
+            {' '}
+            <a href={PARKING_REDIRECT_URL}>click here</a>
+            .
+          </p>
+        </Grid>
+      </Grid>
     </div>
   );
 }
